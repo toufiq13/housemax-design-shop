@@ -12,6 +12,7 @@ import {
   Filter,
   X
 } from 'lucide-react';
+import { useRecommendations } from '@/contexts/RecommendationContext';
 
 interface Product {
   id: number;
@@ -39,6 +40,7 @@ interface MLSearchProps {
 }
 
 const MLSearch: React.FC<MLSearchProps> = ({ products, onSearch, onProductClick }) => {
+  const { addSearchHistory } = useRecommendations();
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([]);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
@@ -163,6 +165,10 @@ const MLSearch: React.FC<MLSearchProps> = ({ products, onSearch, onProductClick 
       const newRecent = [searchQuery, ...recentSearches.filter(s => s !== searchQuery)].slice(0, 5);
       setRecentSearches(newRecent);
       localStorage.setItem('recentSearches', JSON.stringify(newRecent));
+
+      // Add to recommendation system
+      const category = selectedFilters.category.length > 0 ? selectedFilters.category[0] : undefined;
+      addSearchHistory(searchQuery, category);
 
       // Perform search
       onSearch(searchQuery, selectedFilters);

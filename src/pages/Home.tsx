@@ -1,15 +1,325 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, Palette, Layers, ShoppingBag, Sparkles } from "lucide-react";
+import { ArrowRight, Palette, Layers, ShoppingBag, Sparkles, X, Calendar, Clock, User, Mail, Phone } from "lucide-react";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AIAssistant from "@/components/AIAssistant";
 import ScrollReveal from "@/components/ScrollReveal";
+import RecommendedProducts from "@/components/RecommendedProducts";
 import heroImage from "@/assets/hero-interior.jpg";
 
 const Home = () => {
+  const [showDesignConsultation, setShowDesignConsultation] = useState(false);
+  const [consultationForm, setConsultationForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    roomType: '',
+    style: '',
+    budget: '',
+    timeline: '',
+    message: ''
+  });
+
+  // Sample products data for recommendations
+  const products = [
+    {
+      id: 1,
+      name: "Modern Sectional Sofa",
+      price: "$1,299",
+      category: "Furniture",
+      subcategory: "Sofas & Couches",
+      image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop",
+      description: "Comfortable and stylish sectional sofa perfect for modern living spaces",
+      tags: ["modern", "comfortable", "sectional", "gray"],
+      popularity: 0.9,
+      rating: 4.8,
+      trending: true
+    },
+    {
+      id: 2,
+      name: "Luxury Chesterfield Sofa",
+      price: "$1,899",
+      category: "Furniture",
+      subcategory: "Sofas & Couches",
+      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
+      description: "Classic Chesterfield design with premium leather upholstery",
+      tags: ["luxury", "leather", "classic", "brown"],
+      popularity: 0.8,
+      rating: 4.7,
+      trending: true
+    },
+    {
+      id: 3,
+      name: "Minimalist Loveseat",
+      price: "$799",
+      category: "Furniture",
+      subcategory: "Sofas & Couches",
+      image: "https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?w=400&h=300&fit=crop",
+      description: "Clean lines and minimalist design for contemporary homes",
+      tags: ["minimalist", "modern", "compact", "white"],
+      popularity: 0.7,
+      rating: 4.5,
+      trending: false
+    },
+    {
+      id: 4,
+      name: "Premium Recliner Chair",
+      price: "$899",
+      category: "Furniture",
+      subcategory: "Armchairs & Recliners",
+      image: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=400&h=300&fit=crop",
+      description: "Ultra-comfortable recliner with massage function and cup holders",
+      tags: ["recliner", "comfortable", "massage", "brown"],
+      popularity: 0.8,
+      rating: 4.6,
+      trending: true
+    },
+    {
+      id: 5,
+      name: "Designer Accent Chair",
+      price: "$649",
+      category: "Furniture",
+      subcategory: "Armchairs & Recliners",
+      image: "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&h=300&fit=crop",
+      description: "Stylish accent chair with unique geometric pattern",
+      tags: ["accent", "designer", "geometric", "colorful"],
+      popularity: 0.6,
+      rating: 4.3,
+      trending: false
+    },
+    {
+      id: 6,
+      name: "Wingback Reading Chair",
+      price: "$749",
+      category: "Furniture",
+      subcategory: "Armchairs & Recliners",
+      image: "https://images.unsplash.com/photo-1549497538-303791108f95?w=400&h=300&fit=crop",
+      description: "Classic wingback chair perfect for reading and relaxation",
+      tags: ["wingback", "reading", "classic", "navy"],
+      popularity: 0.5,
+      rating: 4.2,
+      trending: false
+    },
+    {
+      id: 7,
+      name: "Glass Coffee Table",
+      price: "$399",
+      category: "Furniture",
+      subcategory: "Coffee Tables & Side Tables",
+      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
+      description: "Elegant glass coffee table with metal frame",
+      tags: ["glass", "modern", "metal", "elegant"],
+      popularity: 0.7,
+      rating: 4.4,
+      trending: false
+    },
+    {
+      id: 8,
+      name: "Wooden Side Table Set",
+      price: "$299",
+      category: "Furniture",
+      subcategory: "Coffee Tables & Side Tables",
+      image: "https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?w=400&h=300&fit=crop",
+      description: "Set of two matching wooden side tables with storage",
+      tags: ["wood", "storage", "set", "natural"],
+      popularity: 0.6,
+      rating: 4.3,
+      trending: false
+    },
+    {
+      id: 9,
+      name: "Marble Coffee Table",
+      price: "$1,199",
+      category: "Furniture",
+      subcategory: "Coffee Tables & Side Tables",
+      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
+      description: "Luxury marble coffee table with gold accents",
+      tags: ["marble", "luxury", "gold", "premium"],
+      popularity: 0.8,
+      rating: 4.7,
+      trending: true
+    },
+    {
+      id: 10,
+      name: "Farmhouse Dining Table",
+      price: "$1,299",
+      category: "Furniture",
+      subcategory: "Dining Tables & Chairs",
+      image: "https://images.unsplash.com/photo-1617806118233-18e1de247200?w=400&h=300&fit=crop",
+      description: "Rustic farmhouse dining table seating 8 people",
+      tags: ["farmhouse", "rustic", "wood", "large"],
+      popularity: 0.7,
+      rating: 4.5,
+      trending: false
+    },
+    {
+      id: 11,
+      name: "Modern Dining Chair Set",
+      price: "$599",
+      category: "Furniture",
+      subcategory: "Dining Tables & Chairs",
+      image: "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&h=300&fit=crop",
+      description: "Set of 4 modern dining chairs with upholstered seats",
+      tags: ["modern", "upholstered", "set", "comfortable"],
+      popularity: 0.6,
+      rating: 4.3,
+      trending: false
+    },
+    {
+      id: 12,
+      name: "Extendable Dining Table",
+      price: "$1,599",
+      category: "Furniture",
+      subcategory: "Dining Tables & Chairs",
+      image: "https://images.unsplash.com/photo-1617806118233-18e1de247200?w=400&h=300&fit=crop",
+      description: "Versatile extendable dining table for 6-10 people",
+      tags: ["extendable", "versatile", "wood", "spacious"],
+      popularity: 0.8,
+      rating: 4.6,
+      trending: true
+    },
+    {
+      id: 13,
+      name: "King Size Platform Bed",
+      price: "$1,199",
+      category: "Furniture",
+      subcategory: "Beds",
+      image: "https://images.unsplash.com/photo-1505693314120-0d443867891c?w=400&h=300&fit=crop",
+      description: "Modern platform bed with built-in storage drawers",
+      tags: ["king", "platform", "storage", "modern"],
+      popularity: 0.9,
+      rating: 4.8,
+      trending: true
+    },
+    {
+      id: 14,
+      name: "Queen Size Upholstered Bed",
+      price: "$899",
+      category: "Furniture",
+      subcategory: "Beds",
+      image: "https://images.unsplash.com/photo-1505693314120-0d443867891c?w=400&h=300&fit=crop",
+      description: "Luxurious upholstered bed with tufted headboard",
+      tags: ["queen", "upholstered", "tufted", "luxury"],
+      popularity: 0.8,
+      rating: 4.7,
+      trending: true
+    },
+    {
+      id: 15,
+      name: "Single Daybed",
+      price: "$599",
+      category: "Furniture",
+      subcategory: "Beds",
+      image: "https://images.unsplash.com/photo-1505693314120-0d443867891c?w=400&h=300&fit=crop",
+      description: "Versatile daybed perfect for guest rooms or small spaces",
+      tags: ["single", "daybed", "versatile", "compact"],
+      popularity: 0.5,
+      rating: 4.2,
+      trending: false
+    },
+    {
+      id: 16,
+      name: "Crystal Chandelier",
+      price: "$1,899",
+      category: "Lighting",
+      subcategory: "Chandeliers",
+      image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop",
+      description: "Elegant crystal chandelier with 12 lights",
+      tags: ["crystal", "elegant", "luxury", "dining"],
+      popularity: 0.8,
+      rating: 4.7,
+      trending: true
+    },
+    {
+      id: 17,
+      name: "Modern Geometric Chandelier",
+      price: "$799",
+      category: "Lighting",
+      subcategory: "Chandeliers",
+      image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop",
+      description: "Contemporary geometric chandelier with LED lights",
+      tags: ["modern", "geometric", "LED", "contemporary"],
+      popularity: 0.7,
+      rating: 4.5,
+      trending: false
+    },
+    {
+      id: 18,
+      name: "Adjustable Floor Lamp",
+      price: "$299",
+      category: "Lighting",
+      subcategory: "Floor Lamps",
+      image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop",
+      description: "Modern floor lamp with adjustable height and brightness",
+      tags: ["adjustable", "modern", "brightness", "reading"],
+      popularity: 0.6,
+      rating: 4.3,
+      trending: false
+    },
+    {
+      id: 19,
+      name: "Arc Floor Lamp",
+      price: "$449",
+      category: "Lighting",
+      subcategory: "Floor Lamps",
+      image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop",
+      description: "Stylish arc floor lamp perfect for reading corners",
+      tags: ["arc", "stylish", "reading", "corner"],
+      popularity: 0.7,
+      rating: 4.4,
+      trending: false
+    },
+    {
+      id: 20,
+      name: "Ceramic Table Lamp",
+      price: "$149",
+      category: "Lighting",
+      subcategory: "Table Lamps",
+      image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop",
+      description: "Handcrafted ceramic table lamp with fabric shade",
+      tags: ["ceramic", "handcrafted", "fabric", "bedside"],
+      popularity: 0.5,
+      rating: 4.1,
+      trending: false
+    }
+  ];
+
+  const openInteriorDesignConsultation = () => {
+    setShowDesignConsultation(true);
+  };
+
+  const handleConsultationSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Here you would typically send the form data to your backend
+    console.log('Consultation form submitted:', consultationForm);
+    toast.success('Thank you! We\'ll contact you within 24 hours to schedule your consultation.');
+    setShowDesignConsultation(false);
+    setConsultationForm({
+      name: '',
+      email: '',
+      phone: '',
+      roomType: '',
+      style: '',
+      budget: '',
+      timeline: '',
+      message: ''
+    });
+  };
+
+  const updateConsultationForm = (field: string, value: string) => {
+    setConsultationForm(prev => ({ ...prev, [field]: value }));
+  };
+
   const features = [
     {
       icon: Palette,
@@ -130,8 +440,8 @@ const Home = () => {
                       onClick={() => {
                         switch (feature.title) {
                           case 'Interior Design':
-                            // Scroll to a design section or navigate to a design page
-                            document.getElementById('design-section')?.scrollIntoView({ behavior: 'smooth' });
+                            // Open interior design consultation modal or navigate to design page
+                            openInteriorDesignConsultation();
                             break;
                           case '3D Planning':
                             window.location.href = '/planner';
@@ -171,6 +481,9 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Recommended Products Section */}
+      <RecommendedProducts products={products} />
 
       {/* Design Section */}
       <section id="design-section" className="py-20 px-4 bg-gradient-to-b from-muted/20 to-background">
@@ -256,6 +569,155 @@ const Home = () => {
           </ScrollReveal>
         </div>
       </section>
+
+      {/* Interior Design Consultation Modal */}
+      <Dialog open={showDesignConsultation} onOpenChange={setShowDesignConsultation}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Palette className="h-5 w-5" />
+              Free Interior Design Consultation
+            </DialogTitle>
+            <DialogDescription>
+              Get personalized design advice from our expert interior designers. Fill out the form below and we'll contact you within 24 hours.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <form onSubmit={handleConsultationSubmit} className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="name">Full Name *</Label>
+                <Input
+                  id="name"
+                  value={consultationForm.name}
+                  onChange={(e) => updateConsultationForm('name', e.target.value)}
+                  placeholder="Enter your full name"
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="email">Email Address *</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={consultationForm.email}
+                  onChange={(e) => updateConsultationForm('email', e.target.value)}
+                  placeholder="Enter your email"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="phone">Phone Number</Label>
+                <Input
+                  id="phone"
+                  value={consultationForm.phone}
+                  onChange={(e) => updateConsultationForm('phone', e.target.value)}
+                  placeholder="Enter your phone number"
+                />
+              </div>
+              <div>
+                <Label htmlFor="roomType">Room Type *</Label>
+                <Select value={consultationForm.roomType} onValueChange={(value) => updateConsultationForm('roomType', value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select room type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="living-room">Living Room</SelectItem>
+                    <SelectItem value="bedroom">Bedroom</SelectItem>
+                    <SelectItem value="kitchen">Kitchen</SelectItem>
+                    <SelectItem value="bathroom">Bathroom</SelectItem>
+                    <SelectItem value="dining-room">Dining Room</SelectItem>
+                    <SelectItem value="office">Home Office</SelectItem>
+                    <SelectItem value="outdoor">Outdoor Space</SelectItem>
+                    <SelectItem value="entire-home">Entire Home</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="style">Preferred Style</Label>
+                <Select value={consultationForm.style} onValueChange={(value) => updateConsultationForm('style', value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select your preferred style" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="modern">Modern</SelectItem>
+                    <SelectItem value="traditional">Traditional</SelectItem>
+                    <SelectItem value="minimalist">Minimalist</SelectItem>
+                    <SelectItem value="industrial">Industrial</SelectItem>
+                    <SelectItem value="scandinavian">Scandinavian</SelectItem>
+                    <SelectItem value="bohemian">Bohemian</SelectItem>
+                    <SelectItem value="farmhouse">Farmhouse</SelectItem>
+                    <SelectItem value="contemporary">Contemporary</SelectItem>
+                    <SelectItem value="not-sure">Not Sure</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="budget">Budget Range</Label>
+                <Select value={consultationForm.budget} onValueChange={(value) => updateConsultationForm('budget', value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select your budget range" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="under-5k">Under $5,000</SelectItem>
+                    <SelectItem value="5k-10k">$5,000 - $10,000</SelectItem>
+                    <SelectItem value="10k-25k">$10,000 - $25,000</SelectItem>
+                    <SelectItem value="25k-50k">$25,000 - $50,000</SelectItem>
+                    <SelectItem value="50k-100k">$50,000 - $100,000</SelectItem>
+                    <SelectItem value="over-100k">Over $100,000</SelectItem>
+                    <SelectItem value="flexible">Flexible</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="timeline">Project Timeline</Label>
+              <Select value={consultationForm.timeline} onValueChange={(value) => updateConsultationForm('timeline', value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="When would you like to start?" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="asap">ASAP</SelectItem>
+                  <SelectItem value="1-month">Within 1 month</SelectItem>
+                  <SelectItem value="3-months">Within 3 months</SelectItem>
+                  <SelectItem value="6-months">Within 6 months</SelectItem>
+                  <SelectItem value="planning">Just planning for now</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="message">Tell us about your project *</Label>
+              <Textarea
+                id="message"
+                value={consultationForm.message}
+                onChange={(e) => updateConsultationForm('message', e.target.value)}
+                placeholder="Describe your space, what you're looking to achieve, any specific requirements or challenges..."
+                rows={4}
+                required
+              />
+            </div>
+
+            <div className="flex gap-3 pt-4">
+              <Button type="submit" className="flex-1">
+                <Calendar className="mr-2 h-4 w-4" />
+                Request Free Consultation
+              </Button>
+              <Button type="button" variant="outline" onClick={() => setShowDesignConsultation(false)}>
+                <X className="mr-2 h-4 w-4" />
+                Cancel
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </div>
