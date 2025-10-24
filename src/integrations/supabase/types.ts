@@ -14,7 +14,420 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      user_profiles: {
+        Row: {
+          id: string
+          email: string
+          first_name: string | null
+          last_name: string | null
+          phone: string | null
+          bio: string | null
+          role: 'customer' | 'admin' | 'designer'
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id: string
+          email: string
+          first_name?: string | null
+          last_name?: string | null
+          phone?: string | null
+          bio?: string | null
+          role?: 'customer' | 'admin' | 'designer'
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          email?: string
+          first_name?: string | null
+          last_name?: string | null
+          phone?: string | null
+          bio?: string | null
+          role?: 'customer' | 'admin' | 'designer'
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      user_addresses: {
+        Row: {
+          id: string
+          user_id: string
+          type: 'home' | 'work' | 'other'
+          name: string
+          address: string
+          city: string
+          state: string
+          zip_code: string
+          country: string
+          is_default: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          type?: 'home' | 'work' | 'other'
+          name: string
+          address: string
+          city: string
+          state: string
+          zip_code: string
+          country: string
+          is_default?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          type?: 'home' | 'work' | 'other'
+          name?: string
+          address?: string
+          city?: string
+          state?: string
+          zip_code?: string
+          country?: string
+          is_default?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      user_preferences: {
+        Row: {
+          id: string
+          user_id: string
+          favorite_style: string | null
+          budget_range: string | null
+          room_types: string[] | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          favorite_style?: string | null
+          budget_range?: string | null
+          room_types?: string[] | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          favorite_style?: string | null
+          budget_range?: string | null
+          room_types?: string[] | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      categories: {
+        Row: {
+          id: string
+          name: string
+          description: string | null
+          image_url: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          description?: string | null
+          image_url?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          description?: string | null
+          image_url?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      subcategories: {
+        Row: {
+          id: string
+          category_id: string
+          name: string
+          description: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          category_id: string
+          name: string
+          description?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          category_id?: string
+          name?: string
+          description?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      products: {
+        Row: {
+          id: string
+          name: string
+          description: string | null
+          price: number
+          category_id: string | null
+          subcategory_id: string | null
+          image_url: string | null
+          tags: string[] | null
+          popularity: number
+          rating: number
+          trending: boolean
+          stock_quantity: number
+          is_active: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          description?: string | null
+          price: number
+          category_id?: string | null
+          subcategory_id?: string | null
+          image_url?: string | null
+          tags?: string[] | null
+          popularity?: number
+          rating?: number
+          trending?: boolean
+          stock_quantity?: number
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          description?: string | null
+          price?: number
+          category_id?: string | null
+          subcategory_id?: string | null
+          image_url?: string | null
+          tags?: string[] | null
+          popularity?: number
+          rating?: number
+          trending?: boolean
+          stock_quantity?: number
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      search_history: {
+        Row: {
+          id: string
+          user_id: string
+          query: string
+          category: string | null
+          clicked_products: string[] | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          query: string
+          category?: string | null
+          clicked_products?: string[] | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          query?: string
+          category?: string | null
+          clicked_products?: string[] | null
+          created_at?: string
+        }
+      }
+      user_favorites: {
+        Row: {
+          id: string
+          user_id: string
+          product_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          product_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          product_id?: string
+          created_at?: string
+        }
+      }
+      cart_items: {
+        Row: {
+          id: string
+          user_id: string
+          product_id: string
+          quantity: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          product_id: string
+          quantity?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          product_id?: string
+          quantity?: number
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      orders: {
+        Row: {
+          id: string
+          user_id: string
+          order_number: string
+          status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
+          payment_status: 'pending' | 'paid' | 'failed' | 'refunded'
+          subtotal: number
+          tax_amount: number
+          shipping_amount: number
+          total_amount: number
+          shipping_address: Json | null
+          billing_address: Json | null
+          notes: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          order_number: string
+          status?: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
+          payment_status?: 'pending' | 'paid' | 'failed' | 'refunded'
+          subtotal: number
+          tax_amount?: number
+          shipping_amount?: number
+          total_amount: number
+          shipping_address?: Json | null
+          billing_address?: Json | null
+          notes?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          order_number?: string
+          status?: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
+          payment_status?: 'pending' | 'paid' | 'failed' | 'refunded'
+          subtotal?: number
+          tax_amount?: number
+          shipping_amount?: number
+          total_amount?: number
+          shipping_address?: Json | null
+          billing_address?: Json | null
+          notes?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      order_items: {
+        Row: {
+          id: string
+          order_id: string
+          product_id: string | null
+          product_name: string
+          product_price: number
+          quantity: number
+          total_price: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          order_id: string
+          product_id?: string | null
+          product_name: string
+          product_price: number
+          quantity: number
+          total_price: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          order_id?: string
+          product_id?: string | null
+          product_name?: string
+          product_price?: number
+          quantity?: number
+          total_price?: number
+          created_at?: string
+        }
+      }
+      design_consultations: {
+        Row: {
+          id: string
+          user_id: string | null
+          name: string
+          email: string
+          phone: string | null
+          room_type: string | null
+          style: string | null
+          budget: string | null
+          timeline: string | null
+          message: string
+          status: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id?: string | null
+          name: string
+          email: string
+          phone?: string | null
+          room_type?: string | null
+          style?: string | null
+          budget?: string | null
+          timeline?: string | null
+          message: string
+          status?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string | null
+          name?: string
+          email?: string
+          phone?: string | null
+          room_type?: string | null
+          style?: string | null
+          budget?: string | null
+          timeline?: string | null
+          message?: string
+          status?: string
+          created_at?: string
+          updated_at?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +436,9 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      user_role: 'customer' | 'admin' | 'designer'
+      order_status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
+      payment_status: 'pending' | 'paid' | 'failed' | 'refunded'
     }
     CompositeTypes: {
       [_ in never]: never

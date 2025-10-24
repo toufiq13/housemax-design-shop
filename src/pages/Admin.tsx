@@ -46,22 +46,30 @@ import {
   Upload
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useAuth } from '@/contexts/AuthContext';
+import { productService, adminService, consultationService, categoryService } from '@/lib/database';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { useRecommendations } from '@/contexts/RecommendationContext';
 
 interface Product {
-  id: number;
+  id: string;
   name: string;
-  price: string;
-  category: string;
-  subcategory: string;
-  image: string;
-  description: string;
-  tags: string[];
-  popularity?: number;
-  rating?: number;
-  trending?: boolean;
+  description: string | null;
+  price: number;
+  category_id: string | null;
+  subcategory_id: string | null;
+  image_url: string | null;
+  tags: string[] | null;
+  popularity: number;
+  rating: number;
+  trending: boolean;
+  stock_quantity: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  categories?: { name: string } | null;
+  subcategories?: { name: string } | null;
 }
 
 interface AdminStats {
@@ -74,128 +82,174 @@ interface AdminStats {
 }
 
 const Admin = () => {
+  const { user } = useAuth();
   const { searchHistory, recommendations, clearHistory } = useRecommendations();
   const [stats, setStats] = useState<AdminStats>({
-    totalProducts: 40,
-    totalUsers: 1250,
-    totalOrders: 3420,
-    totalRevenue: 125000,
-    trendingProducts: 8,
-    lowStockItems: 3
+    totalProducts: 0,
+    totalUsers: 0,
+    totalOrders: 0,
+    totalRevenue: 0,
+    trendingProducts: 0,
+    lowStockItems: 0
   });
+  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
 
-  const [products, setProducts] = useState<Product[]>([
-    {
-      id: 1,
-      name: "Modern Sectional Sofa",
-      price: "$1,299",
-      category: "Furniture",
-      subcategory: "Sofas & Couches",
-      image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop",
-      description: "Comfortable and stylish sectional sofa perfect for modern living spaces",
-      tags: ["modern", "comfortable", "sectional", "gray"],
-      popularity: 0.9,
-      rating: 4.8,
-      trending: true
-    },
-    {
-      id: 2,
-      name: "Luxury Chesterfield Sofa",
-      price: "$1,899",
-      category: "Furniture",
-      subcategory: "Sofas & Couches",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "Classic Chesterfield design with premium leather upholstery",
-      tags: ["luxury", "leather", "classic", "brown"],
-      popularity: 0.8,
-      rating: 4.7,
-      trending: true
+  // Load admin data
+  useEffect(() => {
+    loadAdminData();
+  }, []);
+
+  const loadAdminData = async () => {
+    try {
+      setLoading(true);
+      const [statsData, productsData, categoriesData] = await Promise.all([
+        adminService.getStats(),
+        productService.getProducts({ limit: 100 }),
+        categoryService.getCategories()
+      ]);
+      
+      setStats(statsData);
+      setProducts(productsData);
+      setCategories(categoriesData);
+    } catch (error) {
+      console.error('Error loading admin data:', error);
+      toast.error('Failed to load admin data');
+    } finally {
+      setLoading(false);
     }
-  ]);
+  };
 
   const [newProduct, setNewProduct] = useState<Partial<Product>>({
     name: '',
-    price: '',
-    category: '',
-    subcategory: '',
-    image: '',
     description: '',
+    price: 0,
+    category_id: '',
+    subcategory_id: '',
+    image_url: '',
     tags: [],
     popularity: 0,
     rating: 0,
-    trending: false
+    trending: false,
+    stock_quantity: 0,
+    is_active: true
   });
 
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
-  const categories = ['all', 'Furniture', 'Lighting', 'Flooring & Rugs', 'Window Treatments', 'Textiles & Soft Furnishings', 'Storage & Organization', 'Kitchen & Dining Accessories', 'Bathroom Accessories', 'Décor & Accessories', 'Technology & Smart Devices', 'Outdoor/Patio Interior'];
+  const categoryOptions = ['all', ...categories.map(cat => cat.name)];
 
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+                         (product.description && product.description.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesCategory = selectedCategory === 'all' || product.category_id === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
-  const handleAddProduct = () => {
-    if (!newProduct.name || !newProduct.price || !newProduct.category) {
+  const handleAddProduct = async () => {
+    if (!newProduct.name || !newProduct.price || !newProduct.category_id) {
       toast.error('Please fill in all required fields');
       return;
     }
 
-    const product: Product = {
-      id: products.length + 1,
-      name: newProduct.name,
-      price: newProduct.price,
-      category: newProduct.category,
-      subcategory: newProduct.subcategory || '',
-      image: newProduct.image || 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop',
-      description: newProduct.description || '',
-      tags: newProduct.tags || [],
-      popularity: newProduct.popularity || 0,
-      rating: newProduct.rating || 0,
-      trending: newProduct.trending || false
-    };
+    try {
+      const product = await productService.createProduct({
+        name: newProduct.name!,
+        description: newProduct.description || null,
+        price: newProduct.price!,
+        category_id: newProduct.category_id || null,
+        subcategory_id: newProduct.subcategory_id || null,
+        image_url: newProduct.image_url || null,
+        tags: newProduct.tags || null,
+        popularity: newProduct.popularity || 0,
+        rating: newProduct.rating || 0,
+        trending: newProduct.trending || false,
+        stock_quantity: newProduct.stock_quantity || 0,
+        is_active: newProduct.is_active || true
+      });
 
-    setProducts([...products, product]);
-    setNewProduct({
-      name: '',
-      price: '',
-      category: '',
-      subcategory: '',
-      image: '',
-      description: '',
-      tags: [],
-      popularity: 0,
-      rating: 0,
-      trending: false
-    });
-    toast.success('Product added successfully!');
+      setProducts([...products, product]);
+      setNewProduct({
+        name: '',
+        description: '',
+        price: 0,
+        category_id: '',
+        subcategory_id: '',
+        image_url: '',
+        tags: [],
+        popularity: 0,
+        rating: 0,
+        trending: false,
+        stock_quantity: 0,
+        is_active: true
+      });
+      toast.success('Product added successfully!');
+    } catch (error) {
+      console.error('Error adding product:', error);
+      toast.error('Failed to add product');
+    }
   };
 
   const handleEditProduct = (product: Product) => {
     setEditingProduct(product);
   };
 
-  const handleUpdateProduct = () => {
+  const handleUpdateProduct = async () => {
     if (!editingProduct) return;
 
-    setProducts(products.map(p => p.id === editingProduct.id ? editingProduct : p));
-    setEditingProduct(null);
-    toast.success('Product updated successfully!');
+    try {
+      const updatedProduct = await productService.updateProduct(editingProduct.id, {
+        name: editingProduct.name,
+        description: editingProduct.description,
+        price: editingProduct.price,
+        category_id: editingProduct.category_id,
+        subcategory_id: editingProduct.subcategory_id,
+        image_url: editingProduct.image_url,
+        tags: editingProduct.tags,
+        popularity: editingProduct.popularity,
+        rating: editingProduct.rating,
+        trending: editingProduct.trending,
+        stock_quantity: editingProduct.stock_quantity,
+        is_active: editingProduct.is_active
+      });
+
+      setProducts(products.map(p => p.id === editingProduct.id ? updatedProduct : p));
+      setEditingProduct(null);
+      toast.success('Product updated successfully!');
+    } catch (error) {
+      console.error('Error updating product:', error);
+      toast.error('Failed to update product');
+    }
   };
 
-  const handleDeleteProduct = (id: number) => {
-    setProducts(products.filter(p => p.id !== id));
-    toast.success('Product deleted successfully!');
+  const handleDeleteProduct = async (id: string) => {
+    try {
+      await productService.deleteProduct(id);
+      setProducts(products.filter(p => p.id !== id));
+      toast.success('Product deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      toast.error('Failed to delete product');
+    }
   };
 
-  const handleToggleTrending = (id: number) => {
-    setProducts(products.map(p => 
-      p.id === id ? { ...p, trending: !p.trending } : p
-    ));
+  const handleToggleTrending = async (id: string) => {
+    try {
+      const product = products.find(p => p.id === id);
+      if (!product) return;
+
+      const updatedProduct = await productService.updateProduct(id, {
+        trending: !product.trending
+      });
+
+      setProducts(products.map(p => p.id === id ? updatedProduct : p));
+    } catch (error) {
+      console.error('Error toggling trending:', error);
+      toast.error('Failed to update product');
+    }
   };
 
   const handleClearSearchHistory = () => {
@@ -287,7 +341,7 @@ const Admin = () => {
                     <SelectValue placeholder="Filter by category" />
                   </SelectTrigger>
                   <SelectContent>
-                    {categories.map(category => (
+                    {categoryOptions.map(category => (
                       <SelectItem key={category} value={category}>
                         {category === 'all' ? 'All Categories' : category}
                       </SelectItem>
@@ -325,23 +379,25 @@ const Admin = () => {
                         <Label htmlFor="price">Price *</Label>
                         <Input
                           id="price"
+                          type="number"
+                          step="0.01"
                           value={newProduct.price}
-                          onChange={(e) => setNewProduct({...newProduct, price: e.target.value})}
-                          placeholder="Enter price (e.g., $299)"
+                          onChange={(e) => setNewProduct({...newProduct, price: parseFloat(e.target.value)})}
+                          placeholder="Enter price (e.g., 299.99)"
                         />
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="category">Category *</Label>
-                        <Select value={newProduct.category} onValueChange={(value) => setNewProduct({...newProduct, category: value})}>
+                        <Select value={newProduct.category_id} onValueChange={(value) => setNewProduct({...newProduct, category_id: value})}>
                           <SelectTrigger>
                             <SelectValue placeholder="Select category" />
                           </SelectTrigger>
                           <SelectContent>
-                            {categories.slice(1).map(category => (
-                              <SelectItem key={category} value={category}>
-                                {category}
+                            {categories.map(category => (
+                              <SelectItem key={category.id} value={category.id}>
+                                {category.name}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -351,9 +407,9 @@ const Admin = () => {
                         <Label htmlFor="subcategory">Subcategory</Label>
                         <Input
                           id="subcategory"
-                          value={newProduct.subcategory}
-                          onChange={(e) => setNewProduct({...newProduct, subcategory: e.target.value})}
-                          placeholder="Enter subcategory"
+                          value={newProduct.subcategory_id}
+                          onChange={(e) => setNewProduct({...newProduct, subcategory_id: e.target.value})}
+                          placeholder="Enter subcategory ID"
                         />
                       </div>
                     </div>
@@ -361,8 +417,8 @@ const Admin = () => {
                       <Label htmlFor="image">Image URL</Label>
                       <Input
                         id="image"
-                        value={newProduct.image}
-                        onChange={(e) => setNewProduct({...newProduct, image: e.target.value})}
+                        value={newProduct.image_url}
+                        onChange={(e) => setNewProduct({...newProduct, image_url: e.target.value})}
                         placeholder="Enter image URL"
                       />
                     </div>
@@ -434,18 +490,18 @@ const Admin = () => {
                         <TableCell>
                           <div className="flex items-center gap-3">
                             <img
-                              src={product.image}
+                              src={product.image_url || '/placeholder.svg'}
                               alt={product.name}
                               className="w-12 h-12 rounded object-cover"
                             />
                             <div>
                               <div className="font-medium">{product.name}</div>
-                              <div className="text-sm text-muted-foreground">{product.subcategory}</div>
+                              <div className="text-sm text-muted-foreground">{product.subcategories?.name || 'No subcategory'}</div>
                             </div>
                           </div>
                         </TableCell>
-                        <TableCell>{product.category}</TableCell>
-                        <TableCell>{product.price}</TableCell>
+                        <TableCell>{product.categories?.name || 'Uncategorized'}</TableCell>
+                        <TableCell>${product.price.toFixed(2)}</TableCell>
                         <TableCell>
                           <div className="flex items-center gap-1">
                             <span>★</span>

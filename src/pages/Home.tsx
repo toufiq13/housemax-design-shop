@@ -10,6 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
+import { consultationService } from "@/lib/database";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AIAssistant from "@/components/AIAssistant";
@@ -18,6 +20,7 @@ import RecommendedProducts from "@/components/RecommendedProducts";
 import heroImage from "@/assets/hero-interior.jpg";
 
 const Home = () => {
+  const { user } = useAuth();
   const [showDesignConsultation, setShowDesignConsultation] = useState(false);
   const [consultationForm, setConsultationForm] = useState({
     name: '',
@@ -298,22 +301,38 @@ const Home = () => {
     setShowDesignConsultation(true);
   };
 
-  const handleConsultationSubmit = (e: React.FormEvent) => {
+  const handleConsultationSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically send the form data to your backend
-    console.log('Consultation form submitted:', consultationForm);
-    toast.success('Thank you! We\'ll contact you within 24 hours to schedule your consultation.');
-    setShowDesignConsultation(false);
-    setConsultationForm({
-      name: '',
-      email: '',
-      phone: '',
-      roomType: '',
-      style: '',
-      budget: '',
-      timeline: '',
-      message: ''
-    });
+    try {
+      await consultationService.createConsultation({
+        user_id: user?.id || null,
+        name: consultationForm.name,
+        email: consultationForm.email,
+        phone: consultationForm.phone || null,
+        room_type: consultationForm.roomType || null,
+        style: consultationForm.style || null,
+        budget: consultationForm.budget || null,
+        timeline: consultationForm.timeline || null,
+        message: consultationForm.message,
+        status: 'pending'
+      });
+      
+      toast.success('Thank you! We\'ll contact you within 24 hours to schedule your consultation.');
+      setShowDesignConsultation(false);
+      setConsultationForm({
+        name: '',
+        email: '',
+        phone: '',
+        roomType: '',
+        style: '',
+        budget: '',
+        timeline: '',
+        message: ''
+      });
+    } catch (error) {
+      console.error('Error submitting consultation:', error);
+      toast.error('Failed to submit consultation. Please try again.');
+    }
   };
 
   const updateConsultationForm = (field: string, value: string) => {

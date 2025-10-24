@@ -1,768 +1,468 @@
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ShoppingCart } from "lucide-react";
-import { useState, useMemo } from "react";
-import { useCart } from "@/contexts/CartContext";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import AIAssistant from "@/components/AIAssistant";
-import MLSearch from "@/components/MLSearch";
-import { toast } from "sonner";
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { 
+  Search, 
+  Filter, 
+  Star, 
+  ShoppingCart, 
+  Heart,
+  Grid3X3,
+  List,
+  SlidersHorizontal,
+  Loader2
+} from 'lucide-react';
+import { motion } from 'framer-motion';
+import { toast } from 'sonner';
+import { useAuth } from '@/contexts/AuthContext';
+import { productService, categoryService, searchService, favoritesService } from '@/lib/database';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import MLSearch from '@/components/MLSearch';
+import CartSidebar from '@/components/CartSidebar';
+import { useCart } from '@/contexts/CartContext';
+
+interface Product {
+  id: string;
+  name: string;
+  description: string | null;
+  price: number;
+  category_id: string | null;
+  subcategory_id: string | null;
+  image_url: string | null;
+  tags: string[] | null;
+  popularity: number;
+  rating: number;
+  trending: boolean;
+  stock_quantity: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  categories?: { name: string } | null;
+  subcategories?: { name: string } | null;
+}
+
+interface Category {
+  id: string;
+  name: string;
+  description: string | null;
+  image_url: string | null;
+  subcategories?: Subcategory[];
+}
+
+interface Subcategory {
+  id: string;
+  category_id: string;
+  name: string;
+  description: string | null;
+}
 
 const Shop = () => {
+  const { user } = useAuth();
   const { addItem } = useCart();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [appliedFilters, setAppliedFilters] = useState<any>({});
-  const products = [
-    // FURNITURE - Sofas & Couches
-    {
-      id: 1,
-      name: "Modern Sectional Sofa",
-      price: "$1,299",
-      category: "Furniture",
-      subcategory: "Sofas & Couches",
-      image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop",
-      description: "Comfortable and stylish sectional sofa perfect for modern living spaces",
-      tags: ["modern", "comfortable", "sectional", "gray"],
-      popularity: 0.9,
-      rating: 4.8,
-      trending: true
-    },
-    {
-      id: 2,
-      name: "Luxury Chesterfield Sofa",
-      price: "$1,899",
-      category: "Furniture",
-      subcategory: "Sofas & Couches",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "Classic Chesterfield design with premium leather upholstery",
-      tags: ["luxury", "leather", "classic", "brown"],
-      popularity: 0.8,
-      rating: 4.7,
-      trending: true
-    },
-    {
-      id: 3,
-      name: "Minimalist Loveseat",
-      price: "$799",
-      category: "Furniture",
-      subcategory: "Sofas & Couches",
-      image: "https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?w=400&h=300&fit=crop",
-      description: "Clean lines and minimalist design for contemporary homes",
-      tags: ["minimalist", "modern", "compact", "white"],
-      popularity: 0.7,
-      rating: 4.5,
-      trending: false
-    },
+  const [selectedSubcategory, setSelectedSubcategory] = useState("all");
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [sortBy, setSortBy] = useState('popularity');
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [showCart, setShowCart] = useState(false);
 
-    // FURNITURE - Armchairs & Recliners
-    {
-      id: 4,
-      name: "Premium Recliner Chair",
-      price: "$899",
-      category: "Furniture",
-      subcategory: "Armchairs & Recliners",
-      image: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=400&h=300&fit=crop",
-      description: "Ultra-comfortable recliner with massage function and cup holders",
-      tags: ["recliner", "comfortable", "massage", "brown"],
-      popularity: 0.8,
-      rating: 4.6,
-      trending: true
-    },
-    {
-      id: 5,
-      name: "Designer Accent Chair",
-      price: "$649",
-      category: "Furniture",
-      subcategory: "Armchairs & Recliners",
-      image: "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&h=300&fit=crop",
-      description: "Stylish accent chair with unique geometric pattern",
-      tags: ["accent", "designer", "geometric", "colorful"],
-      popularity: 0.6,
-      rating: 4.3,
-      trending: false
-    },
-    {
-      id: 6,
-      name: "Wingback Reading Chair",
-      price: "$749",
-      category: "Furniture",
-      subcategory: "Armchairs & Recliners",
-      image: "https://images.unsplash.com/photo-1549497538-303791108f95?w=400&h=300&fit=crop",
-      description: "Classic wingback chair perfect for reading and relaxation",
-      tags: ["wingback", "reading", "classic", "navy"],
-      popularity: 0.5,
-      rating: 4.2,
-      trending: false
-    },
+  // Load initial data
+  useEffect(() => {
+    loadData();
+  }, []);
 
-    // FURNITURE - Coffee Tables & Side Tables
-    {
-      id: 7,
-      name: "Glass Coffee Table",
-      price: "$399",
-      category: "Furniture",
-      subcategory: "Coffee Tables & Side Tables",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "Elegant glass coffee table with metal frame",
-      tags: ["glass", "modern", "metal", "elegant"],
-      popularity: 0.7,
-      rating: 4.4,
-      trending: false
-    },
-    {
-      id: 8,
-      name: "Wooden Side Table Set",
-      price: "$299",
-      category: "Furniture",
-      subcategory: "Coffee Tables & Side Tables",
-      image: "https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?w=400&h=300&fit=crop",
-      description: "Set of two matching wooden side tables with storage",
-      tags: ["wood", "storage", "set", "natural"],
-      popularity: 0.6,
-      rating: 4.3,
-      trending: false
-    },
-    {
-      id: 9,
-      name: "Marble Coffee Table",
-      price: "$1,199",
-      category: "Furniture",
-      subcategory: "Coffee Tables & Side Tables",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "Luxury marble coffee table with gold accents",
-      tags: ["marble", "luxury", "gold", "premium"],
-      popularity: 0.8,
-      rating: 4.7,
-      trending: true
-    },
-
-    // FURNITURE - Dining Tables & Chairs
-    {
-      id: 10,
-      name: "Farmhouse Dining Table",
-      price: "$1,299",
-      category: "Furniture",
-      subcategory: "Dining Tables & Chairs",
-      image: "https://images.unsplash.com/photo-1617806118233-18e1de247200?w=400&h=300&fit=crop",
-      description: "Rustic farmhouse dining table seating 8 people",
-      tags: ["farmhouse", "rustic", "wood", "large"],
-      popularity: 0.7,
-      rating: 4.5,
-      trending: false
-    },
-    {
-      id: 11,
-      name: "Modern Dining Chair Set",
-      price: "$599",
-      category: "Furniture",
-      subcategory: "Dining Tables & Chairs",
-      image: "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&h=300&fit=crop",
-      description: "Set of 4 modern dining chairs with upholstered seats",
-      tags: ["modern", "upholstered", "set", "comfortable"],
-      popularity: 0.6,
-      rating: 4.3,
-      trending: false
-    },
-    {
-      id: 12,
-      name: "Extendable Dining Table",
-      price: "$1,599",
-      category: "Furniture",
-      subcategory: "Dining Tables & Chairs",
-      image: "https://images.unsplash.com/photo-1617806118233-18e1de247200?w=400&h=300&fit=crop",
-      description: "Versatile extendable dining table for 6-10 people",
-      tags: ["extendable", "versatile", "wood", "spacious"],
-      popularity: 0.8,
-      rating: 4.6,
-      trending: true
-    },
-
-    // FURNITURE - Beds
-    {
-      id: 13,
-      name: "King Size Platform Bed",
-      price: "$1,199",
-      category: "Furniture",
-      subcategory: "Beds",
-      image: "https://images.unsplash.com/photo-1505693314120-0d443867891c?w=400&h=300&fit=crop",
-      description: "Modern platform bed with built-in storage drawers",
-      tags: ["king", "platform", "storage", "modern"],
-      popularity: 0.9,
-      rating: 4.8,
-      trending: true
-    },
-    {
-      id: 14,
-      name: "Queen Size Upholstered Bed",
-      price: "$899",
-      category: "Furniture",
-      subcategory: "Beds",
-      image: "https://images.unsplash.com/photo-1505693314120-0d443867891c?w=400&h=300&fit=crop",
-      description: "Luxurious upholstered bed with tufted headboard",
-      tags: ["queen", "upholstered", "tufted", "luxury"],
-      popularity: 0.8,
-      rating: 4.7,
-      trending: true
-    },
-    {
-      id: 15,
-      name: "Single Daybed",
-      price: "$599",
-      category: "Furniture",
-      subcategory: "Beds",
-      image: "https://images.unsplash.com/photo-1505693314120-0d443867891c?w=400&h=300&fit=crop",
-      description: "Versatile daybed perfect for guest rooms or small spaces",
-      tags: ["single", "daybed", "versatile", "compact"],
-      popularity: 0.5,
-      rating: 4.2,
-      trending: false
-    },
-
-    // LIGHTING - Chandeliers
-    {
-      id: 16,
-      name: "Crystal Chandelier",
-      price: "$1,899",
-      category: "Lighting",
-      subcategory: "Chandeliers",
-      image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop",
-      description: "Elegant crystal chandelier with 12 lights",
-      tags: ["crystal", "elegant", "luxury", "dining"],
-      popularity: 0.8,
-      rating: 4.7,
-      trending: true
-    },
-    {
-      id: 17,
-      name: "Modern Geometric Chandelier",
-      price: "$799",
-      category: "Lighting",
-      subcategory: "Chandeliers",
-      image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop",
-      description: "Contemporary geometric chandelier with LED lights",
-      tags: ["modern", "geometric", "LED", "contemporary"],
-      popularity: 0.7,
-      rating: 4.5,
-      trending: false
-    },
-
-    // LIGHTING - Floor Lamps
-    {
-      id: 18,
-      name: "Adjustable Floor Lamp",
-      price: "$299",
-      category: "Lighting",
-      subcategory: "Floor Lamps",
-      image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop",
-      description: "Modern floor lamp with adjustable height and brightness",
-      tags: ["adjustable", "modern", "brightness", "reading"],
-      popularity: 0.6,
-      rating: 4.3,
-      trending: false
-    },
-    {
-      id: 19,
-      name: "Arc Floor Lamp",
-      price: "$449",
-      category: "Lighting",
-      subcategory: "Floor Lamps",
-      image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop",
-      description: "Stylish arc floor lamp perfect for reading corners",
-      tags: ["arc", "stylish", "reading", "corner"],
-      popularity: 0.7,
-      rating: 4.4,
-      trending: false
-    },
-
-    // LIGHTING - Table Lamps
-    {
-      id: 20,
-      name: "Ceramic Table Lamp",
-      price: "$149",
-      category: "Lighting",
-      subcategory: "Table Lamps",
-      image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop",
-      description: "Handcrafted ceramic table lamp with fabric shade",
-      tags: ["ceramic", "handcrafted", "fabric", "bedside"],
-      popularity: 0.5,
-      rating: 4.1,
-      trending: false
-    },
-    {
-      id: 21,
-      name: "Smart Table Lamp",
-      price: "$199",
-      category: "Lighting",
-      subcategory: "Table Lamps",
-      image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop",
-      description: "WiFi-enabled smart table lamp with app control",
-      tags: ["smart", "WiFi", "app", "modern"],
-      popularity: 0.8,
-      rating: 4.6,
-      trending: true
-    },
-
-    // FLOORING & RUGS
-    {
-      id: 22,
-      name: "Persian Area Rug",
-      price: "$899",
-      category: "Flooring & Rugs",
-      subcategory: "Carpets & Rugs",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "Authentic Persian rug with traditional patterns",
-      tags: ["persian", "traditional", "handmade", "luxury"],
-      popularity: 0.7,
-      rating: 4.5,
-      trending: false
-    },
-    {
-      id: 23,
-      name: "Modern Geometric Rug",
-      price: "$399",
-      category: "Flooring & Rugs",
-      subcategory: "Carpets & Rugs",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "Contemporary geometric rug with bold patterns",
-      tags: ["geometric", "modern", "bold", "contemporary"],
-      popularity: 0.6,
-      rating: 4.3,
-      trending: false
-    },
-    {
-      id: 24,
-      name: "Hardwood Flooring",
-      price: "$8.99",
-      category: "Flooring & Rugs",
-      subcategory: "Hardwood Flooring",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "Premium oak hardwood flooring per square foot",
-      tags: ["hardwood", "oak", "premium", "natural"],
-      popularity: 0.8,
-      rating: 4.7,
-      trending: true
-    },
-
-    // WINDOW TREATMENTS
-    {
-      id: 25,
-      name: "Luxury Curtain Set",
-      price: "$299",
-      category: "Window Treatments",
-      subcategory: "Curtains & Drapes",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "Premium blackout curtains with thermal lining",
-      tags: ["blackout", "thermal", "premium", "bedroom"],
-      popularity: 0.7,
-      rating: 4.4,
-      trending: false
-    },
-    {
-      id: 26,
-      name: "Roman Blinds",
-      price: "$199",
-      category: "Window Treatments",
-      subcategory: "Blinds",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "Elegant roman blinds with cordless operation",
-      tags: ["roman", "cordless", "elegant", "modern"],
-      popularity: 0.6,
-      rating: 4.2,
-      trending: false
-    },
-
-    // TEXTILES & SOFT FURNISHINGS
-    {
-      id: 27,
-      name: "Decorative Throw Pillows",
-      price: "$49",
-      category: "Textiles & Soft Furnishings",
-      subcategory: "Cushions & Throw Pillows",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "Set of 4 decorative throw pillows with various patterns",
-      tags: ["decorative", "patterns", "set", "colorful"],
-      popularity: 0.5,
-      rating: 4.1,
-      trending: false
-    },
-    {
-      id: 28,
-      name: "Luxury Bedding Set",
-      price: "$199",
-      category: "Textiles & Soft Furnishings",
-      subcategory: "Bed Linens & Duvet Covers",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "Premium cotton bedding set with duvet cover and pillowcases",
-      tags: ["cotton", "premium", "bedding", "luxury"],
-      popularity: 0.8,
-      rating: 4.6,
-      trending: true
-    },
-
-    // STORAGE & ORGANIZATION
-    {
-      id: 29,
-      name: "Modern Storage Cabinet",
-      price: "$699",
-      category: "Storage & Organization",
-      subcategory: "Cabinets & Cupboards",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "Sleek storage cabinet with multiple compartments",
-      tags: ["storage", "modern", "compartments", "sleek"],
-      popularity: 0.6,
-      rating: 4.3,
-      trending: false
-    },
-    {
-      id: 30,
-      name: "Shoe Storage Rack",
-      price: "$149",
-      category: "Storage & Organization",
-      subcategory: "Shoe Racks",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "Space-saving shoe rack with 20 compartments",
-      tags: ["shoes", "storage", "space-saving", "organized"],
-      popularity: 0.5,
-      rating: 4.0,
-      trending: false
-    },
-
-    // KITCHEN & DINING ACCESSORIES
-    {
-      id: 31,
-      name: "Ceramic Dinnerware Set",
-      price: "$199",
-      category: "Kitchen & Dining Accessories",
-      subcategory: "Dinnerware",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "Complete ceramic dinnerware set for 8 people",
-      tags: ["ceramic", "dinnerware", "complete", "elegant"],
-      popularity: 0.7,
-      rating: 4.4,
-      trending: false
-    },
-    {
-      id: 32,
-      name: "Stainless Steel Cookware Set",
-      price: "$399",
-      category: "Kitchen & Dining Accessories",
-      subcategory: "Cookware",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "Professional-grade stainless steel cookware set",
-      tags: ["stainless", "professional", "cookware", "durable"],
-      popularity: 0.8,
-      rating: 4.7,
-      trending: true
-    },
-
-    // BATHROOM ACCESSORIES
-    {
-      id: 33,
-      name: "Vanity Mirror with LED",
-      price: "$299",
-      category: "Bathroom Accessories",
-      subcategory: "Mirrors",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "LED-lit vanity mirror with touch controls",
-      tags: ["LED", "vanity", "touch", "modern"],
-      popularity: 0.7,
-      rating: 4.5,
-      trending: false
-    },
-    {
-      id: 34,
-      name: "Bathroom Storage Unit",
-      price: "$199",
-      category: "Bathroom Accessories",
-      subcategory: "Bathroom Storage Units",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "Wall-mounted bathroom storage with multiple shelves",
-      tags: ["storage", "wall-mounted", "shelves", "bathroom"],
-      popularity: 0.6,
-      rating: 4.2,
-      trending: false
-    },
-
-    // DÉCOR & ACCESSORIES
-    {
-      id: 35,
-      name: "Abstract Wall Art",
-      price: "$149",
-      category: "Décor & Accessories",
-      subcategory: "Wall Art & Paintings",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "Large abstract wall art canvas print",
-      tags: ["abstract", "wall art", "canvas", "large"],
-      popularity: 0.6,
-      rating: 4.3,
-      trending: false
-    },
-    {
-      id: 36,
-      name: "Decorative Vase Set",
-      price: "$99",
-      category: "Décor & Accessories",
-      subcategory: "Vases & Planters",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "Set of 3 decorative ceramic vases in different sizes",
-      tags: ["ceramic", "decorative", "set", "vases"],
-      popularity: 0.5,
-      rating: 4.1,
-      trending: false
-    },
-
-    // TECHNOLOGY & SMART DEVICES
-    {
-      id: 37,
-      name: "Smart Thermostat",
-      price: "$249",
-      category: "Technology & Smart Devices",
-      subcategory: "Smart Thermostats",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "WiFi-enabled smart thermostat with app control",
-      tags: ["smart", "thermostat", "WiFi", "energy-saving"],
-      popularity: 0.8,
-      rating: 4.6,
-      trending: true
-    },
-    {
-      id: 38,
-      name: "Smart Speaker",
-      price: "$199",
-      category: "Technology & Smart Devices",
-      subcategory: "Smart Speakers & Assistants",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "Voice-controlled smart speaker with premium sound",
-      tags: ["smart", "speaker", "voice", "premium"],
-      popularity: 0.9,
-      rating: 4.8,
-      trending: true
-    },
-
-    // OUTDOOR/PATIO INTERIOR
-    {
-      id: 39,
-      name: "Outdoor Dining Set",
-      price: "$799",
-      category: "Outdoor/Patio Interior",
-      subcategory: "Outdoor Chairs & Tables",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "Weather-resistant outdoor dining set for 6 people",
-      tags: ["outdoor", "weather-resistant", "dining", "patio"],
-      popularity: 0.7,
-      rating: 4.4,
-      trending: false
-    },
-    {
-      id: 40,
-      name: "Patio Umbrella",
-      price: "$299",
-      category: "Outdoor/Patio Interior",
-      subcategory: "Patio Umbrellas",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      description: "Large patio umbrella with tilt mechanism",
-      tags: ["umbrella", "patio", "tilt", "shade"],
-      popularity: 0.6,
-      rating: 4.2,
-      trending: false
+  // Load user favorites
+  useEffect(() => {
+    if (user) {
+      loadFavorites();
     }
-  ];
+  }, [user]);
 
-  const categories = ["all", ...Array.from(new Set(products.map(p => p.category)))];
-  const subcategories = Array.from(new Set(products.map(p => p.subcategory)));
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      const [productsData, categoriesData] = await Promise.all([
+        productService.getProducts({ limit: 50 }),
+        categoryService.getCategories()
+      ]);
+      
+      setProducts(productsData);
+      setCategories(categoriesData);
+    } catch (error) {
+      console.error('Error loading data:', error);
+      toast.error('Failed to load products');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const filteredProducts = useMemo(() => {
-    return products.filter(product => {
-      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           product.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase())) ||
-                           product.subcategory.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
+  const loadFavorites = async () => {
+    if (!user) return;
+    
+    try {
+      const favoritesData = await favoritesService.getFavorites(user.id);
+      const favoriteIds = new Set(favoritesData.map(fav => fav.product_id));
+      setFavorites(favoriteIds);
+    } catch (error) {
+      console.error('Error loading favorites:', error);
+    }
+  };
+
+  const handleSearch = async (query: string, filters: any) => {
+    try {
+      setLoading(true);
       
-      // Apply ML filters
-      const matchesFilters = Object.keys(appliedFilters).every(filterKey => {
-        const filterValue = appliedFilters[filterKey];
-        if (!filterValue || (Array.isArray(filterValue) && filterValue.length === 0)) {
-          return true;
+      // Add to search history if user is logged in
+      if (user) {
+        await searchService.addSearchHistory(user.id, query, filters.category?.[0]);
+      }
+
+      const searchFilters: any = {
+        search: query,
+        limit: 50
+      };
+
+      if (filters.category && filters.category.length > 0) {
+        const category = categories.find(c => c.name === filters.category[0]);
+        if (category) {
+          searchFilters.category = category.id;
         }
-        
-        switch (filterKey) {
-          case 'category':
-            return filterValue.includes(product.category);
-          case 'subcategory':
-            return filterValue.includes(product.subcategory);
-          case 'priceRange':
-            const price = parseFloat(product.price.replace('$', '').replace(',', ''));
-            return price >= filterValue[0] && price <= filterValue[1];
-          case 'style':
-            return filterValue.some((style: string) => 
-              product.tags.some(tag => tag.toLowerCase().includes(style.toLowerCase()))
-            );
-          case 'color':
-            return filterValue.some((color: string) => 
-              product.tags.some(tag => tag.toLowerCase().includes(color.toLowerCase()))
-            );
-          default:
-            return true;
-        }
-      });
-      
-      return matchesSearch && matchesCategory && matchesFilters;
+      }
+
+      const results = await productService.getProducts(searchFilters);
+      setProducts(results);
+    } catch (error) {
+      console.error('Error searching products:', error);
+      toast.error('Search failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCategoryChange = async (categoryId: string) => {
+    try {
+      setLoading(true);
+      setSelectedCategory(categoryId);
+      setSelectedSubcategory("all");
+
+      const filters: any = { limit: 50 };
+      if (categoryId !== "all") {
+        filters.category = categoryId;
+      }
+
+      const results = await productService.getProducts(filters);
+      setProducts(results);
+    } catch (error) {
+      console.error('Error filtering by category:', error);
+      toast.error('Failed to filter products');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubcategoryChange = async (subcategoryId: string) => {
+    try {
+      setLoading(true);
+      setSelectedSubcategory(subcategoryId);
+
+      const filters: any = { limit: 50 };
+      if (selectedCategory !== "all") {
+        filters.category = selectedCategory;
+      }
+      if (subcategoryId !== "all") {
+        filters.subcategory = subcategoryId;
+      }
+
+      const results = await productService.getProducts(filters);
+      setProducts(results);
+    } catch (error) {
+      console.error('Error filtering by subcategory:', error);
+      toast.error('Failed to filter products');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSortChange = (sortType: string) => {
+    setSortBy(sortType);
+    const sortedProducts = [...products].sort((a, b) => {
+      switch (sortType) {
+        case 'price-low':
+          return a.price - b.price;
+        case 'price-high':
+          return b.price - a.price;
+        case 'rating':
+          return b.rating - a.rating;
+        case 'popularity':
+        default:
+          return b.popularity - a.popularity;
+      }
     });
-  }, [searchTerm, selectedCategory, appliedFilters]);
-
-  const handleAddToCart = (product: any) => {
-    addItem(product);
-    toast.success(`${product.name} added to cart!`);
+    setProducts(sortedProducts);
   };
 
-  const handleMLSearch = (query: string, filters: any) => {
-    setSearchTerm(query);
-    setAppliedFilters(filters);
+  const handleAddToCart = (product: Product) => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image_url || '',
+      quantity: 1
+    });
+    toast.success(`${product.name} added to cart`);
   };
 
-  const handleProductClick = (product: any) => {
-    // Could open a product detail modal or navigate to product page
-    console.log('Product clicked:', product);
+  const handleToggleFavorite = async (productId: string) => {
+    if (!user) {
+      toast.error('Please log in to add favorites');
+      return;
+    }
+
+    try {
+      const isFavorite = favorites.has(productId);
+      
+      if (isFavorite) {
+        await favoritesService.removeFavorite(user.id, productId);
+        setFavorites(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(productId);
+          return newSet;
+        });
+        toast.success('Removed from favorites');
+      } else {
+        await favoritesService.addFavorite(user.id, productId);
+        setFavorites(prev => new Set(prev).add(productId));
+        toast.success('Added to favorites');
+      }
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+      toast.error('Failed to update favorites');
+    }
   };
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(price);
+  };
+
+  const getSelectedCategory = () => {
+    return categories.find(c => c.id === selectedCategory);
+  };
+
+  const getSubcategories = () => {
+    const category = getSelectedCategory();
+    return category?.subcategories || [];
+  };
+
+  if (loading && products.length === 0) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className="container mx-auto px-4 pt-24 pb-12">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="flex items-center gap-2">
+              <Loader2 className="h-6 w-6 animate-spin" />
+              <span>Loading products...</span>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <AIAssistant />
-
+      
       <div className="container mx-auto px-4 pt-24 pb-12">
-        <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Shop Products</h1>
-          <p className="text-xl text-muted-foreground mb-8">
-            Discover our curated collection of premium interior furnishings with AI-powered search
-          </p>
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-2">Shop</h1>
+          <p className="text-muted-foreground">Discover our curated collection of premium home furnishings</p>
+        </div>
+
+        {/* Search and Filters */}
+        <div className="mb-8">
+          <MLSearch onSearch={handleSearch} />
           
-          {/* Category Filter */}
-          <div className="mb-6">
-            <div className="flex flex-wrap gap-2">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    selectedCategory === category
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted text-muted-foreground hover:bg-muted/80'
-                  }`}
-                >
-                  {category === 'all' ? 'All Products' : category}
-                </button>
-              ))}
+          <div className="flex flex-wrap gap-4 mt-6">
+            {/* Category Filter */}
+            <Select value={selectedCategory} onValueChange={handleCategoryChange}>
+              <SelectTrigger className="w-48">
+                <SelectValue placeholder="All Categories" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Categories</SelectItem>
+                {categories.map(category => (
+                  <SelectItem key={category.id} value={category.id}>
+                    {category.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {/* Subcategory Filter */}
+            {getSubcategories().length > 0 && (
+              <Select value={selectedSubcategory} onValueChange={handleSubcategoryChange}>
+                <SelectTrigger className="w-48">
+                  <SelectValue placeholder="All Subcategories" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Subcategories</SelectItem>
+                  {getSubcategories().map(subcategory => (
+                    <SelectItem key={subcategory.id} value={subcategory.id}>
+                      {subcategory.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+
+            {/* Sort Filter */}
+            <Select value={sortBy} onValueChange={handleSortChange}>
+              <SelectTrigger className="w-48">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="popularity">Most Popular</SelectItem>
+                <SelectItem value="rating">Highest Rated</SelectItem>
+                <SelectItem value="price-low">Price: Low to High</SelectItem>
+                <SelectItem value="price-high">Price: High to Low</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {/* View Mode Toggle */}
+            <div className="flex border rounded-lg">
+              <Button
+                variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setViewMode('grid')}
+              >
+                <Grid3X3 className="h-4 w-4" />
+              </Button>
+              <Button
+                variant={viewMode === 'list' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setViewMode('list')}
+              >
+                <List className="h-4 w-4" />
+              </Button>
             </div>
           </div>
-          
-          {/* ML Search Component */}
-          <MLSearch 
-            products={products}
-            onSearch={handleMLSearch}
-            onProductClick={handleProductClick}
-          />
         </div>
 
-        {/* Results Count */}
-        <div className="mb-6">
-          <p className="text-muted-foreground">
-            Showing {filteredProducts.length} of {products.length} products
-            {selectedCategory !== "all" && ` in ${selectedCategory}`}
-            {searchTerm && ` for "${searchTerm}"`}
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProducts.map((product) => (
-            <Card key={product.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 group">
-              <div className="aspect-[4/3] overflow-hidden">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-sm text-muted-foreground">{product.category}</p>
-                  {product.trending && (
-                    <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Trending</span>
-                  )}
-                </div>
-                <p className="text-xs text-muted-foreground mb-1">{product.subcategory}</p>
-                <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
-                <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{product.description}</p>
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-2xl font-bold text-primary">{product.price}</p>
-                  <div className="flex items-center gap-1">
-                    <span className="text-sm text-muted-foreground">★</span>
-                    <span className="text-sm font-medium">{product.rating}</span>
+        {/* Products Grid */}
+        <div className={`grid gap-6 ${
+          viewMode === 'grid' 
+            ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' 
+            : 'grid-cols-1'
+        }`}>
+          {products.map((product) => (
+            <motion.div
+              key={product.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Card className="group hover:shadow-lg transition-all duration-300">
+                <div className="relative">
+                  <img
+                    src={product.image_url || '/placeholder.svg'}
+                    alt={product.name}
+                    className={`w-full object-cover ${
+                      viewMode === 'grid' ? 'h-64' : 'h-48 w-48'
+                    }`}
+                  />
+                  <div className="absolute top-2 right-2 flex gap-2">
+                    {product.trending && (
+                      <Badge variant="destructive" className="text-xs">
+                        Trending
+                      </Badge>
+                    )}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 w-8 p-0 bg-white/80 hover:bg-white"
+                      onClick={() => handleToggleFavorite(product.id)}
+                    >
+                      <Heart 
+                        className={`h-4 w-4 ${
+                          favorites.has(product.id) ? 'fill-red-500 text-red-500' : ''
+                        }`} 
+                      />
+                    </Button>
                   </div>
                 </div>
-                <div className="flex flex-wrap gap-1">
-                  {product.tags.slice(0, 3).map((tag, index) => (
-                    <span key={index} className="text-xs bg-muted px-2 py-1 rounded">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </CardContent>
-              <CardFooter className="p-6 pt-0">
-                <Button 
-                  className="w-full" 
-                  variant="default"
-                  onClick={() => handleAddToCart(product)}
-                >
-                  <ShoppingCart className="mr-2 h-4 w-4" />
-                  Add to Cart
-                </Button>
-              </CardFooter>
-            </Card>
+                
+                <CardContent className={`p-4 ${viewMode === 'list' ? 'flex-1' : ''}`}>
+                  <div className={viewMode === 'list' ? 'flex gap-4' : ''}>
+                    <div className={viewMode === 'list' ? 'flex-1' : ''}>
+                      <h3 className="font-semibold text-lg mb-2 line-clamp-2">
+                        {product.name}
+                      </h3>
+                      <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
+                        {product.description}
+                      </p>
+                      
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="flex items-center">
+                          <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                          <span className="text-sm ml-1">{product.rating}</span>
+                        </div>
+                        <Badge variant="secondary" className="text-xs">
+                          {product.categories?.name || 'Uncategorized'}
+                        </Badge>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <span className="text-2xl font-bold">
+                          {formatPrice(product.price)}
+                        </span>
+                        <Button
+                          onClick={() => handleAddToCart(product)}
+                          className="flex items-center gap-2"
+                        >
+                          <ShoppingCart className="h-4 w-4" />
+                          Add to Cart
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
           ))}
         </div>
 
-        {filteredProducts.length === 0 && (
+        {/* No Results */}
+        {products.length === 0 && !loading && (
           <div className="text-center py-12">
-            <div className="max-w-md mx-auto">
-              <div className="text-6xl mb-4">🔍</div>
-              <h3 className="text-xl font-semibold mb-2">No products found</h3>
-              <p className="text-muted-foreground mb-4">
-                {searchTerm 
-                  ? `No products match your search for "${searchTerm}"`
-                  : selectedCategory !== "all"
-                  ? `No products found in ${selectedCategory} category`
-                  : "No products found matching your criteria"
-                }
-              </p>
-              <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">Try:</p>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Clearing your search terms</li>
-                  <li>• Selecting a different category</li>
-                  <li>• Using different keywords</li>
-                  <li>• Browsing all products</li>
-                </ul>
-                <Button 
-                  variant="outline" 
-                  className="mt-4"
-                  onClick={() => {
-                    setSearchTerm("");
-                    setSelectedCategory("all");
-                    setAppliedFilters({});
-                  }}
-                >
-                  Clear Filters
-                </Button>
-              </div>
-            </div>
+            <p className="text-muted-foreground text-lg">No products found</p>
+            <p className="text-muted-foreground">Try adjusting your search or filters</p>
           </div>
         )}
       </div>
 
+      {/* Cart Sidebar */}
+      <CartSidebar isOpen={showCart} onClose={() => setShowCart(false)} />
+      
       <Footer />
     </div>
   );
