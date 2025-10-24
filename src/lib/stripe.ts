@@ -71,7 +71,7 @@ export class StripeService {
     try {
       const stripe = await this.initialize();
       
-      const { error, paymentIntent } = await stripe.confirmPayment({
+      const result = await stripe.confirmPayment({
         clientSecret,
         confirmParams: {
           payment_method: paymentMethodId,
@@ -79,8 +79,8 @@ export class StripeService {
         },
       });
 
-      if (error) {
-        return { success: false, error: error.message };
+      if (result.error) {
+        return { success: false, error: result.error.message };
       }
 
       return { success: true };

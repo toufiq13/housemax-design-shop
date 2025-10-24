@@ -80,6 +80,19 @@ const Shop = () => {
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [showCart, setShowCart] = useState(false);
 
+  // Define loadFavorites first
+  const loadFavorites = useCallback(async () => {
+    if (!user) return;
+    
+    try {
+      const favoritesData = await favoritesService.getFavorites(user.id);
+      const favoriteIds = new Set<string>(favoritesData.map((fav: any) => String(fav.product_id)));
+      setFavorites(favoriteIds);
+    } catch (error) {
+      console.error('Error loading favorites:', error);
+    }
+  }, [user]);
+
   // Load initial data
   useEffect(() => {
     loadData();
@@ -110,18 +123,6 @@ const Shop = () => {
     }
   };
 
-  const loadFavorites = useCallback(async () => {
-    if (!user) return;
-    
-    try {
-      const favoritesData = await favoritesService.getFavorites(user.id);
-      const favoriteIds = new Set(favoritesData.map(fav => fav.product_id));
-      setFavorites(favoriteIds);
-    } catch (error) {
-      console.error('Error loading favorites:', error);
-    }
-  }, [user]);
-
   const handleSearch = async (query: string, filters: Record<string, unknown>) => {
     try {
       setLoading(true);
@@ -136,8 +137,9 @@ const Shop = () => {
         limit: 50
       };
 
-      if (filters.category && filters.category.length > 0) {
-        const category = categories.find(c => c.name === filters.category[0]);
+      if (filters.category && Array.isArray(filters.category) && filters.category.length > 0) {
+        const categoryName = String(filters.category[0]);
+        const category = categories.find(c => c.name === categoryName);
         if (category) {
           searchFilters.category = category.id;
         }
@@ -221,9 +223,15 @@ const Shop = () => {
       name: product.name,
       price: product.price,
       image: product.image_url || '',
-      quantity: 1
+      quantity: 1,
+      category: product.categories?.name || 'Uncategorized'
     });
     toast.success(`${product.name} added to cart`);
+  };
+
+  const handleProductClick = (product: any) => {
+    // Navigate to product detail or show modal
+    console.log('Product clicked:', product);
   };
 
   const handleToggleFavorite = async (productId: string) => {
@@ -300,7 +308,22 @@ const Shop = () => {
 
         {/* Search and Filters */}
         <div className="mb-8">
-          <MLSearch onSearch={handleSearch} />
+          <MLSearch 
+            products={products.map(p => ({
+              id: Number(p.id.split('-')[0]) || 0,
+              name: p.name,
+              price: String(p.price),
+              category: p.categories?.name || 'Uncategorized',
+              image: p.image_url || '',
+              description: p.description || '',
+              tags: p.tags || [],
+              popularity: p.popularity,
+              rating: p.rating,
+              trending: p.trending
+            }))}
+            onSearch={handleSearch}
+            onProductClick={handleProductClick}
+          />
           
           <div className="flex flex-wrap gap-4 mt-6">
             {/* Category Filter */}
@@ -461,7 +484,7 @@ const Shop = () => {
       </div>
 
       {/* Cart Sidebar */}
-      <CartSidebar isOpen={showCart} onClose={() => setShowCart(false)} />
+      {showCart && <CartSidebar />}
       
       <Footer />
     </div>

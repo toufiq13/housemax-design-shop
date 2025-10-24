@@ -181,7 +181,7 @@ const MLSearch: React.FC<MLSearchProps> = ({ products, onSearch, onProductClick 
     handleSearch(suggestion.text);
   };
 
-  const handleFilterChange = (filterType: keyof typeof selectedFilters, value: string | number | boolean) => {
+  const handleFilterChange = (filterType: keyof typeof selectedFilters, value: any) => {
     setSelectedFilters(prev => ({
       ...prev,
       [filterType]: value

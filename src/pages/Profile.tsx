@@ -92,7 +92,7 @@ const AddressForm: React.FC<AddressFormProps> = ({ address, onSave, onCancel }) 
     onSave(formData);
   };
 
-  const updateFormData = (field: keyof typeof formData, value: string | number | boolean) => {
+  const updateFormData = (field: keyof typeof formData, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -263,11 +263,11 @@ const Profile = () => {
     setIsEditing(false);
   };
 
-  const updateProfile = (field: keyof UserProfile, value: string | number | boolean) => {
+  const updateProfile = (field: keyof UserProfile, value: any) => {
     setProfile(prev => ({ ...prev, [field]: value }));
   };
 
-  const updatePreferences = (field: keyof UserProfile['preferences'], value: string | number | boolean) => {
+  const updatePreferences = (field: keyof UserProfile['preferences'], value: any) => {
     setProfile(prev => ({
       ...prev,
       preferences: { ...prev.preferences, [field]: value }

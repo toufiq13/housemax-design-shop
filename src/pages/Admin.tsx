@@ -94,7 +94,7 @@ const Admin = () => {
   });
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
 
   // Load admin data
   useEffect(() => {
@@ -566,7 +566,7 @@ const Admin = () => {
                           </div>
                           <div>
                             <div className="font-medium">{product.name}</div>
-                            <div className="text-sm text-muted-foreground">{product.category}</div>
+                            <div className="text-sm text-muted-foreground">{product.categories?.name || 'Uncategorized'}</div>
                           </div>
                         </div>
                         <div className="text-right">
@@ -585,13 +585,13 @@ const Admin = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {categories.slice(1).map(category => {
-                      const categoryProducts = products.filter(p => p.category === category);
+                    {categories.slice(0, 5).map((category: any) => {
+                      const categoryProducts = products.filter(p => p.category_id === category.id);
                       const avgRating = categoryProducts.reduce((sum, p) => sum + (p.rating || 0), 0) / categoryProducts.length || 0;
                       return (
-                        <div key={category} className="flex items-center justify-between">
+                        <div key={category.id} className="flex items-center justify-between">
                           <div>
-                            <div className="font-medium">{category}</div>
+                            <div className="font-medium">{category.name}</div>
                             <div className="text-sm text-muted-foreground">{categoryProducts.length} products</div>
                           </div>
                           <div className="text-right">

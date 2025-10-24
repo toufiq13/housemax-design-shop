@@ -729,10 +729,10 @@ export const imageEnhancementService = {
   async enhanceProductImages(products: Product[]): Promise<Product[]> {
     try {
       const enhancedProducts = await Promise.all(
-        products.map(async (product) => {
+        products.map(async (product: any) => {
           try {
             // Search for better images based on product name and category
-            const searchQuery = `${product.name} ${product.category}`;
+            const searchQuery = `${product.name} ${product.category || 'furniture'}`;
             const imageResults = await unsplashService.searchPhotos(searchQuery, 1, 1, 'squarish');
             
             if (imageResults.results.length > 0) {
