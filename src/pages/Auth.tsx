@@ -31,8 +31,9 @@ const Auth = () => {
       toast.success("Account created! Please check your email to verify.");
       setEmail("");
       setPassword("");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to create account");
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to create account";
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -45,8 +46,9 @@ const Auth = () => {
     try {
       await signIn(email, password);
       toast.success("Welcome back!");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to sign in");
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to sign in";
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }

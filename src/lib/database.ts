@@ -1,5 +1,7 @@
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '../supabase';
 import type { Database } from '@/integrations/supabase/types';
+import openaiService from './openai';
+import { unsplashService } from './unsplash';
 
 type Tables = Database['public']['Tables'];
 type Product = Tables['products']['Row'];
@@ -491,8 +493,8 @@ export const orderService = {
     taxAmount: number;
     shippingAmount: number;
     totalAmount: number;
-    shippingAddress: any;
-    billingAddress: any;
+    shippingAddress: Record<string, unknown>;
+    billingAddress: Record<string, unknown>;
     notes?: string;
   }) {
     // Generate order number
@@ -633,5 +635,164 @@ export const adminService = {
       trendingProducts: trendingProducts || 0,
       lowStockItems: lowStockItems || 0
     };
+  }
+};
+
+// AI-powered recommendation services
+export const aiRecommendationService = {
+  async getPersonalizedRecommendations(
+    userId: string,
+    userPreferences: string,
+    roomType: string,
+    style: string
+  ) {
+    try {
+      // Get user's purchase history and preferences
+      const { data: userProfile } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      const { data: purchaseHistory } = await supabase
+        .from('orders')
+        .select(`
+          order_items (
+            products (
+              name,
+              category,
+              subcategory,
+              price,
+              description
+            )
+          )
+        `)
+        .eq('user_id', userId);
+
+      // Generate AI recommendations
+      const aiRecommendations = await openaiService.generateProductRecommendations(
+        userPreferences,
+        roomType,
+        style
+      );
+
+      // Get trending products as fallback
+      const { data: trendingProducts } = await supabase
+        .from('products')
+        .select('*')
+        .eq('trending', true)
+        .limit(8);
+
+      return {
+        aiRecommendations,
+        trendingProducts: trendingProducts || [],
+        purchaseHistory: purchaseHistory || []
+      };
+    } catch (error) {
+      console.error('AI recommendation error:', error);
+      // Fallback to trending products
+      const { data: trendingProducts } = await supabase
+        .from('products')
+        .select('*')
+        .eq('trending', true)
+        .limit(8);
+
+      return {
+        aiRecommendations: "I'd be happy to help you find the perfect products for your space! Please browse our trending items below.",
+        trendingProducts: trendingProducts || [],
+        purchaseHistory: []
+      };
+    }
+  },
+
+  async generateDesignIdeas(roomDescription: string, budget: string, style: string) {
+    try {
+      return await openaiService.generateDesignIdeas(roomDescription, budget, style);
+    } catch (error) {
+      console.error('AI design ideas error:', error);
+      return "I'd be happy to help you with design ideas! Please try our 3D planner or browse our product categories for inspiration.";
+    }
+  },
+
+  async analyzeRoomImage(imageDescription: string) {
+    try {
+      return await openaiService.analyzeRoomImage(imageDescription);
+    } catch (error) {
+      console.error('AI room analysis error:', error);
+      return "I'd be happy to analyze your room and provide design recommendations! Please try our 3D planner for a more detailed analysis.";
+    }
+  }
+};
+
+// Unsplash image enhancement service
+export const imageEnhancementService = {
+  async enhanceProductImages(products: Product[]): Promise<Product[]> {
+    try {
+      const enhancedProducts = await Promise.all(
+        products.map(async (product) => {
+          try {
+            // Search for better images based on product name and category
+            const searchQuery = `${product.name} ${product.category}`;
+            const imageResults = await unsplashService.searchPhotos(searchQuery, 1, 1, 'squarish');
+            
+            if (imageResults.results.length > 0) {
+              const betterImage = imageResults.results[0];
+              return {
+                ...product,
+                image: unsplashService.getOptimizedImageUrl(betterImage, 'regular'),
+                image_alt: betterImage.alt_description || product.name,
+                image_credit: `Photo by ${betterImage.user.name} on Unsplash`,
+              };
+            }
+            
+            return product;
+          } catch (error) {
+            console.error(`Error enhancing image for product ${product.id}:`, error);
+            return product;
+          }
+        })
+      );
+
+      return enhancedProducts;
+    } catch (error) {
+      console.error('Error enhancing product images:', error);
+      return products;
+    }
+  },
+
+  async getInteriorDesignImages(roomType: string, style: string = 'modern'): Promise<any[]> {
+    try {
+      const results = await unsplashService.getInteriorDesignPhotos(roomType, style, 1, 10);
+      return results.results.map(photo => ({
+        id: photo.id,
+        url: unsplashService.getOptimizedImageUrl(photo, 'regular'),
+        thumb: unsplashService.getOptimizedImageUrl(photo, 'thumb'),
+        alt: photo.alt_description,
+        credit: `Photo by ${photo.user.name} on Unsplash`,
+        color: photo.color,
+        likes: photo.likes,
+      }));
+    } catch (error) {
+      console.error('Error fetching interior design images:', error);
+      return [];
+    }
+  },
+
+  async getProductCategoryImages(category: string, style: string = 'minimalist'): Promise<any[]> {
+    try {
+      const results = await unsplashService.getProductPhotos(category, style, 1, 8);
+      return results.results.map(photo => ({
+        id: photo.id,
+        url: unsplashService.getOptimizedImageUrl(photo, 'regular'),
+        thumb: unsplashService.getOptimizedImageUrl(photo, 'thumb'),
+        alt: photo.alt_description,
+        credit: `Photo by ${photo.user.name} on Unsplash`,
+        color: photo.color,
+        likes: photo.likes,
+      }));
+    } catch (error) {
+      console.error('Error fetching product category images:', error);
+      return [];
+    }
   }
 };

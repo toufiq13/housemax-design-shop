@@ -94,7 +94,7 @@ const Admin = () => {
   });
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   // Load admin data
   useEffect(() => {

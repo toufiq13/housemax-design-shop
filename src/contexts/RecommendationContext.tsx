@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { aiRecommendationService } from '../lib/database';
 
 interface Product {
   id: number;
@@ -27,6 +28,9 @@ interface RecommendationContextType {
   addSearchHistory: (query: string, category?: string, clickedProducts?: number[]) => void;
   generateRecommendations: (products: Product[]) => Product[];
   clearHistory: () => void;
+  getAIPersonalizedRecommendations: (userId: string, preferences: string, roomType: string, style: string) => Promise<any>;
+  getAIDesignIdeas: (roomDescription: string, budget: string, style: string) => Promise<string>;
+  analyzeRoomWithAI: (imageDescription: string) => Promise<string>;
 }
 
 const RecommendationContext = createContext<RecommendationContextType | undefined>(undefined);
@@ -156,7 +160,7 @@ export const RecommendationProvider: React.FC<RecommendationProviderProps> = ({ 
 
     // Sort by recommendation score and return top products
     const sortedProducts = scoredProducts
-      .sort((a, b) => (b as any).recommendationScore - (a as any).recommendationScore)
+      .sort((a, b) => (b as Product & { recommendationScore: number }).recommendationScore - (a as Product & { recommendationScore: number }).recommendationScore)
       .slice(0, 8);
 
     setRecommendations(sortedProducts);
@@ -169,12 +173,28 @@ export const RecommendationProvider: React.FC<RecommendationProviderProps> = ({ 
     localStorage.removeItem('searchHistory');
   };
 
+  // AI-powered recommendation methods
+  const getAIPersonalizedRecommendations = async (userId: string, preferences: string, roomType: string, style: string) => {
+    return await aiRecommendationService.getPersonalizedRecommendations(userId, preferences, roomType, style);
+  };
+
+  const getAIDesignIdeas = async (roomDescription: string, budget: string, style: string) => {
+    return await aiRecommendationService.generateDesignIdeas(roomDescription, budget, style);
+  };
+
+  const analyzeRoomWithAI = async (imageDescription: string) => {
+    return await aiRecommendationService.analyzeRoomImage(imageDescription);
+  };
+
   const value: RecommendationContextType = {
     searchHistory,
     recommendations,
     addSearchHistory,
     generateRecommendations,
-    clearHistory
+    clearHistory,
+    getAIPersonalizedRecommendations,
+    getAIDesignIdeas,
+    analyzeRoomWithAI
   };
 
   return (

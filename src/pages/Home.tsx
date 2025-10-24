@@ -468,13 +468,14 @@ const Home = () => {
                           case 'Premium Products':
                             window.location.href = '/shop';
                             break;
-                          case 'AI Assistant':
+                          case 'AI Assistant': {
                             // Trigger AI assistant
                             const aiButton = document.querySelector('[data-ai-assistant]') as HTMLElement;
                             if (aiButton) {
                               aiButton.click();
                             }
                             break;
+                          }
                           default:
                             break;
                         }

@@ -58,7 +58,7 @@ const FurnitureObject: React.FC<{
   isSelected: boolean;
   onSelect: (id: string) => void;
 }> = ({ item, onUpdate, isSelected, onSelect }) => {
-  const meshRef = useRef<any>();
+  const meshRef = useRef<THREE.Mesh>();
   const [isHovered, setIsHovered] = useState(false);
 
   useFrame(() => {
@@ -96,7 +96,7 @@ const FurnitureObject: React.FC<{
     }
   };
 
-  const handleClick = (e: any) => {
+  const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onSelect(item.id);
   };

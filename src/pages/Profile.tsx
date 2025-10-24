@@ -92,7 +92,7 @@ const AddressForm: React.FC<AddressFormProps> = ({ address, onSave, onCancel }) 
     onSave(formData);
   };
 
-  const updateFormData = (field: keyof typeof formData, value: any) => {
+  const updateFormData = (field: keyof typeof formData, value: string | number | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -243,8 +243,9 @@ const Profile = () => {
       await signOut();
       toast.success("Signed out successfully");
       navigate("/");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to sign out");
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to sign out";
+      toast.error(errorMessage);
     }
   };
 
@@ -262,11 +263,11 @@ const Profile = () => {
     setIsEditing(false);
   };
 
-  const updateProfile = (field: keyof UserProfile, value: any) => {
+  const updateProfile = (field: keyof UserProfile, value: string | number | boolean) => {
     setProfile(prev => ({ ...prev, [field]: value }));
   };
 
-  const updatePreferences = (field: keyof UserProfile['preferences'], value: any) => {
+  const updatePreferences = (field: keyof UserProfile['preferences'], value: string | number | boolean) => {
     setProfile(prev => ({
       ...prev,
       preferences: { ...prev.preferences, [field]: value }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -90,7 +90,7 @@ const Shop = () => {
     if (user) {
       loadFavorites();
     }
-  }, [user]);
+  }, [user, loadFavorites]);
 
   const loadData = async () => {
     try {
@@ -110,7 +110,7 @@ const Shop = () => {
     }
   };
 
-  const loadFavorites = async () => {
+  const loadFavorites = useCallback(async () => {
     if (!user) return;
     
     try {
@@ -120,9 +120,9 @@ const Shop = () => {
     } catch (error) {
       console.error('Error loading favorites:', error);
     }
-  };
+  }, [user]);
 
-  const handleSearch = async (query: string, filters: any) => {
+  const handleSearch = async (query: string, filters: Record<string, unknown>) => {
     try {
       setLoading(true);
       
@@ -131,7 +131,7 @@ const Shop = () => {
         await searchService.addSearchHistory(user.id, query, filters.category?.[0]);
       }
 
-      const searchFilters: any = {
+      const searchFilters: Record<string, unknown> = {
         search: query,
         limit: 50
       };
@@ -159,7 +159,7 @@ const Shop = () => {
       setSelectedCategory(categoryId);
       setSelectedSubcategory("all");
 
-      const filters: any = { limit: 50 };
+      const filters: Record<string, unknown> = { limit: 50 };
       if (categoryId !== "all") {
         filters.category = categoryId;
       }
@@ -179,7 +179,7 @@ const Shop = () => {
       setLoading(true);
       setSelectedSubcategory(subcategoryId);
 
-      const filters: any = { limit: 50 };
+      const filters: Record<string, unknown> = { limit: 50 };
       if (selectedCategory !== "all") {
         filters.category = selectedCategory;
       }

@@ -13,6 +13,9 @@ import Footer from "@/components/Footer";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { CreditCard, CheckCircle, ArrowLeft, ShoppingBag } from "lucide-react";
 import { toast } from "sonner";
+import { stripeService } from "@/lib/stripe";
+import { exchangeRateService } from "@/lib/exchangerate";
+import { loadStripe } from '@stripe/stripe-js';
 
 const Payment = () => {
   const navigate = useNavigate();
@@ -29,6 +32,10 @@ const Payment = () => {
     city: '',
     zipCode: '',
   });
+  const [selectedCurrency, setSelectedCurrency] = useState('USD');
+  const [exchangeRate, setExchangeRate] = useState(1);
+  const [convertedTotal, setConvertedTotal] = useState(0);
+  const [isLoadingRates, setIsLoadingRates] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -41,6 +48,56 @@ const Payment = () => {
     }
   }, [isAuthenticated, items, navigate]);
 
+  // Load exchange rates and set user's preferred currency
+  useEffect(() => {
+    const loadExchangeRates = async () => {
+      try {
+        setIsLoadingRates(true);
+        const userCurrency = exchangeRateService.getUserCurrency();
+        setSelectedCurrency(userCurrency);
+        
+        if (userCurrency !== 'USD') {
+          const rates = await exchangeRateService.getCachedRates('USD');
+          const rate = rates[userCurrency] || 1;
+          setExchangeRate(rate);
+          setConvertedTotal(getTotalPrice() * rate);
+        } else {
+          setConvertedTotal(getTotalPrice());
+        }
+      } catch (error) {
+        console.error('Error loading exchange rates:', error);
+        setConvertedTotal(getTotalPrice());
+      } finally {
+        setIsLoadingRates(false);
+      }
+    };
+
+    loadExchangeRates();
+  }, [getTotalPrice]);
+
+  // Handle currency change
+  const handleCurrencyChange = async (currency: string) => {
+    try {
+      setIsLoadingRates(true);
+      setSelectedCurrency(currency);
+      
+      if (currency !== 'USD') {
+        const rates = await exchangeRateService.getCachedRates('USD');
+        const rate = rates[currency] || 1;
+        setExchangeRate(rate);
+        setConvertedTotal(getTotalPrice() * rate);
+      } else {
+        setExchangeRate(1);
+        setConvertedTotal(getTotalPrice());
+      }
+    } catch (error) {
+      console.error('Error converting currency:', error);
+      toast.error('Failed to convert currency');
+    } finally {
+      setIsLoadingRates(false);
+    }
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -50,24 +107,45 @@ const Payment = () => {
     e.preventDefault();
     setPaymentStep('processing');
     
-    // Simulate payment processing
-    setTimeout(() => {
-      // Create order
-      const order = {
-        id: `ORD-${Date.now()}`,
-        date: new Date().toISOString(),
-        status: 'processing' as const,
-        total: getTotalPrice() * 1.08,
-        items: items.map(item => ({
-          id: item.id,
-          name: item.name,
-          price: item.price,
-          quantity: item.quantity,
-          image: item.image,
-          category: item.category,
+    try {
+      // Create Stripe payment intent
+      const paymentIntent = await stripeService.createPaymentIntent(
+        convertedTotal,
+        selectedCurrency.toLowerCase(),
+        {
+          order_id: `ORD-${Date.now()}`,
+          user_email: formData.email,
+          items: JSON.stringify(items.map(item => ({
+            id: item.id,
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price
+          })))
+        }
+      );
+
+      // Confirm payment with Stripe
+      const result = await stripeService.confirmPayment(paymentIntent.client_secret);
+      
+      if (result.success) {
+        // Create order
+        const order = {
+          id: `ORD-${Date.now()}`,
+          date: new Date().toISOString(),
+          status: 'processing' as const,
+          total: convertedTotal,
+          currency: selectedCurrency,
+          items: items.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            image: item.image,
+            category: item.category,
         })),
         shippingAddress: `${formData.address}, ${formData.city}, ${formData.zipCode}`,
-        paymentMethod: `**** **** **** ${formData.cardNumber.slice(-4)}`,
+        paymentMethod: `Stripe Payment`,
+        paymentIntentId: paymentIntent.id,
       };
 
       // Save order to localStorage
@@ -78,7 +156,14 @@ const Payment = () => {
       setPaymentStep('success');
       clearCart();
       toast.success('Payment successful! Your order has been placed.');
-    }, 3000);
+    } else {
+      throw new Error(result.error || 'Payment failed');
+    }
+    } catch (error) {
+      console.error('Payment error:', error);
+      setPaymentStep('form');
+      toast.error('Payment failed. Please try again.');
+    }
   };
 
   if (paymentStep === 'processing') {
@@ -295,10 +380,31 @@ const Payment = () => {
                   
                   <Separator className="my-4" />
                   
+                  {/* Currency Selector */}
+                  <div className="mb-4">
+                    <Label htmlFor="currency">Currency</Label>
+                    <select
+                      id="currency"
+                      value={selectedCurrency}
+                      onChange={(e) => handleCurrencyChange(e.target.value)}
+                      className="w-full p-2 border rounded-md"
+                      disabled={isLoadingRates}
+                    >
+                      {exchangeRateService.getCommonCurrencies().map((currency) => (
+                        <option key={currency.code} value={currency.code}>
+                          {currency.flag} {currency.code} - {currency.name}
+                        </option>
+                      ))}
+                    </select>
+                    {isLoadingRates && (
+                      <p className="text-sm text-muted-foreground mt-1">Loading exchange rates...</p>
+                    )}
+                  </div>
+
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span>Subtotal ({getTotalItems()} items)</span>
-                      <span>${getTotalPrice().toFixed(2)}</span>
+                      <span>{exchangeRateService.formatCurrency(getTotalPrice(), selectedCurrency)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Shipping</span>
@@ -306,12 +412,12 @@ const Payment = () => {
                     </div>
                     <div className="flex justify-between">
                       <span>Tax</span>
-                      <span>${(getTotalPrice() * 0.08).toFixed(2)}</span>
+                      <span>{exchangeRateService.formatCurrency(getTotalPrice() * 0.08, selectedCurrency)}</span>
                     </div>
                     <Separator />
                     <div className="flex justify-between text-lg font-bold">
                       <span>Total</span>
-                      <span>${(getTotalPrice() * 1.08).toFixed(2)}</span>
+                      <span>{exchangeRateService.formatCurrency(convertedTotal * 1.08, selectedCurrency)}</span>
                     </div>
                   </div>
                   

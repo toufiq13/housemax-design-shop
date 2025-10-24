@@ -6,8 +6,9 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { MessageCircle, X, Send, ShoppingCart, ExternalLink, Image, Sparkles } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "../supabase";
 import { toast } from "sonner";
+import openaiService from "../lib/openai";
 
 interface Message {
   role: "user" | "assistant";
@@ -169,21 +170,49 @@ const AIAssistant = () => {
         return;
       }
 
-      // Regular AI chat
-      const { data, error } = await supabase.functions.invoke("ai-chat", {
-        body: { message: userMessage, conversationHistory: messages },
-      });
+      // Try Supabase AI chat first, fallback to direct OpenAI
+      try {
+        const { data, error } = await supabase.functions.invoke("ai-chat", {
+          body: { message: userMessage, conversationHistory: messages },
+        });
 
-      if (error) throw error;
+        if (error) throw error;
 
-      setMessages((prev) => [
-        ...prev,
-        { 
-          role: "assistant", 
-          content: data.response,
-          timestamp: new Date().toISOString()
-        },
-      ]);
+        setMessages((prev) => [
+          ...prev,
+          { 
+            role: "assistant", 
+            content: data.response,
+            timestamp: new Date().toISOString()
+          },
+        ]);
+      } catch (supabaseError) {
+        console.log("Supabase AI failed, trying direct OpenAI:", supabaseError);
+        
+        // Fallback to direct OpenAI API call
+        const openaiMessages = [
+          {
+            role: 'system' as const,
+            content: 'You are a helpful interior design assistant for HOUSEMAX. You help users with design ideas, color schemes, furniture recommendations, space planning tips, and product suggestions. Be friendly, concise, and provide actionable advice.'
+          },
+          ...messages.map(msg => ({
+            role: msg.role as 'user' | 'assistant',
+            content: msg.content
+          })),
+          { role: 'user' as const, content: userMessage }
+        ];
+
+        const aiResponse = await openaiService.chatCompletion(openaiMessages);
+        
+        setMessages((prev) => [
+          ...prev,
+          { 
+            role: "assistant", 
+            content: aiResponse,
+            timestamp: new Date().toISOString()
+          },
+        ]);
+      }
     } catch (error) {
       console.error("AI chat error:", error);
       setMessages((prev) => [

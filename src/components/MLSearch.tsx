@@ -35,7 +35,7 @@ interface SearchSuggestion {
 
 interface MLSearchProps {
   products: Product[];
-  onSearch: (query: string, filters: any) => void;
+  onSearch: (query: string, filters: Record<string, unknown>) => void;
   onProductClick: (product: Product) => void;
 }
 
@@ -181,7 +181,7 @@ const MLSearch: React.FC<MLSearchProps> = ({ products, onSearch, onProductClick 
     handleSearch(suggestion.text);
   };
 
-  const handleFilterChange = (filterType: keyof typeof selectedFilters, value: any) => {
+  const handleFilterChange = (filterType: keyof typeof selectedFilters, value: string | number | boolean) => {
     setSelectedFilters(prev => ({
       ...prev,
       [filterType]: value
