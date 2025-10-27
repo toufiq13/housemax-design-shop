@@ -4,34 +4,18 @@ import { OrbitControls, Box, Sphere, Cylinder, Text, Html, Plane } from '@react-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { toast } from 'sonner';
 import { 
   RotateCcw, 
   Save, 
-  Download, 
-  Eye, 
-  EyeOff, 
   Plus, 
-  Minus,
-  Move,
-  RotateCw,
   Trash2,
-  Share2,
-  Copy,
-  Palette,
   Settings,
   Grid3X3,
-  Camera,
-  Upload,
-  Maximize,
-  Minimize,
   ArrowLeft,
   ArrowRight,
   ArrowUp,
@@ -40,25 +24,21 @@ import {
   Home,
   Layers,
   Paintbrush,
-  Monitor,
-  Smartphone,
-  Tablet,
   Sun
 } from 'lucide-react';
 
 interface FurnitureItem {
   id: string;
-  type: 'sofa' | 'table' | 'chair' | 'lamp' | 'bed' | 'shelf' | 'tv' | 'plant' | 'bookshelf' | 'dining_table';
+  type: string;
   position: [number, number, number];
   rotation: [number, number, number];
   scale: [number, number, number];
   color: string;
   name: string;
-  price?: number;
-  description?: string;
-  isDragging?: boolean;
-  material?: string;
-  texture?: string;
+  price: number;
+  description: string;
+  material: string;
+  texture: string;
 }
 
 interface RoomDimensions {
@@ -85,17 +65,9 @@ interface RooftopEnvironment {
   windIntensity: number;
 }
 
-interface DesignProject {
-  id: string;
-  name: string;
-  furniture: FurnitureItem[];
-  createdAt: string;
-  updatedAt: string;
-  thumbnail?: string;
-}
-
-const FurnitureObject: React.FC<{ 
-  item: FurnitureItem; 
+// Furniture Object Component
+const FurnitureObject: React.FC<{
+  item: FurnitureItem;
   onUpdate: (item: FurnitureItem) => void;
   isSelected: boolean;
   onSelect: (id: string) => void;
@@ -105,14 +77,13 @@ const FurnitureObject: React.FC<{
 
   useFrame(() => {
     if (meshRef.current) {
-      meshRef.current.position.set(...item.position);
-      meshRef.current.rotation.set(...item.rotation);
-      meshRef.current.scale.set(...item.scale);
+      meshRef.current.rotation.y += 0.01;
     }
   });
 
   const getGeometry = () => {
     switch (item.type) {
+      // Indoor furniture
       case 'sofa':
         return <Box args={[2, 0.5, 0.8]} />;
       case 'table':
@@ -128,42 +99,105 @@ const FurnitureObject: React.FC<{
       case 'tv':
         return <Box args={[1.5, 0.1, 0.9]} />;
       case 'plant':
-        return <Cylinder args={[0.3, 0.3, 1.2]} />;
+        return <Cylinder args={[0.3, 0.3, 2]} />;
       case 'bookshelf':
-        return <Box args={[0.3, 2, 0.8]} />;
-      case 'dining_table':
         return <Box args={[1.5, 0.05, 1]} />;
+      case 'dining_table':
+        return <Box args={[1, 1, 1]} />;
+      
+      // Rooftop furniture
+      case 'outdoor-sofa':
+        return <Box args={[2, 0.5, 0.8]} />;
+      case 'outdoor-table':
+        return <Box args={[1.2, 0.05, 0.8]} />;
+      case 'outdoor-chair':
+        return <Box args={[0.5, 0.8, 0.5]} />;
+      case 'umbrella':
+        return <Cylinder args={[0.1, 0.1, 2.5]} />;
+      case 'fire-pit':
+        return <Cylinder args={[0.8, 0.8, 0.3]} />;
+      case 'outdoor-plant':
+        return <Cylinder args={[0.4, 0.4, 1.5]} />;
+      case 'string-lights':
+        return <Box args={[3, 0.05, 0.05]} />;
+      case 'outdoor-lamp':
+        return <Cylinder args={[0.15, 0.15, 2]} />;
+      case 'garden-bed':
+        return <Box args={[2, 0.3, 1]} />;
+      case 'water-feature':
+        return <Cylinder args={[1, 1, 0.5]} />;
+      case 'grill':
+        return <Box args={[1, 0.8, 0.6]} />;
+      case 'hammock':
+        return <Box args={[2, 0.1, 0.1]} />;
+      
+      // New rooftop items
+      case 'ceiling-fan':
+        return (
+          <group>
+            <Cylinder args={[0.1, 0.1, 0.2]} position={[0, 0.1, 0]} />
+            <Box args={[2, 0.05, 0.2]} position={[0, 0.15, 0]} />
+            <Box args={[0.2, 0.05, 2]} position={[0, 0.15, 0]} />
+          </group>
+        );
+      case 'led-lights':
+        return (
+          <group>
+            <Box args={[0.1, 0.1, 0.1]} position={[0, 0.05, 0]} />
+            <Box args={[0.05, 0.05, 0.05]} position={[0, 0.1, 0]} />
+          </group>
+        );
+      case 'fixed-pop-roof':
+        return (
+          <group>
+            <Box args={[3, 0.1, 3]} position={[0, 0.2, 0]} />
+            <Box args={[0.1, 0.3, 3]} position={[-1.4, 0.35, 0]} />
+            <Box args={[0.1, 0.3, 3]} position={[1.4, 0.35, 0]} />
+            <Box args={[3, 0.3, 0.1]} position={[0, 0.35, -1.4]} />
+            <Box args={[3, 0.3, 0.1]} position={[0, 0.35, 1.4]} />
+          </group>
+        );
+      case 'solar-panel':
+        return <Box args={[1.5, 0.05, 1]} />;
+      case 'rooftop-garden':
+        return <Box args={[2, 0.2, 1.5]} />;
+      case 'outdoor-speaker':
+        return <Cylinder args={[0.2, 0.2, 0.3]} />;
+      case 'weather-station':
+        return (
+          <group>
+            <Cylinder args={[0.1, 0.1, 1]} />
+            <Box args={[0.3, 0.2, 0.1]} position={[0, 0.6, 0]} />
+          </group>
+        );
+      
       default:
         return <Box args={[1, 1, 1]} />;
     }
   };
 
-  const handleClick = (e: any) => {
-    e.stopPropagation();
-    onSelect(item.id);
-  };
-
-  const handlePointerOver = () => setIsHovered(true);
-  const handlePointerOut = () => setIsHovered(false);
-
   return (
-    <group>
-      <mesh 
-        ref={meshRef}
-        onClick={handleClick}
-        onPointerOver={handlePointerOver}
-        onPointerOut={handlePointerOut}
-      >
-        {getGeometry()}
-        <meshStandardMaterial 
-          color={item.color} 
-          transparent
-          opacity={isSelected ? 0.8 : isHovered ? 0.9 : 1}
-        />
-      </mesh>
+    <group
+      ref={meshRef}
+      position={item.position}
+      rotation={item.rotation}
+      scale={item.scale}
+      onClick={(e) => {
+        e.stopPropagation();
+        onSelect(item.id);
+      }}
+      onPointerOver={() => setIsHovered(true)}
+      onPointerOut={() => setIsHovered(false)}
+    >
+      {getGeometry()}
+      <meshStandardMaterial 
+        color={item.color} 
+        opacity={isSelected ? 0.8 : isHovered ? 0.9 : 1}
+        transparent
+      />
       {isSelected && (
-        <Html position={[0, 1, 0]} center>
-          <div className="bg-background border border-border rounded-lg px-2 py-1 text-xs font-medium shadow-lg">
+        <Html position={[0, 1, 0]}>
+          <div className="bg-black text-white px-2 py-1 rounded text-sm">
             {item.name}
           </div>
         </Html>
@@ -172,6 +206,7 @@ const FurnitureObject: React.FC<{
   );
 };
 
+// Room Component
 const Room: React.FC<{ 
   showGrid: boolean; 
   dimensions: RoomDimensions; 
@@ -201,7 +236,11 @@ const Room: React.FC<{
                 args={[length, 0.01, 0.01]} 
                 position={[0, 0.01, -width/2 + i * 0.5]}
               >
-                <meshStandardMaterial color="#cccccc" transparent opacity={0.3} />
+                <meshStandardMaterial 
+                  color={workspaceMode === 'rooftop' ? '#87CEEB' : '#cccccc'} 
+                  transparent 
+                  opacity={workspaceMode === 'rooftop' ? 0.5 : 0.3} 
+                />
               </Box>
             </group>
           ))}
@@ -211,7 +250,11 @@ const Room: React.FC<{
                 args={[0.01, 0.01, width]} 
                 position={[-length/2 + i * 0.5, 0.01, 0]}
               >
-                <meshStandardMaterial color="#cccccc" transparent opacity={0.3} />
+                <meshStandardMaterial 
+                  color={workspaceMode === 'rooftop' ? '#87CEEB' : '#cccccc'} 
+                  transparent 
+                  opacity={workspaceMode === 'rooftop' ? 0.5 : 0.3} 
+                />
               </Box>
             </group>
           ))}
@@ -355,19 +398,10 @@ const RooftopEnvironment: React.FC<{
   );
 };
 
-const Planner3D: React.FC = () => {
-  console.log('Planner3D component rendering');
-  
+const Planner3DFixed: React.FC = () => {
   const [furniture, setFurniture] = useState<FurnitureItem[]>([]);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [showGrid, setShowGrid] = useState(true);
-  const [cameraView, setCameraView] = useState<'perspective' | 'top'>('perspective');
-  const [projects, setProjects] = useState<DesignProject[]>([]);
-  const [currentProject, setCurrentProject] = useState<DesignProject | null>(null);
-  const [showProjectDialog, setShowProjectDialog] = useState(false);
-  const [projectName, setProjectName] = useState('');
-  
-  // New state for enhanced features
   const [roomDimensions, setRoomDimensions] = useState<RoomDimensions>({
     length: 10,
     width: 10,
@@ -394,18 +428,26 @@ const Planner3D: React.FC = () => {
   });
 
   const addFurniture = (type: string) => {
-    const isRooftopType = type.startsWith('outdoor-') || ['umbrella', 'fire-pit', 'string-lights', 'garden-bed', 'water-feature', 'grill', 'hammock'].includes(type);
+    const isRooftopType = type.startsWith('outdoor-') || ['umbrella', 'fire-pit', 'string-lights', 'garden-bed', 'water-feature', 'grill', 'hammock', 'ceiling-fan', 'led-lights', 'fixed-pop-roof', 'solar-panel', 'rooftop-garden', 'outdoor-speaker', 'weather-station'].includes(type);
+    
+    // Special positioning for ceiling items
+    const isCeilingItem = ['ceiling-fan', 'led-lights'].includes(type);
+    const isFixedStructure = ['fixed-pop-roof', 'solar-panel'].includes(type);
     
     const newItem: FurnitureItem = {
       id: `${type}-${Date.now()}`,
-      type: type as FurnitureItem['type'],
-      position: [Math.random() * 4 - 2, 0, Math.random() * 4 - 2],
+      type: type as any,
+      position: isCeilingItem 
+        ? [Math.random() * 4 - 2, roomDimensions.height - 0.5, Math.random() * 4 - 2] // Ceiling level
+        : isFixedStructure 
+        ? [0, 0, 0] // Center position for fixed structures
+        : [Math.random() * 4 - 2, 0, Math.random() * 4 - 2], // Ground level
       rotation: [0, 0, 0],
       scale: [1, 1, 1],
-      color: isRooftopType ? getRooftopColor(type) : getDefaultColor(type as FurnitureItem['type']),
-      name: isRooftopType ? getRooftopName(type) : getDefaultName(type as FurnitureItem['type']),
-      price: isRooftopType ? getRooftopPrice(type) : getDefaultPrice(type as FurnitureItem['type']),
-      description: isRooftopType ? `${getRooftopName(type)} - Perfect for outdoor spaces` : getDefaultDescription(type as FurnitureItem['type']),
+      color: isRooftopType ? getRooftopColor(type) : getDefaultColor(type),
+      name: isRooftopType ? getRooftopName(type) : getDefaultName(type),
+      price: isRooftopType ? getRooftopPrice(type) : getDefaultPrice(type),
+      description: isRooftopType ? `${getRooftopName(type)} - Perfect for outdoor spaces` : getDefaultDescription(type),
       material: isRooftopType ? 'weather-resistant' : 'wood',
       texture: isRooftopType ? 'outdoor' : 'smooth'
     };
@@ -413,24 +455,24 @@ const Planner3D: React.FC = () => {
     setSelectedItem(newItem.id);
   };
 
-  const getDefaultColor = (type: FurnitureItem['type']): string => {
-    const colors = {
+  const getDefaultColor = (type: string): string => {
+    const colors: { [key: string]: string } = {
       sofa: '#8B4513',
       table: '#D2691E',
-      chair: '#CD853F',
+      chair: '#8B4513',
       lamp: '#FFD700',
-      bed: '#4169E1',
-      shelf: '#A0522D',
-      tv: '#2C2C2C',
+      bed: '#F5F5DC',
+      shelf: '#8B4513',
+      tv: '#000000',
       plant: '#228B22',
       bookshelf: '#8B4513',
       dining_table: '#D2691E',
     };
-    return colors[type];
+    return colors[type] || '#8B4513';
   };
 
-  const getDefaultName = (type: FurnitureItem['type']): string => {
-    const names = {
+  const getDefaultName = (type: string): string => {
+    const names: { [key: string]: string } = {
       sofa: 'Modern Sofa',
       table: 'Coffee Table',
       chair: 'Dining Chair',
@@ -442,11 +484,11 @@ const Planner3D: React.FC = () => {
       bookshelf: 'Book Shelf',
       dining_table: 'Dining Table',
     };
-    return names[type];
+    return names[type] || type;
   };
 
-  const getDefaultPrice = (type: FurnitureItem['type']): number => {
-    const prices = {
+  const getDefaultPrice = (type: string): number => {
+    const prices: { [key: string]: number } = {
       sofa: 899,
       table: 299,
       chair: 149,
@@ -458,11 +500,11 @@ const Planner3D: React.FC = () => {
       bookshelf: 599,
       dining_table: 799,
     };
-    return prices[type];
+    return prices[type] || 0;
   };
 
-  const getDefaultDescription = (type: FurnitureItem['type']): string => {
-    const descriptions = {
+  const getDefaultDescription = (type: string): string => {
+    const descriptions: { [key: string]: string } = {
       sofa: 'Comfortable modern sofa perfect for living rooms',
       table: 'Stylish coffee table with storage space',
       chair: 'Ergonomic dining chair with premium materials',
@@ -474,12 +516,12 @@ const Planner3D: React.FC = () => {
       bookshelf: 'Tall bookshelf with multiple compartments',
       dining_table: 'Solid wood dining table for 6 people',
     };
-    return descriptions[type];
+    return descriptions[type] || `${type} - High quality furniture`;
   };
 
   // Rooftop-specific helper functions
   const getRooftopName = (type: string): string => {
-    const names = {
+    const names: { [key: string]: string } = {
       'outdoor-sofa': 'Outdoor Sectional',
       'outdoor-table': 'Patio Table',
       'outdoor-chair': 'Outdoor Chair',
@@ -492,12 +534,19 @@ const Planner3D: React.FC = () => {
       'water-feature': 'Water Feature',
       'grill': 'BBQ Grill',
       'hammock': 'Hammock',
+      'ceiling-fan': 'Ceiling Fan',
+      'led-lights': 'LED Strip Lights',
+      'fixed-pop-roof': 'Fixed Pop Roof',
+      'solar-panel': 'Solar Panel',
+      'rooftop-garden': 'Rooftop Garden',
+      'outdoor-speaker': 'Outdoor Speaker',
+      'weather-station': 'Weather Station',
     };
-    return names[type as keyof typeof names] || type;
+    return names[type] || type;
   };
 
   const getRooftopPrice = (type: string): number => {
-    const prices = {
+    const prices: { [key: string]: number } = {
       'outdoor-sofa': 1299,
       'outdoor-table': 599,
       'outdoor-chair': 199,
@@ -510,12 +559,19 @@ const Planner3D: React.FC = () => {
       'water-feature': 899,
       'grill': 699,
       'hammock': 399,
+      'ceiling-fan': 599,
+      'led-lights': 199,
+      'fixed-pop-roof': 2999,
+      'solar-panel': 899,
+      'rooftop-garden': 499,
+      'outdoor-speaker': 399,
+      'weather-station': 299,
     };
-    return prices[type as keyof typeof prices] || 0;
+    return prices[type] || 0;
   };
 
   const getRooftopColor = (type: string): string => {
-    const colors = {
+    const colors: { [key: string]: string } = {
       'outdoor-sofa': '#8B4513',
       'outdoor-table': '#D2691E',
       'outdoor-chair': '#8B4513',
@@ -528,8 +584,15 @@ const Planner3D: React.FC = () => {
       'water-feature': '#87CEEB',
       'grill': '#696969',
       'hammock': '#8B4513',
+      'ceiling-fan': '#C0C0C0',
+      'led-lights': '#FFFFFF',
+      'fixed-pop-roof': '#708090',
+      'solar-panel': '#2F4F4F',
+      'rooftop-garden': '#228B22',
+      'outdoor-speaker': '#000000',
+      'weather-station': '#4682B4',
     };
-    return colors[type as keyof typeof colors] || '#8B4513';
+    return colors[type] || '#8B4513';
   };
 
   const updateFurniture = (updatedItem: FurnitureItem) => {
@@ -540,96 +603,14 @@ const Planner3D: React.FC = () => {
 
   const deleteFurniture = (id: string) => {
     setFurniture(furniture.filter(item => item.id !== id));
-    if (selectedItem === id) {
-      setSelectedItem(null);
-    }
-    toast.success('Item deleted successfully');
+    setSelectedItem(null);
   };
 
   const resetRoom = () => {
     setFurniture([]);
     setSelectedItem(null);
-    toast.success('Room reset successfully');
   };
 
-  const saveProject = () => {
-    if (!projectName.trim()) {
-      toast.error('Please enter a project name');
-      return;
-    }
-
-    const project: DesignProject = {
-      id: `project-${Date.now()}`,
-      name: projectName,
-      furniture,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    const updatedProjects = [...projects, project];
-    setProjects(updatedProjects);
-    localStorage.setItem('designProjects', JSON.stringify(updatedProjects));
-    setCurrentProject(project);
-    setShowProjectDialog(false);
-    setProjectName('');
-    toast.success('Project saved successfully!');
-  };
-
-  const loadProject = (project: DesignProject) => {
-    setFurniture(project.furniture);
-    setCurrentProject(project);
-    setSelectedItem(null);
-    toast.success(`Loaded project: ${project.name}`);
-  };
-
-  const shareProject = () => {
-    if (!currentProject) {
-      toast.error('No project to share');
-      return;
-    }
-
-    const shareData = {
-      project: currentProject,
-      timestamp: new Date().toISOString(),
-    };
-
-    const shareUrl = `${window.location.origin}/planner?shared=${encodeURIComponent(JSON.stringify(shareData))}`;
-    
-    navigator.clipboard.writeText(shareUrl).then(() => {
-      toast.success('Share link copied to clipboard!');
-    }).catch(() => {
-      toast.error('Failed to copy share link');
-    });
-  };
-
-  const exportImage = () => {
-    // This would typically capture the canvas and download as image
-    toast.success('Image export feature coming soon!');
-  };
-
-  const loadSavedProjects = () => {
-    const saved = localStorage.getItem('designProjects');
-    if (saved) {
-      setProjects(JSON.parse(saved));
-    }
-  };
-
-  React.useEffect(() => {
-    loadSavedProjects();
-  }, []);
-
-  // Handle fullscreen toggle
-  const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen();
-      setViewMode(prev => ({ ...prev, fullscreen: true }));
-    } else {
-      document.exitFullscreen();
-      setViewMode(prev => ({ ...prev, fullscreen: false }));
-    }
-  };
-
-  // Handle view mode changes
   const handleViewModeChange = (mode: 'edit' | 'view') => {
     setViewMode(prev => ({ ...prev, type: mode }));
     if (mode === 'view') {
@@ -639,56 +620,19 @@ const Planner3D: React.FC = () => {
     }
   };
 
-  // Handle camera navigation in view mode
   const handleCameraNavigation = (direction: 'left' | 'right' | 'up' | 'down') => {
-    if (viewMode.type !== 'view') return;
-    
-    const [x, y, z] = cameraPosition;
     const step = 0.5;
-    
-    switch (direction) {
-      case 'left':
-        setCameraPosition([x - step, y, z]);
-        break;
-      case 'right':
-        setCameraPosition([x + step, y, z]);
-        break;
-      case 'up':
-        setCameraPosition([x, y + step, z]);
-        break;
-      case 'down':
-        setCameraPosition([x, y - step, z]);
-        break;
-    }
-  };
-
-  // Handle keyboard navigation
-  useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      if (viewMode.type !== 'view') return;
-      
-      switch (e.key) {
-        case 'ArrowLeft':
-          handleCameraNavigation('left');
-          break;
-        case 'ArrowRight':
-          handleCameraNavigation('right');
-          break;
-        case 'ArrowUp':
-          handleCameraNavigation('up');
-          break;
-        case 'ArrowDown':
-          handleCameraNavigation('down');
-          break;
-        case 'Escape':
-          handleViewModeChange('edit');
-          break;
+    setCameraPosition(prev => {
+      const [x, y, z] = prev;
+      switch (direction) {
+        case 'left': return [x - step, y, z];
+        case 'right': return [x + step, y, z];
+        case 'up': return [x, y + step, z];
+        case 'down': return [x, y - step, z];
+        default: return prev;
       }
-    };
-
-    document.addEventListener('keydown', handleKeyPress);
-    return () => document.removeEventListener('keydown', handleKeyPress);
-  }, [viewMode.type]);
+    });
+  };
 
   const selectedFurniture = furniture.find(item => item.id === selectedItem);
 
@@ -713,7 +657,7 @@ const Planner3D: React.FC = () => {
                 Colors
               </TabsTrigger>
               <TabsTrigger value="view" className="text-xs">
-                <Eye className="h-3 w-3 mr-1" />
+                <Settings className="h-3 w-3 mr-1" />
                 View
               </TabsTrigger>
             </TabsList>
@@ -752,67 +696,6 @@ const Planner3D: React.FC = () => {
 
             {/* Furniture Tab */}
             <TabsContent value="furniture" className="space-y-4">
-              {/* Project Management */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Settings className="h-4 w-4" />
-                    Project
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <Dialog open={showProjectDialog} onOpenChange={setShowProjectDialog}>
-                    <DialogTrigger asChild>
-                      <Button variant="outline" size="sm" className="w-full justify-start">
-                        <Save className="h-4 w-4 mr-2" />
-                        Save Project
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Save Project</DialogTitle>
-                      </DialogHeader>
-                      <div className="space-y-4">
-                        <div>
-                          <Label htmlFor="projectName">Project Name</Label>
-                          <Input
-                            id="projectName"
-                            value={projectName}
-                            onChange={(e) => setProjectName(e.target.value)}
-                            placeholder="Enter project name"
-                          />
-                        </div>
-                        <Button onClick={saveProject} className="w-full">
-                          Save Project
-                        </Button>
-                      </div>
-                    </DialogContent>
-                  </Dialog>
-                  
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full justify-start"
-                    onClick={shareProject}
-                    disabled={!currentProject}
-                  >
-                    <Share2 className="h-4 w-4 mr-2" />
-                    Share Project
-                  </Button>
-                  
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full justify-start"
-                    onClick={exportImage}
-                  >
-                    <Camera className="h-4 w-4 mr-2" />
-                    Export Image
-                  </Button>
-                </CardContent>
-              </Card>
-
-              {/* Furniture Library */}
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
@@ -837,7 +720,7 @@ const Planner3D: React.FC = () => {
                         </Badge>
                       </Button>
                     )) :
-                    (['outdoor-sofa', 'outdoor-table', 'outdoor-chair', 'umbrella', 'fire-pit', 'outdoor-plant', 'string-lights', 'outdoor-lamp', 'garden-bed', 'water-feature', 'grill', 'hammock'] as const).map((type) => (
+                    (['outdoor-sofa', 'outdoor-table', 'outdoor-chair', 'umbrella', 'fire-pit', 'outdoor-plant', 'string-lights', 'outdoor-lamp', 'garden-bed', 'water-feature', 'grill', 'hammock', 'ceiling-fan', 'led-lights', 'fixed-pop-roof', 'solar-panel', 'rooftop-garden', 'outdoor-speaker', 'weather-station'] as const).map((type) => (
                       <Button
                         key={type}
                         variant="outline"
@@ -930,10 +813,15 @@ const Planner3D: React.FC = () => {
                         value={rooftopEnvironment.timeOfDay}
                         onValueChange={(value) => setRooftopEnvironment(prev => ({ ...prev, timeOfDay: value as any }))}
                       >
-                        <option value="morning">Morning</option>
-                        <option value="afternoon">Afternoon</option>
-                        <option value="evening">Evening</option>
-                        <option value="night">Night</option>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="morning">Morning</SelectItem>
+                          <SelectItem value="afternoon">Afternoon</SelectItem>
+                          <SelectItem value="evening">Evening</SelectItem>
+                          <SelectItem value="night">Night</SelectItem>
+                        </SelectContent>
                       </Select>
                     </div>
                     <div>
@@ -942,10 +830,15 @@ const Planner3D: React.FC = () => {
                         value={rooftopEnvironment.weather}
                         onValueChange={(value) => setRooftopEnvironment(prev => ({ ...prev, weather: value as any }))}
                       >
-                        <option value="sunny">Sunny</option>
-                        <option value="cloudy">Cloudy</option>
-                        <option value="rainy">Rainy</option>
-                        <option value="clear-night">Clear Night</option>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="sunny">Sunny</SelectItem>
+                          <SelectItem value="cloudy">Cloudy</SelectItem>
+                          <SelectItem value="rainy">Rainy</SelectItem>
+                          <SelectItem value="clear-night">Clear Night</SelectItem>
+                        </SelectContent>
                       </Select>
                     </div>
                     <div>
@@ -969,7 +862,7 @@ const Planner3D: React.FC = () => {
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <Palette className="h-4 w-4" />
+                    <Paintbrush className="h-4 w-4" />
                     Room Colors
                   </CardTitle>
                 </CardHeader>
@@ -1031,7 +924,7 @@ const Planner3D: React.FC = () => {
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <Eye className="h-4 w-4" />
+                    <Settings className="h-4 w-4" />
                     View Controls
                   </CardTitle>
                 </CardHeader>
@@ -1043,7 +936,6 @@ const Planner3D: React.FC = () => {
                       onClick={() => handleViewModeChange('edit')}
                       className="flex-1"
                     >
-                      <Settings className="h-4 w-4 mr-2" />
                       Edit Mode
                     </Button>
                     <Button
@@ -1052,18 +944,14 @@ const Planner3D: React.FC = () => {
                       onClick={() => handleViewModeChange('view')}
                       className="flex-1"
                     >
-                      <Eye className="h-4 w-4 mr-2" />
                       View Mode
                     </Button>
                   </div>
-                  
                   <div>
                     <Label>Perspective</Label>
                     <Select 
                       value={viewMode.perspective} 
-                      onValueChange={(value: 'first-person' | 'third-person' | 'top-down') => 
-                        setViewMode(prev => ({ ...prev, perspective: value }))
-                      }
+                      onValueChange={(value) => setViewMode(prev => ({ ...prev, perspective: value as any }))}
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -1075,17 +963,6 @@ const Planner3D: React.FC = () => {
                       </SelectContent>
                     </Select>
                   </div>
-
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full justify-start"
-                    onClick={toggleFullscreen}
-                  >
-                    {viewMode.fullscreen ? <Minimize className="h-4 w-4 mr-2" /> : <Maximize className="h-4 w-4 mr-2" />}
-                    {viewMode.fullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
-                  </Button>
-
                   <Button
                     variant="outline"
                     size="sm"
@@ -1095,7 +972,6 @@ const Planner3D: React.FC = () => {
                     <Grid3X3 className="h-4 w-4 mr-2" />
                     {showGrid ? 'Hide' : 'Show'} Grid
                   </Button>
-
                   <Button
                     variant="outline"
                     size="sm"
@@ -1143,51 +1019,68 @@ const Planner3D: React.FC = () => {
                       className="flex-1"
                     />
                   </div>
+                  
+                  {/* Quick Color Presets */}
+                  <div className="mt-2">
+                    <Label className="text-sm text-muted-foreground">Quick Colors</Label>
+                    <div className="grid grid-cols-6 gap-1 mt-1">
+                      {['#8B4513', '#D2691E', '#FF6347', '#228B22', '#87CEEB', '#C0C0C0', '#FFD700', '#696969', '#000000', '#FFFFFF', '#FF4500', '#708090'].map((color) => (
+                        <button
+                          key={color}
+                          className="w-6 h-6 rounded border-2 border-gray-300 hover:border-gray-500"
+                          style={{ backgroundColor: color }}
+                          onClick={() => updateFurniture({...selectedFurniture, color})}
+                        />
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
+                {/* Material Selection */}
                 <div>
-                  <Label>Position X: {selectedFurniture.position[0].toFixed(1)}</Label>
-                  <Slider
-                    value={[selectedFurniture.position[0]]}
-                    onValueChange={([value]) => updateFurniture({
-                      ...selectedFurniture,
-                      position: [value, selectedFurniture.position[1], selectedFurniture.position[2]]
-                    })}
-                    min={-5}
-                    max={5}
-                    step={0.1}
-                    className="mt-1"
-                  />
+                  <Label>Material</Label>
+                  <Select
+                    value={selectedFurniture.material}
+                    onValueChange={(value) => updateFurniture({...selectedFurniture, material: value})}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="wood">Wood</SelectItem>
+                      <SelectItem value="metal">Metal</SelectItem>
+                      <SelectItem value="plastic">Plastic</SelectItem>
+                      <SelectItem value="fabric">Fabric</SelectItem>
+                      <SelectItem value="glass">Glass</SelectItem>
+                      <SelectItem value="stone">Stone</SelectItem>
+                      <SelectItem value="weather-resistant">Weather Resistant</SelectItem>
+                      <SelectItem value="leather">Leather</SelectItem>
+                      <SelectItem value="ceramic">Ceramic</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
+                {/* Texture Selection */}
                 <div>
-                  <Label>Position Z: {selectedFurniture.position[2].toFixed(1)}</Label>
-                  <Slider
-                    value={[selectedFurniture.position[2]]}
-                    onValueChange={([value]) => updateFurniture({
-                      ...selectedFurniture,
-                      position: [selectedFurniture.position[0], selectedFurniture.position[1], value]
-                    })}
-                    min={-5}
-                    max={5}
-                    step={0.1}
-                    className="mt-1"
-                  />
-                </div>
-
-                <div>
-                  <Label>Rotation Y: {selectedFurniture.rotation[1].toFixed(1)}°</Label>
-                  <Slider
-                    value={[selectedFurniture.rotation[1] * (180 / Math.PI)]}
-                    onValueChange={([value]) => updateFurniture({
-                      ...selectedFurniture,
-                      rotation: [selectedFurniture.rotation[0], value * (Math.PI / 180), selectedFurniture.rotation[2]]
-                    })}
-                    min={0}
-                    max={360}
-                    step={1}
-                    className="mt-1"
-                  />
+                  <Label>Texture</Label>
+                  <Select
+                    value={selectedFurniture.texture}
+                    onValueChange={(value) => updateFurniture({...selectedFurniture, texture: value})}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="smooth">Smooth</SelectItem>
+                      <SelectItem value="rough">Rough</SelectItem>
+                      <SelectItem value="glossy">Glossy</SelectItem>
+                      <SelectItem value="matte">Matte</SelectItem>
+                      <SelectItem value="outdoor">Outdoor</SelectItem>
+                      <SelectItem value="textured">Textured</SelectItem>
+                      <SelectItem value="fabric">Fabric</SelectItem>
+                      <SelectItem value="wood-grain">Wood Grain</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <Button
@@ -1232,29 +1125,6 @@ const Planner3D: React.FC = () => {
                       <Badge variant="outline" className="text-xs">
                         {item.type}
                       </Badge>
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Saved Projects */}
-          {projects.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Saved Projects</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {projects.map((project) => (
-                  <div
-                    key={project.id}
-                    className="p-2 rounded border cursor-pointer hover:bg-muted transition-colors"
-                    onClick={() => loadProject(project)}
-                  >
-                    <div className="font-medium text-sm">{project.name}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {new Date(project.createdAt).toLocaleDateString()} • {project.furniture.length} items
                     </div>
                   </div>
                 ))}
@@ -1322,7 +1192,7 @@ const Planner3D: React.FC = () => {
                 fov: viewMode.perspective === 'first-person' ? 75 : 50 
               }}
             >
-              <Suspense fallback={<div>Loading 3D scene...</div>}>
+              <Suspense fallback={<div className="flex items-center justify-center h-full">Loading 3D scene...</div>}>
                 <ambientLight intensity={0.5} />
                 <directionalLight position={[10, 10, 5]} intensity={1} />
                 <Room 
@@ -1357,4 +1227,4 @@ const Planner3D: React.FC = () => {
   );
 };
 
-export default Planner3D;
+export default Planner3DFixed;

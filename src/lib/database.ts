@@ -724,22 +724,92 @@ export const aiRecommendationService = {
   }
 };
 
-// Unsplash image enhancement service
+// Enhanced product image service with realistic furniture images
 export const imageEnhancementService = {
+  // Curated realistic product images for different categories
+  getProductImages: {
+    // Sofas & Couches
+    'Modern Sectional Sofa': 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop&q=80',
+    'Luxury Chesterfield Sofa': 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop&q=80',
+    'Minimalist Loveseat': 'https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?w=400&h=300&fit=crop&q=80',
+    'Contemporary Sofa': 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop&q=80',
+    'Velvet Sofa': 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop&q=80',
+    
+    // Armchairs & Recliners
+    'Premium Recliner Chair': 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=400&h=300&fit=crop&q=80',
+    'Designer Accent Chair': 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&h=300&fit=crop&q=80',
+    'Wingback Reading Chair': 'https://images.unsplash.com/photo-1549497538-303791108f95?w=400&h=300&fit=crop&q=80',
+    'Leather Armchair': 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=400&h=300&fit=crop&q=80',
+    'Modern Accent Chair': 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&h=300&fit=crop&q=80',
+    
+    // Coffee Tables & Side Tables
+    'Glass Coffee Table': 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop&q=80',
+    'Wooden Side Table Set': 'https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?w=400&h=300&fit=crop&q=80',
+    'Marble Coffee Table': 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop&q=80',
+    'Modern Coffee Table': 'https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?w=400&h=300&fit=crop&q=80',
+    'Nesting Tables': 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop&q=80',
+    
+    // Dining Tables & Chairs
+    'Farmhouse Dining Table': 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=400&h=300&fit=crop&q=80',
+    'Modern Dining Chair Set': 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&h=300&fit=crop&q=80',
+    'Extendable Dining Table': 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=400&h=300&fit=crop&q=80',
+    'Dining Table Set': 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=400&h=300&fit=crop&q=80',
+    'Bar Stools': 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&h=300&fit=crop&q=80',
+    
+    // Beds
+    'King Size Platform Bed': 'https://images.unsplash.com/photo-1505693314120-0d443867891c?w=400&h=300&fit=crop&q=80',
+    'Queen Size Upholstered Bed': 'https://images.unsplash.com/photo-1505693314120-0d443867891c?w=400&h=300&fit=crop&q=80',
+    'Single Daybed': 'https://images.unsplash.com/photo-1505693314120-0d443867891c?w=400&h=300&fit=crop&q=80',
+    'Modern Bed Frame': 'https://images.unsplash.com/photo-1505693314120-0d443867891c?w=400&h=300&fit=crop&q=80',
+    'Storage Bed': 'https://images.unsplash.com/photo-1505693314120-0d443867891c?w=400&h=300&fit=crop&q=80',
+    
+    // Lighting
+    'Crystal Chandelier': 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop&q=80',
+    'Modern Geometric Chandelier': 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop&q=80',
+    'Adjustable Floor Lamp': 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop&q=80',
+    'Arc Floor Lamp': 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop&q=80',
+    'Ceramic Table Lamp': 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop&q=80',
+    
+    // Storage & Shelving
+    'Bookshelf': 'https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?w=400&h=300&fit=crop&q=80',
+    'Storage Shelf': 'https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?w=400&h=300&fit=crop&q=80',
+    'TV Stand': 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop&q=80',
+    'Wardrobe': 'https://images.unsplash.com/photo-1505693314120-0d443867891c?w=400&h=300&fit=crop&q=80',
+    'Chest of Drawers': 'https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?w=400&h=300&fit=crop&q=80',
+    
+    // Decorative Items
+    'Decorative Plant': 'https://images.unsplash.com/photo-1549497538-303791108f95?w=400&h=300&fit=crop&q=80',
+    'Wall Art': 'https://images.unsplash.com/photo-1549497538-303791108f95?w=400&h=300&fit=crop&q=80',
+    'Mirror': 'https://images.unsplash.com/photo-1549497538-303791108f95?w=400&h=300&fit=crop&q=80',
+    'Vase': 'https://images.unsplash.com/photo-1549497538-303791108f95?w=400&h=300&fit=crop&q=80',
+    'Candles': 'https://images.unsplash.com/photo-1549497538-303791108f95?w=400&h=300&fit=crop&q=80'
+  },
+
   async enhanceProductImages(products: Product[]): Promise<Product[]> {
     try {
       const enhancedProducts = await Promise.all(
         products.map(async (product: any) => {
           try {
-            // Search for better images based on product name and category
-            const searchQuery = `${product.name} ${product.category || 'furniture'}`;
+            // Use curated images first
+            const curatedImage = this.getProductImages[product.name as keyof typeof this.getProductImages];
+            if (curatedImage) {
+              return {
+                ...product,
+                image_url: curatedImage,
+                image_alt: product.name,
+                image_credit: 'High-quality product photography'
+              };
+            }
+
+            // Fallback to Unsplash search
+            const searchQuery = `${product.name} ${product.categories?.name || 'furniture'}`;
             const imageResults = await unsplashService.searchPhotos(searchQuery, 1, 1, 'squarish');
             
             if (imageResults.results.length > 0) {
               const betterImage = imageResults.results[0];
               return {
                 ...product,
-                image: unsplashService.getOptimizedImageUrl(betterImage, 'regular'),
+                image_url: unsplashService.getOptimizedImageUrl(betterImage, 'regular'),
                 image_alt: betterImage.alt_description || product.name,
                 image_credit: `Photo by ${betterImage.user.name} on Unsplash`,
               };

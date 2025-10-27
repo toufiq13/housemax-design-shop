@@ -4,6 +4,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AIAssistant from "@/components/AIAssistant";
 import Planner3D from "@/components/3DPlanner";
+import Test3DPlanner from "@/components/3DPlannerTest";
+import Simple3DPlanner from "@/components/3DPlannerSimple";
+import Planner3DFixed from "@/components/3DPlannerFixed";
 import { Layers, Zap, Save, Share2, Download } from "lucide-react";
 
 const Planner = () => {
@@ -47,7 +50,7 @@ const Planner = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Planner3D />
+              <Planner3DFixed />
             </CardContent>
           </Card>
 
