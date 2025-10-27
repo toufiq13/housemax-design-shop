@@ -1,5 +1,5 @@
-import React, { useState, useRef, Suspense, useEffect } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import React, { useState, useRef, Suspense } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Box, Sphere, Cylinder, Text, Html, Plane } from '@react-three/drei';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -72,14 +72,17 @@ const FurnitureObject: React.FC<{
   isSelected: boolean;
   onSelect: (id: string) => void;
 }> = ({ item, onUpdate, isSelected, onSelect }) => {
-  const meshRef = useRef<any>();
+  const groupRef = useRef<any>();
   const [isHovered, setIsHovered] = useState(false);
+  
+  // Furniture stays in place - no auto-rotation
+  // Position can be adjusted using the position sliders in Item Properties panel
 
-  useFrame(() => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += 0.01;
-    }
-  });
+  const materialProps = {
+    color: item.color,
+    transparent: true,
+    opacity: isSelected ? 0.85 : isHovered ? 0.9 : 1
+  };
 
   const getGeometry = () => {
     switch (item.type) {
@@ -131,32 +134,13 @@ const FurnitureObject: React.FC<{
       case 'hammock':
         return <Box args={[2, 0.1, 0.1]} />;
       
-      // New rooftop items
+      // New rooftop items - simplified to single shapes for proper color support
       case 'ceiling-fan':
-        return (
-          <group>
-            <Cylinder args={[0.1, 0.1, 0.2]} position={[0, 0.1, 0]} />
-            <Box args={[2, 0.05, 0.2]} position={[0, 0.15, 0]} />
-            <Box args={[0.2, 0.05, 2]} position={[0, 0.15, 0]} />
-          </group>
-        );
+        return <Cylinder args={[1, 1, 0.1]} />;
       case 'led-lights':
-        return (
-          <group>
-            <Box args={[0.1, 0.1, 0.1]} position={[0, 0.05, 0]} />
-            <Box args={[0.05, 0.05, 0.05]} position={[0, 0.1, 0]} />
-          </group>
-        );
+        return <Box args={[0.5, 0.05, 0.05]} />;
       case 'fixed-pop-roof':
-        return (
-          <group>
-            <Box args={[3, 0.1, 3]} position={[0, 0.2, 0]} />
-            <Box args={[0.1, 0.3, 3]} position={[-1.4, 0.35, 0]} />
-            <Box args={[0.1, 0.3, 3]} position={[1.4, 0.35, 0]} />
-            <Box args={[3, 0.3, 0.1]} position={[0, 0.35, -1.4]} />
-            <Box args={[3, 0.3, 0.1]} position={[0, 0.35, 1.4]} />
-          </group>
-        );
+        return <Box args={[3, 0.2, 3]} />;
       case 'solar-panel':
         return <Box args={[1.5, 0.05, 1]} />;
       case 'rooftop-garden':
@@ -164,21 +148,18 @@ const FurnitureObject: React.FC<{
       case 'outdoor-speaker':
         return <Cylinder args={[0.2, 0.2, 0.3]} />;
       case 'weather-station':
-        return (
-          <group>
-            <Cylinder args={[0.1, 0.1, 1]} />
-            <Box args={[0.3, 0.2, 0.1]} position={[0, 0.6, 0]} />
-          </group>
-        );
+        return <Cylinder args={[0.2, 0.2, 1]} />;
       
       default:
         return <Box args={[1, 1, 1]} />;
     }
   };
 
+  const geometry = getGeometry();
+
   return (
     <group
-      ref={meshRef}
+      ref={groupRef}
       position={item.position}
       rotation={item.rotation}
       scale={item.scale}
@@ -186,18 +167,25 @@ const FurnitureObject: React.FC<{
         e.stopPropagation();
         onSelect(item.id);
       }}
-      onPointerOver={() => setIsHovered(true)}
-      onPointerOut={() => setIsHovered(false)}
     >
-      {getGeometry()}
-      <meshStandardMaterial 
-        color={item.color} 
-        opacity={isSelected ? 0.8 : isHovered ? 0.9 : 1}
-        transparent
-      />
+      <mesh
+        onPointerOver={(e) => {
+          e.stopPropagation();
+          setIsHovered(true);
+          document.body.style.cursor = 'pointer';
+        }}
+        onPointerOut={(e) => {
+          e.stopPropagation();
+          setIsHovered(false);
+          document.body.style.cursor = 'default';
+        }}
+      >
+        {geometry}
+        <meshStandardMaterial {...materialProps} />
+      </mesh>
       {isSelected && (
-        <Html position={[0, 1, 0]}>
-          <div className="bg-black text-white px-2 py-1 rounded text-sm">
+        <Html position={[0, 1, 0]} center>
+          <div className="bg-background border border-border rounded-lg px-2 py-1 text-xs font-medium shadow-lg">
             {item.name}
           </div>
         </Html>
@@ -427,6 +415,14 @@ const Planner3DFixed: React.FC = () => {
     windIntensity: 0.5
   });
 
+  // Handle workspace mode switching
+  const handleWorkspaceModeChange = (mode: 'indoor' | 'rooftop') => {
+    setWorkspaceMode(mode);
+    // Clear furniture when switching modes (optional - user might want to keep some items)
+    // setFurniture([]);
+    // setSelectedItem(null);
+  };
+
   const addFurniture = (type: string) => {
     const isRooftopType = type.startsWith('outdoor-') || ['umbrella', 'fire-pit', 'string-lights', 'garden-bed', 'water-feature', 'grill', 'hammock', 'ceiling-fan', 'led-lights', 'fixed-pop-roof', 'solar-panel', 'rooftop-garden', 'outdoor-speaker', 'weather-station'].includes(type);
     
@@ -434,14 +430,17 @@ const Planner3DFixed: React.FC = () => {
     const isCeilingItem = ['ceiling-fan', 'led-lights'].includes(type);
     const isFixedStructure = ['fixed-pop-roof', 'solar-panel'].includes(type);
     
+    // In rooftop mode, items should be placed on the rooftop surface (y = 0.1 to be on top of the floor)
+    const baseY = workspaceMode === 'rooftop' ? 0.1 : 0;
+    
     const newItem: FurnitureItem = {
       id: `${type}-${Date.now()}`,
       type: type as any,
       position: isCeilingItem 
         ? [Math.random() * 4 - 2, roomDimensions.height - 0.5, Math.random() * 4 - 2] // Ceiling level
         : isFixedStructure 
-        ? [0, 0, 0] // Center position for fixed structures
-        : [Math.random() * 4 - 2, 0, Math.random() * 4 - 2], // Ground level
+        ? [0, baseY + 0.1, 0] // Center position for fixed structures, slightly above ground
+        : [Math.random() * 4 - 2, baseY, Math.random() * 4 - 2], // Ground/rooftop level
       rotation: [0, 0, 0],
       scale: [1, 1, 1],
       color: isRooftopType ? getRooftopColor(type) : getDefaultColor(type),
@@ -675,7 +674,7 @@ const Planner3DFixed: React.FC = () => {
                   <Button
                     variant={workspaceMode === 'indoor' ? 'default' : 'outline'}
                     size="sm"
-                    onClick={() => setWorkspaceMode('indoor')}
+                    onClick={() => handleWorkspaceModeChange('indoor')}
                     className="flex-1"
                   >
                     <Home className="h-4 w-4 mr-2" />
@@ -684,7 +683,7 @@ const Planner3DFixed: React.FC = () => {
                   <Button
                     variant={workspaceMode === 'rooftop' ? 'default' : 'outline'}
                     size="sm"
-                    onClick={() => setWorkspaceMode('rooftop')}
+                    onClick={() => handleWorkspaceModeChange('rooftop')}
                     className="flex-1"
                   >
                     <Sun className="h-4 w-4 mr-2" />
@@ -859,64 +858,99 @@ const Planner3DFixed: React.FC = () => {
 
             {/* Colors Tab */}
             <TabsContent value="colors" className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Paintbrush className="h-4 w-4" />
-                    Room Colors
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <Label>Walls</Label>
-                    <div className="flex gap-2 mt-1">
-                      <input
-                        type="color"
-                        value={roomColors.walls}
-                        onChange={(e) => setRoomColors(prev => ({ ...prev, walls: e.target.value }))}
-                        className="w-8 h-8 rounded border"
-                      />
-                      <Input
-                        value={roomColors.walls}
-                        onChange={(e) => setRoomColors(prev => ({ ...prev, walls: e.target.value }))}
-                        className="flex-1"
-                      />
+              {workspaceMode === 'indoor' ? (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Paintbrush className="h-4 w-4" />
+                      Room Colors
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <Label>Walls</Label>
+                      <div className="flex gap-2 mt-1">
+                        <input
+                          type="color"
+                          value={roomColors.walls}
+                          onChange={(e) => setRoomColors(prev => ({ ...prev, walls: e.target.value }))}
+                          className="w-8 h-8 rounded border"
+                        />
+                        <Input
+                          value={roomColors.walls}
+                          onChange={(e) => setRoomColors(prev => ({ ...prev, walls: e.target.value }))}
+                          className="flex-1"
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div>
-                    <Label>Floor</Label>
-                    <div className="flex gap-2 mt-1">
-                      <input
-                        type="color"
-                        value={roomColors.floor}
-                        onChange={(e) => setRoomColors(prev => ({ ...prev, floor: e.target.value }))}
-                        className="w-8 h-8 rounded border"
-                      />
-                      <Input
-                        value={roomColors.floor}
-                        onChange={(e) => setRoomColors(prev => ({ ...prev, floor: e.target.value }))}
-                        className="flex-1"
-                      />
+                    <div>
+                      <Label>Floor</Label>
+                      <div className="flex gap-2 mt-1">
+                        <input
+                          type="color"
+                          value={roomColors.floor}
+                          onChange={(e) => setRoomColors(prev => ({ ...prev, floor: e.target.value }))}
+                          className="w-8 h-8 rounded border"
+                        />
+                        <Input
+                          value={roomColors.floor}
+                          onChange={(e) => setRoomColors(prev => ({ ...prev, floor: e.target.value }))}
+                          className="flex-1"
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div>
-                    <Label>Ceiling</Label>
-                    <div className="flex gap-2 mt-1">
-                      <input
-                        type="color"
-                        value={roomColors.ceiling}
-                        onChange={(e) => setRoomColors(prev => ({ ...prev, ceiling: e.target.value }))}
-                        className="w-8 h-8 rounded border"
-                      />
-                      <Input
-                        value={roomColors.ceiling}
-                        onChange={(e) => setRoomColors(prev => ({ ...prev, ceiling: e.target.value }))}
-                        className="flex-1"
-                      />
+                    <div>
+                      <Label>Ceiling</Label>
+                      <div className="flex gap-2 mt-1">
+                        <input
+                          type="color"
+                          value={roomColors.ceiling}
+                          onChange={(e) => setRoomColors(prev => ({ ...prev, ceiling: e.target.value }))}
+                          className="w-8 h-8 rounded border"
+                        />
+                        <Input
+                          value={roomColors.ceiling}
+                          onChange={(e) => setRoomColors(prev => ({ ...prev, ceiling: e.target.value }))}
+                          className="flex-1"
+                        />
+                      </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              ) : (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Paintbrush className="h-4 w-4" />
+                      Rooftop Surface
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <Label>Surface Color (Sky/Days)</Label>
+                      <div className="flex gap-2 mt-1">
+                        <input
+                          type="color"
+                          value={roomColors.floor}
+                          onChange={(e) => setRoomColors(prev => ({ ...prev, floor: e.target.value }))}
+                          className="w-8 h-8 rounded border"
+                        />
+                        <Input
+                          value={roomColors.floor}
+                          onChange={(e) => setRoomColors(prev => ({ ...prev, floor: e.target.value }))}
+                          className="flex-1"
+                          placeholder="#87CEEB"
+                        />
+                      </div>
+                    </div>
+                    <div className="p-3 bg-muted rounded-lg">
+                      <p className="text-sm text-muted-foreground">
+                        💡 Tip: Rooftop mode uses a sky environment. The environment lighting and time of day affect the appearance.
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
             </TabsContent>
 
             {/* View Tab */}
@@ -1005,34 +1039,126 @@ const Planner3DFixed: React.FC = () => {
                 </div>
                 
                 <div>
-                  <Label>Color</Label>
+                  <Label className="text-base font-semibold mb-2 block">🎨 Furniture Color</Label>
                   <div className="flex gap-2 mt-1">
                     <input
                       type="color"
                       value={selectedFurniture.color}
                       onChange={(e) => updateFurniture({...selectedFurniture, color: e.target.value})}
-                      className="w-8 h-8 rounded border"
+                      className="w-12 h-12 rounded border-2 border-border cursor-pointer"
+                      title="Choose custom color"
                     />
                     <Input
                       value={selectedFurniture.color}
                       onChange={(e) => updateFurniture({...selectedFurniture, color: e.target.value})}
                       className="flex-1"
+                      placeholder="Hex color code"
                     />
                   </div>
                   
                   {/* Quick Color Presets */}
-                  <div className="mt-2">
-                    <Label className="text-sm text-muted-foreground">Quick Colors</Label>
-                    <div className="grid grid-cols-6 gap-1 mt-1">
-                      {['#8B4513', '#D2691E', '#FF6347', '#228B22', '#87CEEB', '#C0C0C0', '#FFD700', '#696969', '#000000', '#FFFFFF', '#FF4500', '#708090'].map((color) => (
-                        <button
-                          key={color}
-                          className="w-6 h-6 rounded border-2 border-gray-300 hover:border-gray-500"
-                          style={{ backgroundColor: color }}
-                          onClick={() => updateFurniture({...selectedFurniture, color})}
-                        />
+                  <div className="mt-3">
+                    <Label className="text-sm font-medium mb-2 block">Popular Color Presets</Label>
+                    <div className="grid grid-cols-6 gap-2">
+                      {[
+                        ['#8B4513', 'Brown Wood'],
+                        ['#D2691E', 'Chocolate'],
+                        ['#FF6347', 'Tomato'],
+                        ['#228B22', 'Forest Green'],
+                        ['#87CEEB', 'Sky Blue'],
+                        ['#C0C0C0', 'Silver'],
+                        ['#FFD700', 'Gold'],
+                        ['#696969', 'Dim Gray'],
+                        ['#000000', 'Black'],
+                        ['#FFFFFF', 'White'],
+                        ['#FF4500', 'Orange Red'],
+                        ['#708090', 'Slate Gray'],
+                        ['#FF1493', 'Deep Pink'],
+                        ['#00CED1', 'Dark Turquoise'],
+                        ['#FF69B4', 'Hot Pink'],
+                        ['#FFB6C1', 'Light Pink'],
+                        ['#E6E6FA', 'Lavender'],
+                        ['#F5DEB3', 'Wheat'],
+                      ].map(([color, name]) => (
+                        <div key={color} className="flex flex-col items-center gap-1">
+                          <button
+                            className={`w-8 h-8 rounded border-2 transition-all hover:scale-110 hover:shadow-md ${
+                              selectedFurniture.color === color ? 'border-primary ring-2 ring-primary' : 'border-gray-300 hover:border-primary'
+                            }`}
+                            style={{ backgroundColor: color }}
+                            onClick={() => updateFurniture({...selectedFurniture, color})}
+                            title={name}
+                          />
+                          <span className="text-xs text-muted-foreground text-center line-clamp-1">{name}</span>
+                        </div>
                       ))}
                     </div>
+                  </div>
+
+                  {/* Current Color Preview */}
+                  <div className="mt-3 p-2 rounded border bg-muted/50">
+                    <Label className="text-xs text-muted-foreground">Current Selection:</Label>
+                    <div className="flex items-center gap-2 mt-1">
+                      <div 
+                        className="w-6 h-6 rounded border-2 border-border" 
+                        style={{ backgroundColor: selectedFurniture.color }}
+                      />
+                      <span className="text-sm font-medium">{selectedFurniture.color}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Position Controls */}
+                <div>
+                  <Label className="text-base font-semibold mb-2 block">📍 Position</Label>
+                  <div className="space-y-3">
+                    <div>
+                      <Label>X Position: {selectedFurniture.position[0].toFixed(1)}</Label>
+                      <Slider
+                        value={[selectedFurniture.position[0]]}
+                        onValueChange={([value]) => updateFurniture({
+                          ...selectedFurniture,
+                          position: [value, selectedFurniture.position[1], selectedFurniture.position[2]]
+                        })}
+                        min={-5}
+                        max={5}
+                        step={0.1}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label>Z Position: {selectedFurniture.position[2].toFixed(1)}</Label>
+                      <Slider
+                        value={[selectedFurniture.position[2]]}
+                        onValueChange={([value]) => updateFurniture({
+                          ...selectedFurniture,
+                          position: [selectedFurniture.position[0], selectedFurniture.position[1], value]
+                        })}
+                        min={-5}
+                        max={5}
+                        step={0.1}
+                        className="mt-1"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Rotation Control */}
+                <div>
+                  <Label className="text-base font-semibold mb-2 block">🔄 Rotation</Label>
+                  <div>
+                    <Label>Y Rotation: {selectedFurniture.rotation[1].toFixed(1)}°</Label>
+                    <Slider
+                      value={[selectedFurniture.rotation[1] * (180 / Math.PI)]}
+                      onValueChange={([value]) => updateFurniture({
+                        ...selectedFurniture,
+                        rotation: [selectedFurniture.rotation[0], value * (Math.PI / 180), selectedFurniture.rotation[2]]
+                      })}
+                      min={0}
+                      max={360}
+                      step={1}
+                      className="mt-1"
+                    />
                   </div>
                 </div>
 
