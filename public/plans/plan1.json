@@ -1,0 +1,345 @@
+{
+    "floorplan": {
+        "corners": {
+            "8f4a050d-e102-3c3f-5af9-3d9133555d76": {
+                "x": 0,
+                "y": 0
+            },
+            "4e312eca-6c4f-30d1-3d9a-a19a9d1ee359": {
+                "x": 0,
+                "y": 5
+            },
+            "254656bf-8a53-3987-c810-66b349f49b19": {
+                "x": 6,
+                "y": 5
+            },
+            "11d25193-4411-fbbf-78cb-ae7c0283164b": {
+                "x": 11,
+                "y": 5
+            },
+            "edf0de13-df9f-cd6a-7d11-9bd13c36ce12": {
+                "x": 11,
+                "y": 0
+            },
+            "e7db8654-efe1-bda2-099a-70585874d8c0": {
+                "x": 6,
+                "y": 0
+            }
+        },
+        "walls": [
+            {
+                "corner1": "4e312eca-6c4f-30d1-3d9a-a19a9d1ee359",
+                "corner2": "254656bf-8a53-3987-c810-66b349f49b19",
+                "innerMaterial": {
+                    "color": "#ffffff"
+                },
+                "outerMaterial": {
+                    "color": "#ffffff"
+                }
+            },
+            {
+                "corner1": "254656bf-8a53-3987-c810-66b349f49b19",
+                "corner2": "e7db8654-efe1-bda2-099a-70585874d8c0",
+                "innerMaterial": {
+                    "color": "#ffffff"
+                },
+                "outerMaterial": {
+                    "color": "#ffffff"
+                }
+            },
+            {
+                "corner1": "e7db8654-efe1-bda2-099a-70585874d8c0",
+                "corner2": "8f4a050d-e102-3c3f-5af9-3d9133555d76",
+                "innerMaterial": {
+                    "texture": {
+                        "url": "assets/textures/walls/marble_tiles/marble_tiles.jpg",
+                        "repeat": {
+                            "autoCalculateRepeat": true,
+                            "uvScale": 3
+                        }
+                    }
+                },
+                "outerMaterial": {
+                    "color": "#ffffff"
+                }
+            },
+            {
+                "corner1": "8f4a050d-e102-3c3f-5af9-3d9133555d76",
+                "corner2": "4e312eca-6c4f-30d1-3d9a-a19a9d1ee359",
+                "innerMaterial": {
+                    "color": "#ffffff"
+                },
+                "outerMaterial": {
+                    "color": "#ffffff"
+                }
+            },
+            {
+                "corner1": "254656bf-8a53-3987-c810-66b349f49b19",
+                "corner2": "11d25193-4411-fbbf-78cb-ae7c0283164b",
+                "innerMaterial": {
+                    "color": "#ffffff"
+                },
+                "outerMaterial": {
+                    "color": "#ffffff"
+                }
+            },
+            {
+                "corner1": "11d25193-4411-fbbf-78cb-ae7c0283164b",
+                "corner2": "edf0de13-df9f-cd6a-7d11-9bd13c36ce12",
+                "innerMaterial": {
+                    "color": "#ffffff",
+                    "texture": {
+                        "url": "assets/textures/walls/light_brick/light_brick.jpg",
+                        "repeat": {
+                            "autoCalculateRepeat": true,
+                            "uvScale": 1
+                        }
+                    }
+                },
+                "outerMaterial": {
+                    "color": "#ffffff"
+                }
+            },
+            {
+                "corner1": "edf0de13-df9f-cd6a-7d11-9bd13c36ce12",
+                "corner2": "e7db8654-efe1-bda2-099a-70585874d8c0",
+                "innerMaterial": {
+                    "texture": {
+                        "url": "assets/textures/walls/marble_tiles/marble_tiles.jpg",
+                        "repeat": {
+                            "autoCalculateRepeat": true,
+                            "uvScale": 3
+                        }
+                    }
+                },
+                "outerMaterial": {
+                    "color": "#ffffff"
+                }
+            }
+        ],
+        "floors": [
+            {
+                "id": "11d25193-4411-fbbf-78cb-ae7c0283164b,254656bf-8a53-3987-c810-66b349f49b19,e7db8654-efe1-bda2-099a-70585874d8c0,edf0de13-df9f-cd6a-7d11-9bd13c36ce12",
+                "material": {
+                    "color": "#ffffff",
+                    "texture": {
+                        "url": "assets/textures/floors/light_fine_wood/light_fine_wood.jpg",
+                        "repeat": {
+                            "autoCalculateRepeat": true,
+                            "uvScale": 3
+                        }
+                    }
+                }
+            }
+        ],
+        "roofs": [
+            {
+                "id": "11d25193-4411-fbbf-78cb-ae7c0283164b,254656bf-8a53-3987-c810-66b349f49b19,e7db8654-efe1-bda2-099a-70585874d8c0,edf0de13-df9f-cd6a-7d11-9bd13c36ce12",
+                "material": {
+                    "texture": {
+                        "url": "assets/textures/roofs/concrete2/concrete2.jpg",
+                        "repeat": {
+                            "autoCalculateRepeat": true,
+                            "uvScale": 3
+                        }
+                    }
+                }
+            },
+            {
+                "id": "254656bf-8a53-3987-c810-66b349f49b19,4e312eca-6c4f-30d1-3d9a-a19a9d1ee359,8f4a050d-e102-3c3f-5af9-3d9133555d76,e7db8654-efe1-bda2-099a-70585874d8c0",
+                "material": {
+                    "texture": {
+                        "url": "assets/textures/roofs/concrete2/concrete2.jpg",
+                        "repeat": {
+                            "autoCalculateRepeat": true,
+                            "uvScale": 3
+                        }
+                    }
+                }
+            }
+        ]
+    },
+    "entities": [
+        {
+            "name": "Open Door",
+            "type": "InWallFloorEntity",
+            "url": "assets/models/doors/open_door/open_door.glb",
+            "resizable": true,
+            "transform": {
+                "position": [5.995, 1.1080000121329836, 1.2301476923351116],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "NYC Poster",
+            "type": "WallEntity",
+            "url": "assets/models/home_decorations/nyc_poster/nyc_poster.glb",
+            "resizable": true,
+            "transform": {
+                "position": [10.912462496161462, 1.834397709263869, 4.068569719758538],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Closed Door",
+            "type": "InWallFloorEntity",
+            "url": "assets/models/doors/closed_door_28x80/closed_door_28x80.glb",
+            "resizable": true,
+            "transform": {
+                "position": [4.350172366859107, 1.1080000113563435, 4.995],
+                "rotation": [0, 3.141592653589793, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Floor Lamp",
+            "type": "FloorEntity",
+            "url": "assets/models/furnitures/floor_lamp/floor_lamp.glb",
+            "resizable": true,
+            "transform": {
+                "position": [9.877991335388385, 0.7216399940828865, 0.8473823750850555],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Dresser - White",
+            "type": "FloorEntity",
+            "url": "assets/models/furnitures/dresser_white/dresser_white.glb",
+            "resizable": true,
+            "transform": {
+                "position": [9.05890487509608, 0.35611997157883707, 4.666602001190185],
+                "rotation": [0, -3.141592653589793, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Red Chair",
+            "type": "FloorEntity",
+            "url": "assets/models/furnitures/red_chair/red_chair.glb",
+            "resizable": true,
+            "transform": {
+                "position": [1.686799335865145, 0.3750235058358561, 4.251936908066403],
+                "rotation": [0, 2.5, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Bedside table - Shale",
+            "type": "FloorEntity",
+            "url": "assets/models/furnitures/bedside_table_shale/bedside_table_shale.glb",
+            "resizable": true,
+            "transform": {
+                "position": [10.610173409439929, 0.2615525029468139, 3.5716926833739713],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Blue Rug",
+            "type": "OnFloorEntity",
+            "url": "assets/models/furnitures/blue_rug_60x96/blue_rug_60x96.glb",
+            "resizable": true,
+            "transform": {
+                "position": [9.705800018310548, 0.002500050067901611, 2.5426525826231576],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Bookshelf",
+            "type": "FloorEntity",
+            "url": "assets/models/furnitures/bookshelf/bookshelf.glb",
+            "resizable": true,
+            "transform": {
+                "position": [2.105440782163913, 0.9217649875427745, 0.2659339904785156],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Sofa - Grey",
+            "type": "FloorEntity",
+            "url": "assets/models/furnitures/sofa_grey/sofa_grey.glb",
+            "resizable": true,
+            "transform": {
+                "position": [0.5470920181274415, 0.4254510040398151, 2.5512766566633975],
+                "rotation": [0, 1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Window",
+            "type": "InWallEntity",
+            "url": "assets/models/windows/white_window/white_window.glb",
+            "resizable": true,
+            "transform": {
+                "position": [3.9067209742215407, 1.5969966917872904, 0.005000000000000018],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Window",
+            "type": "InWallEntity",
+            "url": "assets/models/windows/white_window/white_window.glb",
+            "resizable": true,
+            "transform": {
+                "position": [8.728504252869657, 1.8871084501371331, 0.005000000000000018],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Full Bed",
+            "type": "FloorEntity",
+            "url": "assets/models/furnitures/full_bed/full_bed.glb",
+            "resizable": true,
+            "transform": {
+                "position": [9.925000991821289, 0.5, 2.5035368463434784],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Coffee Table - Wood",
+            "type": "FloorEntity",
+            "url": "assets/models/furnitures/coffee_table_wood/coffee_table_wood.glb",
+            "resizable": true,
+            "transform": {
+                "position": [2.0447638921814884, 0.24014830707495094, 2.6060721749475975],
+                "rotation": [0, 1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Wall Clock",
+            "type": "WallEntity",
+            "url": "assets/models/home_decorations/wall_clock/wall_clock.glb",
+            "resizable": true,
+            "transform": {
+                "position": [4.981112856955588, 2.3869583202578717, 0.08845564994941879],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        }
+    ]
+}
+

@@ -1,0 +1,402 @@
+[
+    {
+        "id": "doors.closed_door_28x80",
+        "name": "Closed Door 28x80",
+        "category": "doors",
+        "url": "assets/models/doors/closed_door_28x80/closed_door_28x80.glb",
+        "thumbnail": "assets/models/doors/closed_door_28x80/thumbnail.png",
+        "type": "InWallFloorEntity"
+    },
+    {
+        "id": "doors.door",
+        "name": "Door",
+        "category": "doors",
+        "url": "assets/models/doors/door/door.glb",
+        "thumbnail": "assets/models/doors/door/thumbnail.png",
+        "type": "InWallFloorEntity"
+    },
+    {
+        "id": "doors.door2",
+        "name": "Door2",
+        "category": "doors",
+        "url": "assets/models/doors/door2/door2.glb",
+        "thumbnail": "assets/models/doors/door2/thumbnail.png",
+        "type": "InWallFloorEntity"
+    },
+    {
+        "id": "doors.open_door",
+        "name": "Open Door",
+        "category": "doors",
+        "url": "assets/models/doors/open_door/open_door.glb",
+        "thumbnail": "assets/models/doors/open_door/thumbnail.png",
+        "type": "InWallFloorEntity"
+    },
+    {
+        "id": "furnitures.bed",
+        "name": "Bed",
+        "category": "furnitures",
+        "url": "assets/models/furnitures/bed/bed.glb",
+        "thumbnail": "assets/models/furnitures/bed/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "furnitures.bedside_table_shale",
+        "name": "Bedside Table Shale",
+        "category": "furnitures",
+        "url": "assets/models/furnitures/bedside_table_shale/bedside_table_shale.glb",
+        "thumbnail": "assets/models/furnitures/bedside_table_shale/thumbnail.jpg",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "furnitures.bedside_table_shale_white",
+        "name": "Bedside Table Shale White",
+        "category": "furnitures",
+        "url": "assets/models/furnitures/bedside_table_shale_white/bedside_table_shale_white.glb",
+        "thumbnail": "assets/models/furnitures/bedside_table_shale_white/thumbnail.jpg",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "furnitures.blue_chair",
+        "name": "Blue Chair",
+        "category": "furnitures",
+        "url": "assets/models/furnitures/blue_chair/blue_chair.glb",
+        "thumbnail": "assets/models/furnitures/blue_chair/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "furnitures.blue_rug_60x96",
+        "name": "Blue Rug 60x96",
+        "category": "furnitures",
+        "url": "assets/models/furnitures/blue_rug_60x96/blue_rug_60x96.glb",
+        "thumbnail": "assets/models/furnitures/blue_rug_60x96/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "furnitures.bookshelf",
+        "name": "Bookshelf",
+        "category": "furnitures",
+        "url": "assets/models/furnitures/bookshelf/bookshelf.glb",
+        "thumbnail": "assets/models/furnitures/bookshelf/thumbnail.jpg",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "furnitures.chair_oak_white",
+        "name": "Chair Oak White",
+        "category": "furnitures",
+        "url": "assets/models/furnitures/chair_oak_white/chair_oak_white.glb",
+        "thumbnail": "assets/models/furnitures/chair_oak_white/thumbnail.jpg",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "furnitures.coffee_table_wood",
+        "name": "Coffee Table Wood",
+        "category": "furnitures",
+        "url": "assets/models/furnitures/coffee_table_wood/coffee_table_wood.glb",
+        "thumbnail": "assets/models/furnitures/coffee_table_wood/thumbnail.jpg",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "furnitures.desk",
+        "name": "Desk",
+        "category": "furnitures",
+        "url": "assets/models/furnitures/desk/desk.glb",
+        "thumbnail": "assets/models/furnitures/desk/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "furnitures.dining_table",
+        "name": "Dining Table",
+        "category": "furnitures",
+        "url": "assets/models/furnitures/dining_table/dining_table.glb",
+        "thumbnail": "assets/models/furnitures/dining_table/thumbnail.jpg",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "furnitures.dresser_dark_wood",
+        "name": "Dresser Dark Wood",
+        "category": "furnitures",
+        "url": "assets/models/furnitures/dresser_dark_wood/dresser_dark_wood.glb",
+        "thumbnail": "assets/models/furnitures/dresser_dark_wood/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "furnitures.dresser_white",
+        "name": "Dresser White",
+        "category": "furnitures",
+        "url": "assets/models/furnitures/dresser_white/dresser_white.glb",
+        "thumbnail": "assets/models/furnitures/dresser_white/thumbnail.jpg",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "furnitures.floor_lamp",
+        "name": "Floor Lamp",
+        "category": "furnitures",
+        "url": "assets/models/furnitures/floor_lamp/floor_lamp.glb",
+        "thumbnail": "assets/models/furnitures/floor_lamp/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "furnitures.full_bed",
+        "name": "Full Bed",
+        "category": "furnitures",
+        "url": "assets/models/furnitures/full_bed/full_bed.glb",
+        "thumbnail": "assets/models/furnitures/full_bed/thumbnail.jpg",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "furnitures.media_console_white",
+        "name": "Media Console White",
+        "category": "furnitures",
+        "url": "assets/models/furnitures/media_console_white/media_console_white.glb",
+        "thumbnail": "assets/models/furnitures/media_console_white/thumbnail.jpg",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "furnitures.red_chair",
+        "name": "Red Chair",
+        "category": "furnitures",
+        "url": "assets/models/furnitures/red_chair/red_chair.glb",
+        "thumbnail": "assets/models/furnitures/red_chair/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "furnitures.side_table",
+        "name": "Side Table",
+        "category": "furnitures",
+        "url": "assets/models/furnitures/side_table/side_table.glb",
+        "thumbnail": "assets/models/furnitures/side_table/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "furnitures.sofa_grey",
+        "name": "Sofa Grey",
+        "category": "furnitures",
+        "url": "assets/models/furnitures/sofa_grey/sofa_grey.glb",
+        "thumbnail": "assets/models/furnitures/sofa_grey/thumbnail.jpg",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "furnitures.wooden_trunk",
+        "name": "Wooden Trunk",
+        "category": "furnitures",
+        "url": "assets/models/furnitures/wooden_trunk/wooden_trunk.glb",
+        "thumbnail": "assets/models/furnitures/wooden_trunk/thumbnail.jpg",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "home_decorations.nyc_poster",
+        "name": "Nyc Poster",
+        "category": "home_decorations",
+        "url": "assets/models/home_decorations/nyc_poster/nyc_poster.glb",
+        "thumbnail": "assets/models/home_decorations/nyc_poster/thumbnail.jpg",
+        "type": "WallEntity"
+    },
+    {
+        "id": "home_decorations.wall_clock",
+        "name": "Wall Clock",
+        "category": "home_decorations",
+        "url": "assets/models/home_decorations/wall_clock/wall_clock.glb",
+        "thumbnail": "assets/models/home_decorations/wall_clock/thumbnail.png",
+        "type": "WallEntity"
+    },
+    {
+        "id": "office.office_chair",
+        "name": "Office Chair",
+        "category": "office",
+        "url": "assets/models/office/office_chair/office_chair.glb",
+        "thumbnail": "assets/models/office/office_chair/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "office.office_chair2",
+        "name": "Office Chair2",
+        "category": "office",
+        "url": "assets/models/office/office_chair2/office_chair2.glb",
+        "thumbnail": "assets/models/office/office_chair2/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "shop.back_brace",
+        "name": "Back Brace",
+        "category": "shop",
+        "url": "assets/models/shop/back_brace/back_brace.gltf",
+        "thumbnail": "assets/models/shop/back_brace/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "shop.checkstand",
+        "name": "Checkstand",
+        "category": "shop",
+        "url": "assets/models/shop/checkstand/checkstand.gltf",
+        "thumbnail": "assets/models/shop/checkstand/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "shop.shelf",
+        "name": "Shelf",
+        "category": "shop",
+        "url": "assets/models/shop/shelf/shelf.glb",
+        "thumbnail": "assets/models/shop/shelf/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "shop.shelf2",
+        "name": "Shelf2",
+        "category": "shop",
+        "url": "assets/models/shop/shelf2/shelf2.glb",
+        "thumbnail": "assets/models/shop/shelf2/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "shop.shelf3",
+        "name": "Shelf3",
+        "category": "shop",
+        "url": "assets/models/shop/shelf3/shelf3.glb",
+        "thumbnail": "assets/models/shop/shelf3/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "shop.shelve",
+        "name": "Shelve",
+        "category": "shop",
+        "url": "assets/models/shop/shelve/shelve.gltf",
+        "thumbnail": "assets/models/shop/shelve/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "shop.shelve2",
+        "name": "Shelve2",
+        "category": "shop",
+        "url": "assets/models/shop/shelve2/shelve2.glb",
+        "thumbnail": "assets/models/shop/shelve2/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "shop.shelve3",
+        "name": "Shelve3",
+        "category": "shop",
+        "url": "assets/models/shop/shelve3/shelve3.glb",
+        "thumbnail": "assets/models/shop/shelve3/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "shop.zhiyin_storefront",
+        "name": "Zhiyin Storefront",
+        "category": "shop",
+        "url": "assets/models/shop/zhiyin_storefront/zhiyin_storefront.glb",
+        "thumbnail": "assets/models/shop/zhiyin_storefront/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "shop.zhiyin_storefront_background",
+        "name": "Zhiyin Storefront Background",
+        "category": "shop",
+        "url": "assets/models/shop/zhiyin_storefront_background/zhiyin_storefront_background.glb",
+        "thumbnail": "assets/models/shop/zhiyin_storefront_background/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "shop.zhiyin_storefront_text",
+        "name": "Zhiyin Storefront Text",
+        "category": "shop",
+        "url": "assets/models/shop/zhiyin_storefront_text/zhiyin_storefront_text.glb",
+        "thumbnail": "assets/models/shop/zhiyin_storefront_text/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "shop.small_display_shelf_a",
+        "name": "Small Display Shelf A",
+        "category": "shop",
+        "url": "assets/models/shop/small_display_shelf_a/small_display_shelf_a.glb",
+        "thumbnail": "assets/models/shop/small_display_shelf_a/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "shop.small_display_shelf_b",
+        "name": "Small Display Shelf B",
+        "category": "shop",
+        "url": "assets/models/shop/small_display_shelf_b/small_display_shelf_b.glb",
+        "thumbnail": "assets/models/shop/small_display_shelf_b/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "shop.cashier_counter_a",
+        "name": "Cashier Counter A",
+        "category": "shop",
+        "url": "assets/models/shop/cashier_counter_a/cashier_counter_a.glb",
+        "thumbnail": "assets/models/shop/cashier_counter_a/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "shop.cashier_counter_b",
+        "name": "Cashier Counter B",
+        "category": "shop",
+        "url": "assets/models/shop/cashier_counter_b/cashier_counter_b.glb",
+        "thumbnail": "assets/models/shop/cashier_counter_b/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "shop.cashier_counter_c",
+        "name": "Cashier Counter C",
+        "category": "shop",
+        "url": "assets/models/shop/cashier_counter_c/cashier_counter_c.glb",
+        "thumbnail": "assets/models/shop/cashier_counter_c/thumbnail.png",
+        "type": "FloorEntity"
+    },
+    {
+        "id": "windows.glass_window",
+        "name": "Glass Window",
+        "category": "windows",
+        "url": "assets/models/windows/glass_window/glass_window.glb",
+        "thumbnail": "assets/models/windows/glass_window/thumbnail.png",
+        "type": "InWallEntity"
+    },
+    {
+        "id": "windows.glass_window2",
+        "name": "Glass Window2",
+        "category": "windows",
+        "url": "assets/models/windows/glass_window2/glass_window2.glb",
+        "thumbnail": "assets/models/windows/glass_window2/thumbnail.png",
+        "type": "InWallEntity"
+    },
+    {
+        "id": "windows.glass_window3",
+        "name": "Glass Window3",
+        "category": "windows",
+        "url": "assets/models/windows/glass_window3/glass_window3.glb",
+        "thumbnail": "assets/models/windows/glass_window3/thumbnail.jpg",
+        "type": "InWallFloorEntity"
+    },
+    {
+        "id": "windows.residential_window",
+        "name": "Residential Window",
+        "category": "windows",
+        "url": "assets/models/windows/residential_window/residential_window.glb",
+        "thumbnail": "assets/models/windows/residential_window/thumbnail.png",
+        "type": "InWallEntity"
+    },
+    {
+        "id": "windows.shop_window",
+        "name": "Shop Window",
+        "category": "windows",
+        "url": "assets/models/windows/shop_window/shop_window.glb",
+        "thumbnail": "assets/models/windows/shop_window/thumbnail.png",
+        "type": "InWallEntity"
+    },
+    {
+        "id": "windows.white_window",
+        "name": "White Window",
+        "category": "windows",
+        "url": "assets/models/windows/white_window/white_window.glb",
+        "thumbnail": "assets/models/windows/white_window/thumbnail.png",
+        "type": "InWallEntity"
+    },
+    {
+        "id": "windows.window",
+        "name": "Window",
+        "category": "windows",
+        "url": "assets/models/windows/window/window.glb",
+        "thumbnail": "assets/models/windows/window/thumbnail.png",
+        "type": "InWallEntity"
+    }
+]

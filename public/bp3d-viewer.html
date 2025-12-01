@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example Models - BP3D Planner</title>
+    <script type="module" crossorigin src="https://bp3d.thingraph.site/assets/index-CIcR9gJq.js"></script>
+    <link rel="stylesheet" crossorigin href="https://bp3d.thingraph.site/assets/index-B3voe9-O.css">
+    <script>
+      // Configure assets root URL to use local assets
+      window.addEventListener('DOMContentLoaded', () => {
+        // Set assets root before the module loads
+        if (window.Viewer3d && window.Viewer3d.setAssetsRootUrl) {
+          window.Viewer3d.setAssetsRootUrl('/assets/');
+        }
+      });
+
+      // Comprehensive translation function
+      function translateText(text) {
+        if (!text || typeof text !== 'string') return text;
+        
+        let newText = text;
+        
+        // Replace "bp3d examples" with "Example Models"
+        newText = newText.replace(/bp3d\s*examples?/gi, 'Example Models');
+        
+        // Replace Chinese model names and UI text - comprehensive dictionary
+        const translations = {
+          // Model names
+          '小货架a': 'Small Display Shelf A',
+          '小货架b': 'Small Display Shelf B',
+          '小货架A': 'Small Display Shelf A',
+          '小货架B': 'Small Display Shelf B',
+          '小货架': 'Small Display Shelf',
+          '收银台a': 'Cashier Counter A',
+          '收银台b': 'Cashier Counter B',
+          '收银台c': 'Cashier Counter C',
+          '收银台A': 'Cashier Counter A',
+          '收银台B': 'Cashier Counter B',
+          '收银台C': 'Cashier Counter C',
+          '收银台': 'Cashier Counter',
+          // Common UI terms
+          '示例': 'Example',
+          '模型': 'Model',
+          '工作': 'Work',
+          '功能': 'Function',
+          '操作': 'Operation',
+          '设置': 'Settings',
+          '保存': 'Save',
+          '加载': 'Load',
+          '新建': 'New',
+          '编辑': 'Edit',
+          '删除': 'Delete',
+          '取消': 'Cancel',
+          '确定': 'OK',
+          '确认': 'Confirm',
+          '文件': 'File',
+          '打开': 'Open',
+          '关闭': 'Close',
+          '导出': 'Export',
+          '导入': 'Import',
+          '帮助': 'Help',
+          '关于': 'About',
+          '视图': 'View',
+          '工具': 'Tools',
+          '选项': 'Options',
+          '首选项': 'Preferences',
+          '退出': 'Exit',
+          '是': 'Yes',
+          '否': 'No',
+          '完成': 'Done',
+          '下一步': 'Next',
+          '上一步': 'Previous',
+          '提交': 'Submit',
+          '重置': 'Reset',
+          '应用': 'Apply',
+          '搜索': 'Search',
+          '筛选': 'Filter',
+          '排序': 'Sort',
+          '刷新': 'Refresh',
+          '更新': 'Update',
+          '创建': 'Create',
+          '修改': 'Modify',
+          '复制': 'Copy',
+          '粘贴': 'Paste',
+          '剪切': 'Cut',
+          '撤销': 'Undo',
+          '重做': 'Redo',
+          '全选': 'Select All',
+          '清除': 'Clear',
+          '添加': 'Add',
+          '移除': 'Remove',
+          '选择': 'Select',
+          '取消选择': 'Deselect',
+          '启用': 'Enable',
+          '禁用': 'Disable',
+          '显示': 'Show',
+          '隐藏': 'Hide',
+          '展开': 'Expand',
+          '折叠': 'Collapse',
+          '最大化': 'Maximize',
+          '最小化': 'Minimize',
+          '还原': 'Restore',
+          '移动': 'Move',
+          '旋转': 'Rotate',
+          '缩放': 'Scale',
+          '调整大小': 'Resize',
+          '对齐': 'Align',
+          '分布': 'Distribute',
+          '锁定': 'Lock',
+          '解锁': 'Unlock',
+          '群组': 'Group',
+          '取消群组': 'Ungroup',
+          '复制': 'Duplicate',
+          '镜像': 'Mirror',
+          '翻转': 'Flip',
+          '属性': 'Properties',
+          '信息': 'Info',
+          '详情': 'Details',
+          '预览': 'Preview',
+          '渲染': 'Render',
+          '材质': 'Material',
+          '纹理': 'Texture',
+          '颜色': 'Color',
+          '灯光': 'Light',
+          '相机': 'Camera',
+          '场景': 'Scene',
+          '对象': 'Object',
+          '模型': 'Model',
+          '网格': 'Mesh',
+          '顶点': 'Vertex',
+          '面': 'Face',
+          '边': 'Edge',
+          '轴': 'Axis',
+          '坐标': 'Coordinate',
+          '位置': 'Position',
+          '旋转': 'Rotation',
+          '缩放': 'Scale',
+          '变换': 'Transform',
+          '选择': 'Selection',
+          '工具': 'Tool',
+          '模式': 'Mode',
+          '编辑模式': 'Edit Mode',
+          '查看模式': 'View Mode',
+          '渲染模式': 'Render Mode',
+          '线框模式': 'Wireframe Mode',
+          '实体模式': 'Solid Mode',
+          '材质模式': 'Material Mode',
+          '纹理模式': 'Texture Mode',
+          '灯光模式': 'Light Mode',
+          '阴影模式': 'Shadow Mode',
+          '环境光': 'Ambient Light',
+          '方向光': 'Directional Light',
+          '点光源': 'Point Light',
+          '聚光灯': 'Spot Light',
+          '平行光': 'Parallel Light',
+          '区域光': 'Area Light',
+          '天空盒': 'Skybox',
+          '环境贴图': 'Environment Map',
+          '背景': 'Background',
+          '前景': 'Foreground',
+          '中景': 'Midground',
+          '后景': 'Background',
+          '图层': 'Layer',
+          '蒙版': 'Mask',
+          '遮罩': 'Mask',
+          '滤镜': 'Filter',
+          '效果': 'Effect',
+          '后处理': 'Post Processing',
+          '抗锯齿': 'Anti Aliasing',
+          '景深': 'Depth of Field',
+          '运动模糊': 'Motion Blur',
+          '泛光': 'Bloom',
+          '色调映射': 'Tone Mapping',
+          '色彩校正': 'Color Correction',
+          '亮度': 'Brightness',
+          '对比度': 'Contrast',
+          '饱和度': 'Saturation',
+          '色相': 'Hue',
+          '伽马': 'Gamma',
+          '曝光': 'Exposure',
+          '白平衡': 'White Balance',
+          '色温': 'Color Temperature',
+          '色调': 'Tint',
+          '阴影': 'Shadow',
+          '高光': 'Highlight',
+          '中间调': 'Midtone',
+          '黑色': 'Black',
+          '白色': 'White',
+          '红色': 'Red',
+          '绿色': 'Green',
+          '蓝色': 'Blue',
+          '黄色': 'Yellow',
+          '青色': 'Cyan',
+          '洋红': 'Magenta',
+          '橙色': 'Orange',
+          '紫色': 'Purple',
+          '粉色': 'Pink',
+          '棕色': 'Brown',
+          '灰色': 'Gray',
+          '银色': 'Silver',
+          '金色': 'Gold',
+          '透明': 'Transparent',
+          '不透明': 'Opaque',
+          '半透明': 'Semi Transparent',
+          '反射': 'Reflection',
+          '折射': 'Refraction',
+          '漫反射': 'Diffuse',
+          '镜面反射': 'Specular',
+          '环境反射': 'Environment Reflection',
+          '金属度': 'Metallic',
+          '粗糙度': 'Roughness',
+          '光滑度': 'Smoothness',
+          '光泽度': 'Glossiness',
+          '自发光': 'Emission',
+          '发光强度': 'Emission Intensity',
+          '法线贴图': 'Normal Map',
+          '置换贴图': 'Displacement Map',
+          '高度贴图': 'Height Map',
+          '环境遮蔽': 'Ambient Occlusion',
+          '细节贴图': 'Detail Map',
+          '遮罩贴图': 'Mask Map',
+          '混合模式': 'Blend Mode',
+          '叠加': 'Overlay',
+          '正片叠底': 'Multiply',
+          '滤色': 'Screen',
+          '柔光': 'Soft Light',
+          '强光': 'Hard Light',
+          '颜色减淡': 'Color Dodge',
+          '颜色加深': 'Color Burn',
+          '变暗': 'Darken',
+          '变亮': 'Lighten',
+          '差值': 'Difference',
+          '排除': 'Exclusion',
+          '色相': 'Hue',
+          '饱和度': 'Saturation',
+          '颜色': 'Color',
+          '明度': 'Luminosity',
+          '正常': 'Normal',
+          '溶解': 'Dissolve',
+          '背后': 'Behind',
+          '清除': 'Clear',
+          '实色混合': 'Hard Mix',
+          '线性减淡': 'Linear Dodge',
+          '线性加深': 'Linear Burn',
+          '线性光': 'Linear Light',
+          '点光': 'Pin Light',
+          '实色混合': 'Hard Mix',
+          '减去': 'Subtract',
+          '划分': 'Divide',
+          '变亮': 'Vivid Light',
+          '线性光': 'Linear Light',
+          '点光': 'Pin Light',
+          '实色混合': 'Hard Mix',
+          '减去': 'Subtract',
+          '划分': 'Divide'
+        };
+        
+        // Apply translations
+        Object.keys(translations).forEach((key) => {
+          const regex = new RegExp(key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+          newText = newText.replace(regex, translations[key]);
+        });
+        
+        // Also catch any remaining Chinese characters and replace with generic placeholder
+        // This is a fallback for any Chinese text not in our dictionary
+        const chineseRegex = /[\u4e00-\u9fff]+/g;
+        if (chineseRegex.test(newText)) {
+          // Try to translate common patterns
+          newText = newText.replace(/[\u4e00-\u9fff]+/g, (match) => {
+            // If it's a known pattern, translate it
+            if (translations[match]) {
+              return translations[match];
+            }
+            // Otherwise, try to infer from context or use a generic replacement
+            // For now, we'll leave it and let the aggressive translation catch it
+            return match;
+          });
+        }
+        
+        return newText;
+      }
+
+      function translateElement(element) {
+        if (!element) return;
+        
+        // Translate text content
+        if (element.children.length === 0) {
+          const text = element.textContent || element.innerText || '';
+          if (text.trim()) {
+            const newText = translateText(text);
+            if (newText !== text) {
+              element.textContent = newText;
+              if (element.innerText !== undefined) {
+                element.innerText = newText;
+              }
+            }
+          }
+        }
+        
+        // Translate attributes
+        ['title', 'aria-label', 'placeholder', 'alt'].forEach((attr) => {
+          const value = element.getAttribute(attr);
+          if (value) {
+            const newValue = translateText(value);
+            if (newValue !== value) {
+              element.setAttribute(attr, newValue);
+            }
+          }
+        });
+        
+        // Translate data attributes
+        Array.from(element.attributes).forEach((attr) => {
+          if (attr.name.startsWith('data-')) {
+            const newValue = translateText(attr.value);
+            if (newValue !== attr.value) {
+              element.setAttribute(attr.name, newValue);
+            }
+          }
+        });
+      }
+
+      function translateUI() {
+        // Translate all elements
+        const allElements = document.querySelectorAll('*');
+        allElements.forEach(translateElement);
+        
+        // Also translate any input values
+        const inputs = document.querySelectorAll('input, textarea');
+        inputs.forEach((input) => {
+          if (input.value) {
+            const newValue = translateText(input.value);
+            if (newValue !== input.value) {
+              input.value = newValue;
+            }
+          }
+        });
+        
+        // Translate select options
+        const selects = document.querySelectorAll('select option');
+        selects.forEach((option) => {
+          if (option.textContent) {
+            const newText = translateText(option.textContent);
+            if (newText !== option.textContent) {
+              option.textContent = newText;
+            }
+          }
+        });
+      }
+
+      // Use MutationObserver to catch dynamically added content
+      const observer = new MutationObserver((mutations) => {
+        let shouldTranslate = false;
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'childList' || mutation.type === 'characterData') {
+            shouldTranslate = true;
+          }
+          if (mutation.type === 'attributes' && 
+              (mutation.attributeName === 'title' || 
+               mutation.attributeName === 'aria-label' ||
+               mutation.attributeName === 'placeholder')) {
+            shouldTranslate = true;
+          }
+        });
+        if (shouldTranslate) {
+          translateUI();
+        }
+      });
+
+      // Start observing
+      function startObserving() {
+        if (document.body) {
+          observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+            characterData: true,
+            attributes: true,
+            attributeFilter: ['title', 'aria-label', 'placeholder', 'alt', 'value', 'data-name', 'data-label']
+          });
+          translateUI();
+        } else {
+          // Wait for body to be created
+          setTimeout(startObserving, 100);
+        }
+      }
+
+      // Aggressive translation to catch all content
+      function runTranslations() {
+        translateUI();
+        
+        // Also specifically look for example model titles/names
+        const possibleSelectors = [
+          'button', 'a', 'span', 'div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+          'label', 'li', 'td', 'th', '[role="button"]', '[role="menuitem"]',
+          '.title', '.name', '.label', '.text', '[class*="title"]', '[class*="name"]'
+        ];
+        
+        possibleSelectors.forEach((selector) => {
+          try {
+            document.querySelectorAll(selector).forEach(translateElement);
+          } catch (e) {
+            // Ignore errors
+          }
+        });
+      }
+
+      // Run translation multiple times to catch all content
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          setTimeout(startObserving, 300);
+          setTimeout(runTranslations, 800);
+          setTimeout(runTranslations, 1500);
+          setTimeout(runTranslations, 2500);
+          setTimeout(runTranslations, 4000);
+          setTimeout(runTranslations, 6000);
+        });
+      } else {
+        setTimeout(startObserving, 300);
+        setTimeout(runTranslations, 800);
+        setTimeout(runTranslations, 1500);
+        setTimeout(runTranslations, 2500);
+        setTimeout(runTranslations, 4000);
+        setTimeout(runTranslations, 6000);
+      }
+
+      window.addEventListener('load', () => {
+        setTimeout(runTranslations, 500);
+        setTimeout(runTranslations, 1500);
+        setTimeout(runTranslations, 3000);
+        setTimeout(runTranslations, 5000);
+      });
+
+      // Also run on any user interaction to catch late-loaded content
+      ['click', 'mouseover', 'focus'].forEach((event) => {
+        document.addEventListener(event, () => {
+          setTimeout(runTranslations, 100);
+        }, { once: false, passive: true });
+      });
+
+      // Periodic check for new content - very aggressive (every 500ms)
+      setInterval(runTranslations, 500);
+      
+      // Intercept and translate any new text nodes being created
+      const originalCreateTextNode = document.createTextNode;
+      document.createTextNode = function(text) {
+        if (typeof text === 'string') {
+          const translated = translateText(text);
+          return originalCreateTextNode.call(this, translated);
+        }
+        return originalCreateTextNode.call(this, text);
+      };
+      
+      // Also monitor for any Chinese characters in the entire document
+      const scanForChinese = () => {
+        const walker = document.createTreeWalker(
+          document.body,
+          NodeFilter.SHOW_TEXT,
+          null,
+          false
+        );
+        
+        let node;
+        while (node = walker.nextNode()) {
+          if (node.textContent && /[\u4e00-\u9fff]/.test(node.textContent)) {
+            const translated = translateText(node.textContent);
+            if (translated !== node.textContent) {
+              node.textContent = translated;
+            }
+          }
+        }
+      };
+      
+      // Run Chinese scan periodically
+      setInterval(scanForChinese, 1000);
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>
