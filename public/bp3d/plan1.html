@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example plan</title>
+    <link href="./css/bootstrap.css" rel="stylesheet">
+    <link href="./css/example.css" rel="stylesheet">
+
+    <script src="./libs/jquery.js"></script>
+    <script src="./libs/bootstrap.js"></script>
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <div class="row main-row">
+            <!-- Left Column -->
+            <div class="col-xs-3 sidebar">
+                <!-- Main Navigation -->
+                <ul class="nav nav-sidebar">
+                    <li id="floorplan_tab"><a href="#">
+                            Edit Floorplan
+                            <span class="glyphicon glyphicon-chevron-right pull-right"></span>
+                        </a></li>
+                    <li id="design_tab"><a href="#">
+                            Design
+                            <span class="glyphicon glyphicon-chevron-right pull-right"></span>
+                        </a></li>
+                    <li id="entities_tab"><a href="#">
+                            Add Entities
+                            <span class="glyphicon glyphicon-chevron-right pull-right"></span>
+                        </a></li>
+                </ul>
+                <hr />
+
+                <!-- Context Menu -->
+                <div id="context-menu">
+                    <div style="margin: 0 20px">
+                        <span id="context-menu-name" class="lead"></span>
+                        <br /><br />
+                        <button class="btn btn-block btn-danger" id="context-menu-delete">
+                            <span class="glyphicon glyphicon-trash"></span>
+                            Delete Entity
+                        </button>
+                        <br />
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Adjust Size</div>
+                            <div class="panel-body" style="color: #333333">
+
+                                <div class="form form-horizontal" class="lead">
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">
+                                            Width
+                                        </label>
+                                        <div class="col-sm-6">
+                                            <input type="number" class="form-control" id="entity-width">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">
+                                            Depth
+                                        </label>
+                                        <div class="col-sm-6">
+                                            <input type="number" class="form-control" id="entity-depth">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">
+                                            Height
+                                        </label>
+                                        <div class="col-sm-6">
+                                            <input type="number" class="form-control" id="entity-height">
+                                        </div>
+                                    </div>
+                                </div>
+                                <small><span class="text-muted">Measurements in centimeters.</span></small>
+                            </div>
+                        </div>
+
+                        <label><input type="checkbox" id="fixed" /> Lock in place</label>
+                        <br /><br />
+                    </div>
+                </div>
+
+                <!-- Floor textures -->
+                <div id="floorTexturesDiv" style="display:none; padding: 0 20px">
+                    <!-- Floor textures added here by FloorTextures.js -->
+                </div>
+
+                <!-- Wall Textures -->
+                <div id="wallTexturesDiv" style="display:none; padding: 0 20px">
+                    <!-- Wall textures added here by WallTextures.js -->
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-xs-9 main">
+
+                <!-- 3D Viewer -->
+                <div id="viewer3d">
+                    <div id="loading-modal">
+                        <h1>Loading...</h1>
+                    </div>
+                </div>
+
+                <!-- Viewer2d -->
+                <div id="viewer2d">
+                    <div id="floorplanner-controls">
+                        <button id="move" class="btn btn-sm btn-default">
+                            <span class="glyphicon glyphicon-move"></span>
+                            Move Walls
+                        </button>
+                        <button id="draw" class="btn btn-sm btn-default">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                            Draw Walls
+                        </button>
+                        <button id="delete" class="btn btn-sm btn-default">
+                            <span class="glyphicon glyphicon-remove"></span>
+                            Delete Walls
+                        </button>
+                        <span class="pull-right">
+                            <button class="btn btn-primary btn-sm" id="update-floorplan">Done &raquo;</button>
+                        </span>
+
+                    </div>
+                    <div id="draw-walls-hint">
+                        Press the "Esc" key to stop drawing walls
+                    </div>
+                </div>
+
+                <!-- Add Entities -->
+                <div id="add-entities">
+                    <div class="row" id="entitiesDiv">
+
+                        <!-- Entities added here by Entities.js -->
+                    </div>
+                </div>
+
+            </div>
+            <!-- End Right Column -->
+        </div>
+    </div>
+    <script type="importmap">
+        {
+            "imports": {
+                "@bp3d/core": "../packages/core/dist/index.js",
+                "@bp3d/plugins": "../packages/plugins/dist/index.js"
+            }
+        }
+    </script>
+    <script type="module">
+        import { Viewer2d, Viewer3d } from "@bp3d/core";
+        import { AxisGizmoPlugin } from "@bp3d/plugins";
+        import { BottomBarPlugin } from "@bp3d/plugins";
+        import { GroundGridPlugin } from "@bp3d/plugins";
+        import { PlanToolbarPlugin } from "@bp3d/plugins";
+        import { SkyboxPlugin } from "@bp3d/plugins";
+        import { ToolbarPlugin } from "@bp3d/plugins";
+        import { TransformPlugin } from "@bp3d/plugins";
+        import { ViewCubePlugin } from "@bp3d/plugins";
+        import { EntitiesLoadingSpinner } from "./js/EntitiesLoadingSpinner.js";
+        import { SideMenu } from "./js/SideMenu.js";
+        import { TextureSelector } from "./js/TextureSelector.js";
+        import { Viewer2dToolbar } from "./js/Viewer2dToolbar.js";
+        import { ContextMenu } from "./js/ContextMenu.js";
+        import { Entities } from "./js/Entities.js";
+        import { FloorTextures } from "./js/FloorTextures.js";
+        import { WallTextures } from "./js/WallTextures.js";
+
+        const viewer3d = new Viewer3d({ containerId: "viewer3d" });
+        const viewer2d = new Viewer2d({ containerId: "viewer2d" }, viewer3d);
+        window.viewer3d = viewer3d;
+
+        new Entities();
+        new FloorTextures();
+        new WallTextures();
+        new EntitiesLoadingSpinner(viewer3d);
+        new ContextMenu(viewer3d);
+        new Viewer2dToolbar(viewer2d);
+        const sideMenu = new SideMenu(viewer3d, viewer2d);
+        new TextureSelector(viewer3d, sideMenu);
+        new AxisGizmoPlugin(viewer3d);
+        new BottomBarPlugin(viewer3d);
+        new GroundGridPlugin(viewer3d);
+        new PlanToolbarPlugin(viewer3d);
+        new SkyboxPlugin(viewer3d);
+        new ToolbarPlugin(viewer3d);
+        new TransformPlugin(viewer3d);
+        new ViewCubePlugin(viewer3d);
+
+        viewer3d.loadPlan("./plans/plan1.json");
+    </script>
+</body>
+
+</html>

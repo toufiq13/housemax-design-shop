@@ -1,0 +1,492 @@
+{
+    "floorplan": {
+        "corners": {
+            "f90da5e3-9e0e-eba7-173d-eb0b071e838e": { "x": -0.8978899999999999, "y": 2.89052 },
+            "da026c08-d76a-a944-8e7b-096b752da9ed": { "x": 6.72211, "y": 2.89052 },
+            "4e3d65cb-54c0-0681-28bf-bddcc7bdb571": { "x": 6.72211, "y": -1.78308 },
+            "5ff30b50-f659-5973-0d83-3b149a49a14f": { "x": -0.8978899999999999, "y": -1.78308 }
+        },
+        "walls": [
+            {
+                "corner1": "5ff30b50-f659-5973-0d83-3b149a49a14f",
+                "corner2": "f90da5e3-9e0e-eba7-173d-eb0b071e838e",
+                "innerMaterial": {
+                    "color": "#ffffff"
+                },
+                "outerMaterial": {
+                    "color": "#ffffff"
+                }
+            },
+            {
+                "corner1": "f90da5e3-9e0e-eba7-173d-eb0b071e838e",
+                "corner2": "da026c08-d76a-a944-8e7b-096b752da9ed",
+                "innerMaterial": {
+                    "color": "#ffffff"
+                },
+                "outerMaterial": {
+                    "color": "#ffffff"
+                }
+            },
+            {
+                "corner1": "da026c08-d76a-a944-8e7b-096b752da9ed",
+                "corner2": "4e3d65cb-54c0-0681-28bf-bddcc7bdb571",
+                "innerMaterial": {
+                    "color": "#ffffff"
+                },
+                "outerMaterial": {
+                    "color": "#ffffff"
+                }
+            },
+            {
+                "corner1": "4e3d65cb-54c0-0681-28bf-bddcc7bdb571",
+                "corner2": "5ff30b50-f659-5973-0d83-3b149a49a14f",
+                "innerMaterial": {
+                    "color": "#ffffff"
+                },
+                "outerMaterial": {
+                    "color": "#ffffff"
+                }
+            }
+        ],
+        "floors": [
+            {
+                "id": "4e3d65cb-54c0-0681-28bf-bddcc7bdb571,5ff30b50-f659-5973-0d83-3b149a49a14f,da026c08-d76a-a944-8e7b-096b752da9ed,f90da5e3-9e0e-eba7-173d-eb0b071e838e",
+                "material": {
+                    "texture": {
+                        "url": "assets/textures/floors/hardwood/hardwood.png",
+                        "repeat": {
+                            "autoCalculateRepeat": true,
+                            "uvScale": 3
+                        }
+                    }
+                }
+            }
+        ],
+        "roofs": [
+            {
+                "id": "4e3d65cb-54c0-0681-28bf-bddcc7bdb571,5ff30b50-f659-5973-0d83-3b149a49a14f,da026c08-d76a-a944-8e7b-096b752da9ed,f90da5e3-9e0e-eba7-173d-eb0b071e838e",
+                "material": {
+                    "color": "#e5e5e5"
+                }
+            }
+        ]
+    },
+    "entities": [
+        {
+            "name": "Window",
+            "type": "InWallEntity",
+            "url": "assets/models/windows/white_window/white_window.glb",
+            "resizable": true,
+            "transform": { "position": [2.823243636497618, 1.6453781091814324, -1.77808], "rotation": [0, 0, 0], "scale": [1, 1, 1] },
+            "fixed": false
+        },
+        {
+            "name": "Open Door",
+            "type": "InWallFloorEntity",
+            "url": "assets/models/doors/open_door/open_door.glb",
+            "resizable": true,
+            "transform": {
+                "position": [6.71711, 1.1122039683246334, 1.642489257782421],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1.5447992003828683, 1.001895466959129, 1.0492546382264805]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Checkstand",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/checkstand/checkstand.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [-0.1942158124674468, 0.58, 0.8766429294000781],
+                "rotation": [0, 0, 0],
+                "scale": [1.036089087472631, 1.0014841463479147, 1.1725408571571074]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Back Brace",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/back_brace/back_brace.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [1.1495165064259058, 1.0000002149741704, -1.520884412073376],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Back Brace",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/back_brace/back_brace.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [-0.04859690784544796, 1.0000002149741704, -1.5083687497057974],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": { "position": [5.445178375020132, 0.6000001222665594, -0.1422960332572245], "rotation": [0, 0, 0], "scale": [1, 1, 1] },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [4.98505541436876, 0.6000001222665594, 0.013437206215140804],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [4.984966770899796, 0.6000001222665594, -0.28694905312657426],
+                "rotation": [0, 1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [3.9260330042666124, 0.6000001222665594, -0.1483032271558501],
+                "rotation": [0, -3.141592653589793, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [1.403729038432965, 0.6000001222665594, -0.14341531418529836],
+                "rotation": [0, -3.141592653589793, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": { "position": [2.906167334996989, 0.6000001222665594, -0.14434001683236211], "rotation": [0, 0, 0], "scale": [1, 1, 1] },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [4.372565431034781, 0.6000001222665594, 0.0011969839554696193],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [4.388522981186749, 0.6000001222665594, -0.284087365903424],
+                "rotation": [0, 1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [2.4656790752607722, 0.6000001222665594, 0.01399384221616394],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [2.4621290953708976, 0.6000001222665594, -0.29626839650526392],
+                "rotation": [0, 1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": { "position": [2.884234821905538, 0.6000001222665594, 1.3748720041022386], "rotation": [0, 0, 0], "scale": [1, 1, 1] },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [1.852128934457337, 0.6000001222665594, -0.29947007749171462],
+                "rotation": [0, 1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [2.433852830258883, 0.6000001222665594, 1.2225439982664005],
+                "rotation": [0, 1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [1.8207885740421614, 0.6000001222665594, 1.514710036201322],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [1.367803148020177, 0.6000001222665594, 1.3625823226242494],
+                "rotation": [0, -3.141592653589793, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [2.4297486293905172, 0.6000001222665594, 1.5182594005761385],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [1.8268751836112912, 0.6000001222665594, 1.2175228119721842],
+                "rotation": [0, 1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [1.859672309655701, 0.6000001222665594, 0.004354234101101184],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Back Brace",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/back_brace/back_brace.gltf",
+            "resizable": true,
+            "transform": { "position": [-0.63929705038328905, 1.0000002149741704, 0.9901576623127363], "rotation": [0, 0, 0], "scale": [1, 1, 1] },
+            "fixed": false
+        },
+        {
+            "name": "Back Brace",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/back_brace/back_brace.gltf",
+            "resizable": true,
+            "transform": { "position": [-0.6308872555220205, 1.0000002149741704, -0.19697973168452002], "rotation": [0, 0, 0], "scale": [1, 1, 1] },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [3.896929926660036, 0.6000001222665594, -1.5443701132701537],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [4.513844926656826, 0.6000001222665594, -1.5573932366827313],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [5.108994020191926, 0.6000001222665594, -1.5544958290597856],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [5.696776877246425, 0.6000001222665594, -1.556649437324427],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [6.312114230946073, 0.6000001222665594, -1.5549890440484444],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Window",
+            "type": "InWallEntity",
+            "url": "assets/models/windows/white_window/white_window.glb",
+            "resizable": true,
+            "transform": {
+                "position": [6.71711, 1.6717948259858576, -0.25300140850884418],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [4.3722193259348865, 0.6000001222665594, 1.2267426018863466],
+                "rotation": [0, 1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [4.981770151790555, 0.6000001222665594, 1.2287754765916256],
+                "rotation": [0, 1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": { "position": [5.440991233190683, 0.6000001222665594, 1.3669979068874665], "rotation": [0, 0, 0], "scale": [1, 1, 1] },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [4.369219391057893, 0.6000001222665594, 1.530636015679078],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [3.92007003107052, 0.6000001222665594, 1.3793199880503752],
+                "rotation": [0, 3.141592653589793, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "assets/models/shop/shelve/shelve.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [4.9780586107990115, 0.6000001222665594, 1.5319175990917626],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        }
+    ]
+}

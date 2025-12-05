@@ -18,6 +18,8 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),
+        "@bp3d/core": path.resolve(__dirname, "./src/lib/bp3d/core/index.js"),
+        "@bp3d/plugins": path.resolve(__dirname, "./src/lib/bp3d/plugins/index.js"),
       },
     },
     define: {

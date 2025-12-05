@@ -1,0 +1,580 @@
+{
+    "floorplan": {
+        "corners": {
+            "f90da5e3-9e0e-eba7-173d-eb0b071e838e": {
+                "x": -1.649729999999997,
+                "y": 2.89052
+            },
+            "da026c08-d76a-a944-8e7b-096b752da9ed": {
+                "x": 6.72211,
+                "y": 2.89052
+            },
+            "4e3d65cb-54c0-0681-28bf-bddcc7bdb571": {
+                "x": 6.72211,
+                "y": -1.78308
+            },
+            "5ff30b50-f659-5973-0d83-3b149a49a14f": {
+                "x": -1.649729999999997,
+                "y": -1.78308
+            }
+        },
+        "walls": [
+            {
+                "corner1": "5ff30b50-f659-5973-0d83-3b149a49a14f",
+                "corner2": "f90da5e3-9e0e-eba7-173d-eb0b071e838e",
+                "innerMaterial": {
+                    "color": "#ffffff"
+                },
+                "outerMaterial": {
+                    "color": "#ffffff"
+                }
+            },
+            {
+                "corner1": "f90da5e3-9e0e-eba7-173d-eb0b071e838e",
+                "corner2": "da026c08-d76a-a944-8e7b-096b752da9ed",
+                "innerMaterial": {
+                    "color": "#ffffff"
+                },
+                "outerMaterial": {
+                    "color": "#ffffff"
+                }
+            },
+            {
+                "corner1": "da026c08-d76a-a944-8e7b-096b752da9ed",
+                "corner2": "4e3d65cb-54c0-0681-28bf-bddcc7bdb571",
+                "innerMaterial": {
+                    "color": "#ffffff"
+                },
+                "outerMaterial": {
+                    "color": "#ffffff"
+                }
+            },
+            {
+                "corner1": "4e3d65cb-54c0-0681-28bf-bddcc7bdb571",
+                "corner2": "5ff30b50-f659-5973-0d83-3b149a49a14f",
+                "innerMaterial": {
+                    "color": "#ffffff"
+                },
+                "outerMaterial": {
+                    "color": "#ffffff"
+                }
+            }
+        ],
+        "floors": [
+            {
+                "id": "4e3d65cb-54c0-0681-28bf-bddcc7bdb571,5ff30b50-f659-5973-0d83-3b149a49a14f,da026c08-d76a-a944-8e7b-096b752da9ed,f90da5e3-9e0e-eba7-173d-eb0b071e838e",
+                "material": {
+                    "texture": {
+                        "url": "rooms/textures/hardwood.png",
+                        "repeat": {
+                            "autoCalculateRepeat": true,
+                            "uvScale": 3
+                        }
+                    }
+                }
+            }
+        ],
+        "roofs": [
+            {
+                "id": "4e3d65cb-54c0-0681-28bf-bddcc7bdb571,5ff30b50-f659-5973-0d83-3b149a49a14f,da026c08-d76a-a944-8e7b-096b752da9ed,f90da5e3-9e0e-eba7-173d-eb0b071e838e",
+                "material": {
+                    "color": "#e5e5e5"
+                }
+            }
+        ]
+    },
+    "entities": [
+        {
+            "name": "Zhiyin Storefront background",
+            "type": "BasicEntity",
+            "url": "models/gltf/zhiyin_storefront_background.glb",
+            "resizable": true,
+            "transform": {
+                "position": [2.509729776153796, 3.5405085566130094, 3.0739299067310486],
+                "rotation": [0, 0, 0],
+                "scale": [1.466666461229354, 0.9999994993212213, 0.9999968856670295]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架A.glb",
+            "resizable": true,
+            "transform": {
+                "position": [3.9260330042666123, 0.6000001158495083, -0.1483032271558501],
+                "rotation": [0, -3.141592653589793, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架A.glb",
+            "resizable": true,
+            "transform": {
+                "position": [2.4478623177156478, 0.6000001158495083, 1.2175228119721841],
+                "rotation": [0, 1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架A.glb",
+            "resizable": true,
+            "transform": {
+                "position": [5.006092173962082, 0.6000001158495083, 0.0011969839554696292],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架A.glb",
+            "resizable": true,
+            "transform": {
+                "position": [5.0060921739620845, 0.6000001158495083, -0.29882131988547356],
+                "rotation": [0, 1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架A.glb",
+            "resizable": true,
+            "transform": {
+                "position": [1.8278289725323151, 0.6000001158495083, 1.5175411158131273],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架A.glb",
+            "resizable": true,
+            "transform": {
+                "position": [2.483788208128436, 0.6000001158495083, 0.000548226349228513],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架A.glb",
+            "resizable": true,
+            "transform": {
+                "position": [5.09702663704167, 0.6000001158495083, -1.5580708480795284],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架A.glb",
+            "resizable": true,
+            "transform": {
+                "position": [5.466117998474223, 0.6000001158495083, -0.13743768513097598],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架A.glb",
+            "resizable": true,
+            "transform": {
+                "position": [2.943814032640574, 0.6000001158495083, -0.1348782311611021],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架A.glb",
+            "resizable": true,
+            "transform": {
+                "position": [4.476993291858337, 0.6000001158495083, -1.5580708480795284],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架A.glb",
+            "resizable": true,
+            "transform": {
+                "position": [1.863754862945103, 0.6000001158495083, -0.29947007749171467],
+                "rotation": [0, 1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架A.glb",
+            "resizable": true,
+            "transform": {
+                "position": [1.863754862945103, 0.6000001158495083, 0.000548226349228513],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架A.glb",
+            "resizable": true,
+            "transform": {
+                "position": [1.8278289725323151, 0.6000001158495083, 1.2175228119721841],
+                "rotation": [0, 1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架A.glb",
+            "resizable": true,
+            "transform": {
+                "position": [4.380095855582658, 0.6000001158495083, 1.2267426018863465],
+                "rotation": [0, 1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架A.glb",
+            "resizable": true,
+            "transform": {
+                "position": [4.380095855582658, 0.6000001158495083, 1.5267609057272897],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架A.glb",
+            "resizable": true,
+            "transform": {
+                "position": [1.403729038432965, 0.6000001158495083, -0.14341531418529835],
+                "rotation": [0, -3.141592653589793, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架A.glb",
+            "resizable": true,
+            "transform": {
+                "position": [4.386058828778751, 0.6000001158495083, -0.29882131988547356],
+                "rotation": [0, 1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架A.glb",
+            "resizable": true,
+            "transform": {
+                "position": [3.8569599466750035, 0.6000001158495083, -1.5580708480795284],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架A.glb",
+            "resizable": true,
+            "transform": {
+                "position": [6.337093327408334, 0.6000001158495083, -1.5580708480795284],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架B.glb",
+            "resizable": true,
+            "transform": {
+                "position": [1.367803148020177, 0.6000001158495083, 1.3625823226242495],
+                "rotation": [0, -3.141592653589793, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架B.glb",
+            "resizable": true,
+            "transform": {
+                "position": [4.386058828778749, 0.6000001158495083, 0.0011969839554696188],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架B.glb",
+            "resizable": true,
+            "transform": {
+                "position": [2.4478623177156478, 0.6000001158495083, 1.5175411158131273],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Zhiyin Storefront text",
+            "type": "BasicEntity",
+            "url": "models/gltf/zhiyin_storefront_text.glb",
+            "resizable": true,
+            "transform": {
+                "position": [1.1662977247245199, 3.550628273220332, 3.143943857599186],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架B.glb",
+            "resizable": true,
+            "transform": {
+                "position": [2.483788208128436, 0.6000001158495083, -0.29947007749171467],
+                "rotation": [0, 1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架B.glb",
+            "resizable": true,
+            "transform": {
+                "position": [5.000129200765992, 0.6000001158495083, 1.2267426018863465],
+                "rotation": [0, 1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架B.glb",
+            "resizable": true,
+            "transform": {
+                "position": [2.907888142227786, 0.6000001158495083, 1.371317471130354],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架B.glb",
+            "resizable": true,
+            "transform": {
+                "position": [5.46015502527813, 0.6000001158495083, 1.386953653431912],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架B.glb",
+            "resizable": true,
+            "transform": {
+                "position": [5.0001292007659925, 0.6000001158495083, 1.5267609057272897],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架B.glb",
+            "resizable": true,
+            "transform": {
+                "position": [5.717059982225002, 0.6000001158495083, -1.5580708480795284],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Door2",
+            "type": "InWallFloorEntity",
+            "url": "models/gltf/door2.glb",
+            "resizable": true,
+            "transform": {
+                "position": [1.0341929618174, 1.37012487130976, 2.8855200000000005],
+                "rotation": [0, 3.141592653589793, 0],
+                "scale": [0.9999373595957429, 1.0000181542407005, 1.6881651916227778]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve",
+            "type": "FloorEntity",
+            "url": "models/gltf/小货架B.glb",
+            "resizable": true,
+            "transform": {
+                "position": [3.92007003107052, 0.6000001158495083, 1.3793199880503753],
+                "rotation": [0, 3.141592653589793, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Window",
+            "type": "InWallEntity",
+            "url": "models/gltf/window.glb",
+            "resizable": true,
+            "transform": {
+                "position": [2.6098701394430037, 1.7727985885632647, -1.77808],
+                "rotation": [0, 0, 0],
+                "scale": [0.9999997568031671, 0.7299402587329734, 1.848444476778035]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Checkstand",
+            "type": "FloorEntity",
+            "url": "models/gltf/checkstand.gltf",
+            "resizable": true,
+            "transform": {
+                "position": [-0.37047674409951853, 0.5799952179804837, 1.0516955250071762],
+                "rotation": [0, 0, 0],
+                "scale": [1.036089087472631, 1.0014841463479147, 1.1725408571571074]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve3",
+            "type": "FloorEntity",
+            "url": "models/gltf/shelve3.glb",
+            "resizable": true,
+            "transform": {
+                "position": [-0.35294415114829225, 1.4000001603737604, -1.508100450471091],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve3",
+            "type": "FloorEntity",
+            "url": "models/gltf/shelve3.glb",
+            "resizable": true,
+            "transform": {
+                "position": [0.9771551333826942, 1.4000001603737604, -1.508100450471091],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Shelve2",
+            "type": "FloorEntity",
+            "url": "models/gltf/shelve2.glb",
+            "resizable": true,
+            "transform": {
+                "position": [-1.2963618967068913, 1.3649996351619151, 0.5872617855082893],
+                "rotation": [0, 1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Zhiyin Storefront background",
+            "type": "BasicEntity",
+            "url": "models/gltf/zhiyin_storefront_background.glb",
+            "resizable": true,
+            "transform": {
+                "position": [6.876824424161127, 3.539268456809619, 0.603719202180069],
+                "rotation": [0, 1.5707963267948966, 0],
+                "scale": [0.8333332166075875, 0.9999994993212213, 0.9999968856670295]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Zhiyin Storefront background",
+            "type": "BasicEntity",
+            "url": "models/gltf/zhiyin_storefront_background.glb",
+            "resizable": true,
+            "transform": {
+                "position": [-1.8318448519051052, 3.5336481846257763, 0.5954786694760619],
+                "rotation": [0, 1.5707963267948966, 0],
+                "scale": [0.8333332166075875, 0.9999994993212213, 0.9999968856670295]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Zhiyin Storefront text",
+            "type": "BasicEntity",
+            "url": "models/gltf/zhiyin_storefront_text.glb",
+            "resizable": true,
+            "transform": {
+                "position": [-1.9018588027732428, 3.665880591964704, 0.5741629311381553],
+                "rotation": [0, -1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        },
+        {
+            "name": "Zhiyin Storefront text",
+            "type": "BasicEntity",
+            "url": "models/gltf/zhiyin_storefront_text.glb",
+            "resizable": true,
+            "transform": {
+                "position": [6.946838375029264, 3.5972165599541803, 0.6120468002024664],
+                "rotation": [0, 1.5707963267948966, 0],
+                "scale": [1, 1, 1]
+            },
+            "fixed": false
+        }
+    ]
+}

@@ -3,18 +3,18 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { 
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { 
-  Search, 
-  Filter, 
-  Star, 
-  ShoppingCart, 
+import {
+  Search,
+  Filter,
+  Star,
+  ShoppingCart,
   Heart,
   Grid3X3,
   List,
@@ -66,6 +66,34 @@ interface Subcategory {
   description: string | null;
 }
 
+// Default product images for items without custom images
+const defaultProductImages = [
+  '/products/sofa_modern_1764869311544.png',
+  '/products/dining_table_1764869329659.png',
+  '/products/bed_frame_1764869349589.png',
+  '/products/bookshelf_wood_1764869371415.png',
+  '/products/office_chair_1764869389469.png',
+  '/products/coffee_table_1764869410185.png',
+];
+
+// Get image based on product name keywords or fallback to index-based selection
+const getProductImage = (product: Product, index: number): string => {
+  if (product.image_url) return product.image_url;
+
+  const name = product.name.toLowerCase();
+
+  // Match by keyword
+  if (name.includes('sofa') || name.includes('couch')) return defaultProductImages[0];
+  if (name.includes('dining') || name.includes('table')) return defaultProductImages[1];
+  if (name.includes('bed') || name.includes('mattress')) return defaultProductImages[2];
+  if (name.includes('shelf') || name.includes('bookcase') || name.includes('bookshelf')) return defaultProductImages[3];
+  if (name.includes('chair') || name.includes('seat')) return defaultProductImages[4];
+  if (name.includes('coffee') || name.includes('side table')) return defaultProductImages[5];
+
+  // Fallback to cycling through images
+  return defaultProductImages[index % defaultProductImages.length];
+};
+
 const Shop = () => {
   const { user } = useAuth();
   const { addItem } = useCart();
@@ -83,7 +111,7 @@ const Shop = () => {
   // Define loadFavorites first
   const loadFavorites = useCallback(async () => {
     if (!user) return;
-    
+
     try {
       const favoritesData = await favoritesService.getFavorites(user.id);
       const favoriteIds = new Set<string>(favoritesData.map((fav: any) => String(fav.product_id)));
@@ -112,7 +140,7 @@ const Shop = () => {
         productService.getProducts({ limit: 50 }),
         categoryService.getCategories()
       ]);
-      
+
       setProducts(productsData);
       setCategories(categoriesData);
     } catch (error) {
@@ -126,7 +154,7 @@ const Shop = () => {
   const handleSearch = async (query: string, filters: Record<string, unknown>) => {
     try {
       setLoading(true);
-      
+
       // Add to search history if user is logged in
       if (user) {
         await searchService.addSearchHistory(user.id, query, filters.category?.[0]);
@@ -217,12 +245,12 @@ const Shop = () => {
     setProducts(sortedProducts);
   };
 
-  const handleAddToCart = (product: Product) => {
+  const handleAddToCart = (product: Product, index: number) => {
     addItem({
       id: product.id,
       name: product.name,
       price: product.price,
-      image: product.image_url || '',
+      image: getProductImage(product, index),
       quantity: 1,
       category: product.categories?.name || 'Uncategorized'
     });
@@ -242,7 +270,7 @@ const Shop = () => {
 
     try {
       const isFavorite = favorites.has(productId);
-      
+
       if (isFavorite) {
         await favoritesService.removeFavorite(user.id, productId);
         setFavorites(prev => {
@@ -298,7 +326,7 @@ const Shop = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      
+
       <div className="container mx-auto px-4 pt-24 pb-12">
         {/* Header */}
         <div className="mb-8">
@@ -308,13 +336,13 @@ const Shop = () => {
 
         {/* Search and Filters */}
         <div className="mb-8">
-          <MLSearch 
-            products={products.map(p => ({
+          <MLSearch
+            products={products.map((p, idx) => ({
               id: Number(p.id.split('-')[0]) || 0,
               name: p.name,
               price: String(p.price),
               category: p.categories?.name || 'Uncategorized',
-              image: p.image_url || '',
+              image: getProductImage(p, idx),
               description: p.description || '',
               tags: p.tags || [],
               popularity: p.popularity,
@@ -324,7 +352,7 @@ const Shop = () => {
             onSearch={handleSearch}
             onProductClick={handleProductClick}
           />
-          
+
           <div className="flex flex-wrap gap-4 mt-6">
             {/* Category Filter */}
             <Select value={selectedCategory} onValueChange={handleCategoryChange}>
@@ -392,12 +420,11 @@ const Shop = () => {
         </div>
 
         {/* Products Grid */}
-        <div className={`grid gap-6 ${
-          viewMode === 'grid' 
-            ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' 
+        <div className={`grid gap-6 ${viewMode === 'grid'
+            ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
             : 'grid-cols-1'
-        }`}>
-          {products.map((product) => (
+          }`}>
+          {products.map((product, index) => (
             <motion.div
               key={product.id}
               initial={{ opacity: 0, y: 20 }}
@@ -407,11 +434,10 @@ const Shop = () => {
               <Card className="group hover:shadow-lg transition-all duration-300">
                 <div className="relative">
                   <img
-                    src={product.image_url || '/placeholder.svg'}
+                    src={getProductImage(product, index)}
                     alt={product.name}
-                    className={`w-full object-cover ${
-                      viewMode === 'grid' ? 'h-64' : 'h-48 w-48'
-                    }`}
+                    className={`w-full object-cover ${viewMode === 'grid' ? 'h-64' : 'h-48 w-48'
+                      }`}
                   />
                   <div className="absolute top-2 right-2 flex gap-2">
                     {product.trending && (
@@ -425,15 +451,14 @@ const Shop = () => {
                       className="h-8 w-8 p-0 bg-white/80 hover:bg-white"
                       onClick={() => handleToggleFavorite(product.id)}
                     >
-                      <Heart 
-                        className={`h-4 w-4 ${
-                          favorites.has(product.id) ? 'fill-red-500 text-red-500' : ''
-                        }`} 
+                      <Heart
+                        className={`h-4 w-4 ${favorites.has(product.id) ? 'fill-red-500 text-red-500' : ''
+                          }`}
                       />
                     </Button>
                   </div>
                 </div>
-                
+
                 <CardContent className={`p-4 ${viewMode === 'list' ? 'flex-1' : ''}`}>
                   <div className={viewMode === 'list' ? 'flex gap-4' : ''}>
                     <div className={viewMode === 'list' ? 'flex-1' : ''}>
@@ -443,7 +468,7 @@ const Shop = () => {
                       <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
                         {product.description}
                       </p>
-                      
+
                       <div className="flex items-center gap-2 mb-3">
                         <div className="flex items-center">
                           <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
@@ -453,13 +478,13 @@ const Shop = () => {
                           {product.categories?.name || 'Uncategorized'}
                         </Badge>
                       </div>
-                      
+
                       <div className="flex items-center justify-between">
                         <span className="text-2xl font-bold">
                           {formatPrice(product.price)}
                         </span>
                         <Button
-                          onClick={() => handleAddToCart(product)}
+                          onClick={() => handleAddToCart(product, index)}
                           className="flex items-center gap-2"
                         >
                           <ShoppingCart className="h-4 w-4" />
@@ -485,7 +510,7 @@ const Shop = () => {
 
       {/* Cart Sidebar */}
       {showCart && <CartSidebar />}
-      
+
       <Footer />
     </div>
   );

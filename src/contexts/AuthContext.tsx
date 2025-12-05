@@ -9,6 +9,8 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  verifyOtp: (email: string, token: string) => Promise<void>;
+  resendOtp: (email: string) => Promise<void>;
   isAuthenticated: boolean;
 }
 
@@ -83,6 +85,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (error) throw error;
   };
 
+  const verifyOtp = async (email: string, token: string) => {
+    const { error } = await supabase.auth.verifyOtp({
+      email,
+      token,
+      type: 'signup',
+    });
+    if (error) throw error;
+  };
+
+  const resendOtp = async (email: string) => {
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email,
+    });
+    if (error) throw error;
+  };
+
   const value = {
     user,
     session,
@@ -90,6 +109,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signIn,
     signUp,
     signOut,
+    verifyOtp,
+    resendOtp,
     isAuthenticated: !!user,
   };
 

@@ -1,0 +1,87 @@
+{
+    "floorplan": {
+        "corners": {
+            "f90da5e3-9e0e-eba7-173d-eb0b071e838e": {
+                "x": 0,
+                "y": 5
+            },
+            "da026c08-d76a-a944-8e7b-096b752da9ed": {
+                "x": 6,
+                "y": 5
+            },
+            "4e3d65cb-54c0-0681-28bf-bddcc7bdb571": {
+                "x": 6,
+                "y": 0
+            },
+            "71d4f128-ae80-3d58-9bd2-711c6ce6cdf2": {
+                "x": 0,
+                "y": 0
+            }
+        },
+        "walls": [
+            {
+                "corner1": "71d4f128-ae80-3d58-9bd2-711c6ce6cdf2",
+                "corner2": "f90da5e3-9e0e-eba7-173d-eb0b071e838e",
+                "innerMaterial": {
+                    "color": "#ffffff"
+                },
+                "outerMaterial": {
+                    "color": "#ffffff"
+                }
+            },
+            {
+                "corner1": "f90da5e3-9e0e-eba7-173d-eb0b071e838e",
+                "corner2": "da026c08-d76a-a944-8e7b-096b752da9ed",
+                "innerMaterial": {
+                    "color": "#ffffff"
+                },
+                "outerMaterial": {
+                    "color": "#ffffff"
+                }
+            },
+            {
+                "corner1": "da026c08-d76a-a944-8e7b-096b752da9ed",
+                "corner2": "4e3d65cb-54c0-0681-28bf-bddcc7bdb571",
+                "innerMaterial": {
+                    "color": "#ffffff"
+                },
+                "outerMaterial": {
+                    "color": "#ffffff"
+                }
+            },
+            {
+                "corner1": "4e3d65cb-54c0-0681-28bf-bddcc7bdb571",
+                "corner2": "71d4f128-ae80-3d58-9bd2-711c6ce6cdf2",
+                "innerMaterial": {
+                    "color": "#ffffff"
+                },
+                "outerMaterial": {
+                    "color": "#ffffff"
+                }
+            }
+        ],
+        "floors": [
+            {
+                "id": "4e3d65cb-54c0-0681-28bf-bddcc7bdb571,71d4f128-ae80-3d58-9bd2-711c6ce6cdf2,da026c08-d76a-a944-8e7b-096b752da9ed,f90da5e3-9e0e-eba7-173d-eb0b071e838e",
+                "material": {
+                    "texture": {
+                        "url": "rooms/textures/hardwood.png",
+                        "repeat": {
+                            "autoCalculateRepeat": true,
+                            "uvScale": 3
+                        }
+                    }
+                }
+            }
+        ],
+        "roofs": [
+            {
+                "id": "4e3d65cb-54c0-0681-28bf-bddcc7bdb571,71d4f128-ae80-3d58-9bd2-711c6ce6cdf2,da026c08-d76a-a944-8e7b-096b752da9ed,f90da5e3-9e0e-eba7-173d-eb0b071e838e",
+                "material": {
+                    "color": "#e5e5e5"
+                }
+            }
+        ]
+    },
+    "entities": []
+}
