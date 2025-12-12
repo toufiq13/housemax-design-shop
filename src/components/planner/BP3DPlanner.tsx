@@ -1,6 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { toast } from "sonner";
 
 export const BP3DPlanner: React.FC = () => {
+    useEffect(() => {
+        const handleMessage = (event: MessageEvent) => {
+            if (event.data && event.data.type === 'BP3D_ERROR') {
+                console.error('BP3D Planner Error:', event.data.payload);
+                toast.error(`3D Planner Error: ${event.data.payload.message}`);
+            }
+        };
+
+        window.addEventListener('message', handleMessage);
+        return () => window.removeEventListener('message', handleMessage);
+    }, []);
+
     return (
         <div className="w-full" style={{ height: '100vh' }}>
             <iframe

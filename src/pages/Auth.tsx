@@ -144,19 +144,21 @@ const Auth = () => {
                 transition={{ duration: 0.3 }}
                 className="space-y-6"
               >
-                {/* OTP Verification UI */}
-                <div className="flex flex-col items-center space-y-4">
-                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-                    <ShieldCheck className="w-8 h-8 text-primary" />
-                  </div>
-
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="text-center space-y-2">
+                  <h2 className="text-2xl font-bold">Check your email</h2>
+                  <p className="text-muted-foreground">
+                    We've sent a 6-digit verification code to
+                  </p>
+                  <div className="flex items-center justify-center gap-2 text-sm font-medium">
                     <Mail className="w-4 h-4" />
                     <span>{email}</span>
                   </div>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Don't see it? Check your spam folder.
+                  </p>
                 </div>
 
-                <div className="flex justify-center">
+                <div className="flex justify-center py-4">
                   <InputOTP
                     maxLength={6}
                     value={otpCode}
@@ -185,7 +187,10 @@ const Auth = () => {
                   {isLoading ? "Verifying..." : "Verify & Continue"}
                 </Button>
 
-                <div className="flex flex-col items-center gap-3">
+                <div className="flex flex-col items-center gap-3 pt-4 border-t">
+                  <div className="text-sm text-muted-foreground">
+                    Did not receive the code?
+                  </div>
                   <Button
                     variant="ghost"
                     onClick={handleResendOtp}
@@ -283,9 +288,9 @@ const Auth = () => {
               </motion.div>
             )}
           </AnimatePresence>
-        </CardContent>
-      </Card>
-    </div>
+        </CardContent >
+      </Card >
+    </div >
   );
 };
 

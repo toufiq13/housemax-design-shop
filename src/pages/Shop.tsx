@@ -74,21 +74,77 @@ const defaultProductImages = [
   '/products/bookshelf_wood_1764869371415.png',
   '/products/office_chair_1764869389469.png',
   '/products/coffee_table_1764869410185.png',
+  '/products/living_room_sofa.png',
+  '/products/kitchen_organizer.png',
+  '/products/blue_dinnerware.png',
+  '/products/white_ceramic_vases.png',
+  '/products/crystal_chandelier.png',
+  '/products/decorative_pillows.png',
+  '/products/dining_table_modern.png',
+  '/products/chesterfield_sofa.png',
+  '/products/arc_floor_lamp.png',
+  '/products/luxury_bedroom.png',
+  '/products/bathroom_vanity.png',
+  '/products/dining_room_set.png',
+  '/products/geometric_rug.png',
+  '/products/storage_cabinet.png',
+  '/products/table_lamp_globe.png',
+  '/products/outdoor_patio_set.png',
+  '/products/persian_rug.png',
+  '/products/rain_shower.png',
+  '/products/smart_home_devices.png',
+  '/products/outdoor_dining.png',
+  '/products/smart_bulbs.png',
+  '/products/cookware_set.png',
 ];
 
 // Get image based on product name keywords or fallback to index-based selection
 const getProductImage = (product: Product, index: number): string => {
-  if (product.image_url) return product.image_url;
-
+  // Always use our curated images based on keyword matching
   const name = product.name.toLowerCase();
 
-  // Match by keyword
-  if (name.includes('sofa') || name.includes('couch')) return defaultProductImages[0];
-  if (name.includes('dining') || name.includes('table')) return defaultProductImages[1];
-  if (name.includes('bed') || name.includes('mattress')) return defaultProductImages[2];
-  if (name.includes('shelf') || name.includes('bookcase') || name.includes('bookshelf')) return defaultProductImages[3];
+  // Match by keyword - newest images first (specific product matches)
+  if (name.includes('patio dining') || name.includes('outdoor table')) return '/products/patio_dining_table.png';
+  if (name.includes('luxury throw') || name.includes('throw blanket') || name.includes('fur blanket')) return '/products/luxury_throw_blanket.png';
+  if (name.includes('modern dining') || name.includes('dining set')) return '/products/modern_dining_set.png';
+  if (name.includes('modern sectional') || name.includes('sectional sofa')) return '/products/modern_sectional_sofa.png';
+
+  if (name.includes('bulb') || name.includes('led') || name.includes('cync') || name.includes('smart light')) return '/products/smart_bulbs.png';
+  if (name.includes('cookware') || name.includes('pot') || name.includes('pan') || name.includes('stainless') || name.includes('cooking')) return '/products/cookware_set.png';
+  if (name.includes('outdoor') || name.includes('patio') || name.includes('garden') || name.includes('terrace')) return '/products/outdoor_patio_set.png';
+  if (name.includes('persian') || name.includes('oriental') || name.includes('traditional rug')) return '/products/persian_rug.png';
+  if (name.includes('shower') || name.includes('rain') || name.includes('faucet') || name.includes('tap')) return '/products/rain_shower.png';
+  if (name.includes('smart') || name.includes('alexa') || name.includes('speaker') || name.includes('home device') || name.includes('tech')) return '/products/smart_home_devices.png';
+  if (name.includes('outdoor dining') || name.includes('balcony')) return '/products/outdoor_dining.png';
+
+  // Previous batch
+  if (name.includes('bathroom') || name.includes('vanity') || name.includes('mirror') || name.includes('sink')) return '/products/bathroom_vanity.png';
+  if (name.includes('dining room') || name.includes('dining set')) return '/products/dining_room_set.png';
+  if (name.includes('rug') || name.includes('carpet') || name.includes('mat') || name.includes('floor covering')) return '/products/geometric_rug.png';
+  if (name.includes('cabinet') || name.includes('cupboard') || name.includes('wardrobe') || name.includes('locker')) return '/products/storage_cabinet.png';
+  if (name.includes('table lamp') || name.includes('desk lamp') || name.includes('bedside lamp') || name.includes('night lamp')) return '/products/table_lamp_globe.png';
+
+  // Previous batch
+  if (name.includes('pillow') || name.includes('cushion') || name.includes('throw')) return '/products/decorative_pillows.png';
+  if (name.includes('chesterfield') || name.includes('leather sofa') || name.includes('tufted')) return '/products/chesterfield_sofa.png';
+  if (name.includes('floor lamp') || name.includes('arc lamp') || name.includes('standing lamp')) return '/products/arc_floor_lamp.png';
+  if (name.includes('bedroom') || name.includes('bed set') || name.includes('blanket') || name.includes('fur')) return '/products/luxury_bedroom.png';
+
+  // Previous batch images
+  if (name.includes('living room') || name.includes('wall art') || name.includes('artwork')) return '/products/living_room_sofa.png';
+  if (name.includes('kitchen') || name.includes('organizer') || name.includes('storage') || name.includes('drawer')) return '/products/kitchen_organizer.png';
+  if (name.includes('dinner') || name.includes('plate') || name.includes('dish') || name.includes('dinnerware') || name.includes('bowl')) return '/products/blue_dinnerware.png';
+  if (name.includes('vase') || name.includes('ceramic') || name.includes('decor') || name.includes('decoration')) return '/products/white_ceramic_vases.png';
+  if (name.includes('chandelier') || name.includes('crystal')) return '/products/crystal_chandelier.png';
+
+  // Original keyword matching
+  if (name.includes('sofa') || name.includes('couch')) return '/products/chesterfield_sofa.png';
+  if (name.includes('dining') || name.includes('table')) return '/products/dining_table_modern.png';
+  if (name.includes('bed') || name.includes('mattress')) return '/products/luxury_bedroom.png';
+  if (name.includes('shelf') || name.includes('bookcase') || name.includes('bookshelf')) return '/products/storage_cabinet.png';
   if (name.includes('chair') || name.includes('seat')) return defaultProductImages[4];
   if (name.includes('coffee') || name.includes('side table')) return defaultProductImages[5];
+  if (name.includes('lamp') || name.includes('light')) return '/products/table_lamp_globe.png';
 
   // Fallback to cycling through images
   return defaultProductImages[index % defaultProductImages.length];
@@ -291,10 +347,13 @@ const Shop = () => {
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
+    // Convert USD to INR (1 USD ≈ 83 INR)
+    const priceInINR = price * 83;
+    return new Intl.NumberFormat('en-IN', {
       style: 'currency',
-      currency: 'USD'
-    }).format(price);
+      currency: 'INR',
+      maximumFractionDigits: 0
+    }).format(priceInINR);
   };
 
   const getSelectedCategory = () => {
@@ -421,8 +480,8 @@ const Shop = () => {
 
         {/* Products Grid */}
         <div className={`grid gap-6 ${viewMode === 'grid'
-            ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-            : 'grid-cols-1'
+          ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+          : 'grid-cols-1'
           }`}>
           {products.map((product, index) => (
             <motion.div

@@ -131,12 +131,23 @@ export class SideMenu {
                 const entityName = $(e.currentTarget).attr("entity-name");
                 const entityType = $(e.currentTarget).attr("entity-type");
                 const entityUrl = $(e.currentTarget).attr("entity-url");
+                const entityWidth = $(e.currentTarget).attr("entity-width");
+                const entityDepth = $(e.currentTarget).attr("entity-depth");
+                const entityHeight = $(e.currentTarget).attr("entity-height");
+                const entityScale = $(e.currentTarget).attr("entity-scale");
+
                 const entityConfig = {
                     name: entityName,
                     type: entityType,
                     url: entityUrl,
                     resizable: true,
                 };
+
+                // Add dimensions if specified (values are in meters)
+                if (entityWidth) entityConfig.width = parseFloat(entityWidth);
+                if (entityDepth) entityConfig.depth = parseFloat(entityDepth);
+                if (entityHeight) entityConfig.height = parseFloat(entityHeight);
+                if (entityScale) entityConfig.scale = parseFloat(entityScale);
 
                 this.viewer3d.addEntity(entityConfig);
                 this.setCurrentState(this.states.DEFAULT);

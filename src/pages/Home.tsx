@@ -38,10 +38,10 @@ const Home = () => {
     {
       id: 1,
       name: "Modern Sectional Sofa",
-      price: "$1,299",
+      price: "₹1,07,817",
       category: "Furniture",
       subcategory: "Sofas & Couches",
-      image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop&q=80",
+      image: "/products/living_room_sofa.png",
       description: "Comfortable and stylish sectional sofa perfect for modern living spaces",
       tags: ["modern", "comfortable", "sectional", "gray"],
       popularity: 0.9,
@@ -51,10 +51,10 @@ const Home = () => {
     {
       id: 2,
       name: "Luxury Chesterfield Sofa",
-      price: "$1,899",
+      price: "₹1,57,617",
       category: "Furniture",
       subcategory: "Sofas & Couches",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop&q=80",
+      image: "/products/chesterfield_sofa.png",
       description: "Classic Chesterfield design with premium leather upholstery",
       tags: ["luxury", "leather", "classic", "brown"],
       popularity: 0.8,
@@ -64,7 +64,7 @@ const Home = () => {
     {
       id: 3,
       name: "Minimalist Loveseat",
-      price: "$799",
+      price: "₹66,317",
       category: "Furniture",
       subcategory: "Sofas & Couches",
       image: "https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?w=400&h=300&fit=crop&q=80",
@@ -77,7 +77,7 @@ const Home = () => {
     {
       id: 4,
       name: "Premium Recliner Chair",
-      price: "$899",
+      price: "₹74,617",
       category: "Furniture",
       subcategory: "Armchairs & Recliners",
       image: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=400&h=300&fit=crop&q=80",
@@ -90,7 +90,7 @@ const Home = () => {
     {
       id: 5,
       name: "Designer Accent Chair",
-      price: "$649",
+      price: "₹53,867",
       category: "Furniture",
       subcategory: "Armchairs & Recliners",
       image: "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&h=300&fit=crop&q=80",
@@ -103,7 +103,7 @@ const Home = () => {
     {
       id: 6,
       name: "Wingback Reading Chair",
-      price: "$749",
+      price: "₹62,167",
       category: "Furniture",
       subcategory: "Armchairs & Recliners",
       image: "https://images.unsplash.com/photo-1549497538-303791108f95?w=400&h=300&fit=crop&q=80",
@@ -116,7 +116,7 @@ const Home = () => {
     {
       id: 7,
       name: "Glass Coffee Table",
-      price: "$399",
+      price: "₹33,117",
       category: "Furniture",
       subcategory: "Coffee Tables & Side Tables",
       image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop&q=80",
@@ -129,7 +129,7 @@ const Home = () => {
     {
       id: 8,
       name: "Wooden Side Table Set",
-      price: "$299",
+      price: "₹24,817",
       category: "Furniture",
       subcategory: "Coffee Tables & Side Tables",
       image: "https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?w=400&h=300&fit=crop&q=80",
@@ -142,7 +142,7 @@ const Home = () => {
     {
       id: 9,
       name: "Marble Coffee Table",
-      price: "$1,199",
+      price: "₹99,517",
       category: "Furniture",
       subcategory: "Coffee Tables & Side Tables",
       image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop&q=80",
@@ -155,10 +155,10 @@ const Home = () => {
     {
       id: 10,
       name: "Farmhouse Dining Table",
-      price: "$1,299",
+      price: "₹1,07,817",
       category: "Furniture",
       subcategory: "Dining Tables & Chairs",
-      image: "https://images.unsplash.com/photo-1617806118233-18e1de247200?w=400&h=300&fit=crop&q=80",
+      image: "/products/dining_table_modern.png",
       description: "Rustic farmhouse dining table seating 8 people",
       tags: ["farmhouse", "rustic", "wood", "large"],
       popularity: 0.7,
@@ -168,7 +168,7 @@ const Home = () => {
     {
       id: 11,
       name: "Modern Dining Chair Set",
-      price: "$599",
+      price: "₹49,717",
       category: "Furniture",
       subcategory: "Dining Tables & Chairs",
       image: "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&h=300&fit=crop&q=80",
@@ -181,7 +181,7 @@ const Home = () => {
     {
       id: 12,
       name: "Extendable Dining Table",
-      price: "$1,599",
+      price: "₹1,32,717",
       category: "Furniture",
       subcategory: "Dining Tables & Chairs",
       image: "https://images.unsplash.com/photo-1617806118233-18e1de247200?w=400&h=300&fit=crop&q=80",
@@ -194,10 +194,10 @@ const Home = () => {
     {
       id: 13,
       name: "King Size Platform Bed",
-      price: "$1,199",
+      price: "₹99,517",
       category: "Furniture",
       subcategory: "Beds",
-      image: "https://images.unsplash.com/photo-1505693314120-0d443867891c?w=400&h=300&fit=crop&q=80",
+      image: "/products/luxury_bedroom.png",
       description: "Modern platform bed with built-in storage drawers",
       tags: ["king", "platform", "storage", "modern"],
       popularity: 0.9,
@@ -207,7 +207,7 @@ const Home = () => {
     {
       id: 14,
       name: "Queen Size Upholstered Bed",
-      price: "$899",
+      price: "₹74,617",
       category: "Furniture",
       subcategory: "Beds",
       image: "https://images.unsplash.com/photo-1505693314120-0d443867891c?w=400&h=300&fit=crop&q=80",
@@ -220,7 +220,7 @@ const Home = () => {
     {
       id: 15,
       name: "Single Daybed",
-      price: "$599",
+      price: "₹49,717",
       category: "Furniture",
       subcategory: "Beds",
       image: "https://images.unsplash.com/photo-1505693314120-0d443867891c?w=400&h=300&fit=crop&q=80",
@@ -233,10 +233,10 @@ const Home = () => {
     {
       id: 16,
       name: "Crystal Chandelier",
-      price: "$1,899",
+      price: "₹1,57,617",
       category: "Lighting",
       subcategory: "Chandeliers",
-      image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop&q=80",
+      image: "/products/crystal_chandelier.png",
       description: "Elegant crystal chandelier with 12 lights",
       tags: ["crystal", "elegant", "luxury", "dining"],
       popularity: 0.8,
@@ -246,10 +246,10 @@ const Home = () => {
     {
       id: 17,
       name: "Modern Geometric Chandelier",
-      price: "$799",
+      price: "₹66,317",
       category: "Lighting",
       subcategory: "Chandeliers",
-      image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop&q=80",
+      image: "/products/crystal_chandelier.png",
       description: "Contemporary geometric chandelier with LED lights",
       tags: ["modern", "geometric", "LED", "contemporary"],
       popularity: 0.7,
@@ -259,10 +259,10 @@ const Home = () => {
     {
       id: 18,
       name: "Adjustable Floor Lamp",
-      price: "$299",
+      price: "₹24,817",
       category: "Lighting",
       subcategory: "Floor Lamps",
-      image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop&q=80",
+      image: "/products/arc_floor_lamp.png",
       description: "Modern floor lamp with adjustable height and brightness",
       tags: ["adjustable", "modern", "brightness", "reading"],
       popularity: 0.6,
@@ -272,10 +272,10 @@ const Home = () => {
     {
       id: 19,
       name: "Arc Floor Lamp",
-      price: "$449",
+      price: "₹37,267",
       category: "Lighting",
       subcategory: "Floor Lamps",
-      image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop&q=80",
+      image: "/products/arc_floor_lamp.png",
       description: "Stylish arc floor lamp perfect for reading corners",
       tags: ["arc", "stylish", "reading", "corner"],
       popularity: 0.7,
@@ -285,10 +285,10 @@ const Home = () => {
     {
       id: 20,
       name: "Ceramic Table Lamp",
-      price: "$149",
+      price: "₹12,367",
       category: "Lighting",
       subcategory: "Table Lamps",
-      image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop&q=80",
+      image: "/products/white_ceramic_vases.png",
       description: "Handcrafted ceramic table lamp with fabric shade",
       tags: ["ceramic", "handcrafted", "fabric", "bedside"],
       popularity: 0.5,
@@ -316,7 +316,7 @@ const Home = () => {
         message: consultationForm.message,
         status: 'pending'
       });
-      
+
       toast.success('Thank you! We\'ll contact you within 24 hours to schedule your consultation.');
       setShowDesignConsultation(false);
       setConsultationForm({
@@ -371,7 +371,7 @@ const Home = () => {
       <section className="pt-24 pb-12 px-4">
         <div className="container mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <motion.div 
+            <motion.div
               className="space-y-6"
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -379,7 +379,7 @@ const Home = () => {
             >
               <h1 className="text-5xl md:text-6xl font-bold leading-tight">
                 Transform Your
-                <motion.span 
+                <motion.span
                   className="block bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -388,7 +388,7 @@ const Home = () => {
                   Living Space
                 </motion.span>
               </h1>
-              <motion.p 
+              <motion.p
                 className="text-xl text-muted-foreground"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -396,7 +396,7 @@ const Home = () => {
               >
                 Expert interior design, premium products, and AI-powered planning—all in one place.
               </motion.p>
-              <motion.div 
+              <motion.div
                 className="flex flex-wrap gap-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -415,7 +415,7 @@ const Home = () => {
                 </Link>
               </motion.div>
             </motion.div>
-            <motion.div 
+            <motion.div
               className="relative"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -454,7 +454,7 @@ const Home = () => {
                   transition={{ duration: 0.3 }}
                 >
                   <Card className="border-border hover:shadow-lg transition-all duration-300 cursor-pointer">
-                    <CardContent 
+                    <CardContent
                       className="p-6 space-y-4"
                       onClick={() => {
                         switch (feature.title) {
@@ -481,7 +481,7 @@ const Home = () => {
                         }
                       }}
                     >
-                      <motion.div 
+                      <motion.div
                         className="h-12 w-12 rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center"
                         whileHover={{ rotate: 5 }}
                         transition={{ duration: 0.2 }}
@@ -602,7 +602,7 @@ const Home = () => {
               Get personalized design advice from our expert interior designers. Fill out the form below and we'll contact you within 24 hours.
             </DialogDescription>
           </DialogHeader>
-          
+
           <form onSubmit={handleConsultationSubmit} className="space-y-6">
             <div className="grid md:grid-cols-2 gap-4">
               <div>

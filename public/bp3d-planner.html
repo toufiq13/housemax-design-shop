@@ -10,6 +10,30 @@
 
     <script src="./bp3d/libs/jquery.js"></script>
     <script src="./bp3d/libs/bootstrap.js"></script>
+    <script>
+        window.onerror = function (message, source, lineno, colno, error) {
+            window.parent.postMessage({
+                type: 'BP3D_ERROR',
+                payload: {
+                    message: message,
+                    source: source,
+                    lineno: lineno,
+                    colno: colno,
+                    error: error ? error.stack : null
+                }
+            }, '*');
+        };
+
+        window.onunhandledrejection = function (event) {
+            window.parent.postMessage({
+                type: 'BP3D_ERROR',
+                payload: {
+                    message: 'Unhandled Rejection: ' + event.reason,
+                    error: event.reason
+                }
+            }, '*');
+        };
+    </script>
 </head>
 
 <body>
@@ -145,8 +169,8 @@
     <script type="importmap">
         {
             "imports": {
-                "@bp3d/core": "./bp3d/packages/core/dist/index.js",
-                "@bp3d/plugins": "./bp3d/packages/plugins/dist/index.js"
+                "@bp3d/core": "./bp3d/packages/core/index.js",
+                "@bp3d/plugins": "./bp3d/packages/plugins/index.js"
             }
         }
     </script>
@@ -168,11 +192,23 @@
         import { Entities } from "./bp3d/js/Entities.js";
         import { FloorTextures } from "./bp3d/js/FloorTextures.js";
         import { WallTextures } from "./bp3d/js/WallTextures.js";
+        import { WallLengthEditor } from "./bp3d/js/WallLengthEditor.js";
 
         const language = "en";
         const viewer3d = new Viewer3d({ containerId: "viewer3d", language });
         const viewer2d = new Viewer2d({ containerId: "viewer2d" }, viewer3d);
         window.viewer3d = viewer3d;
+        window.viewer2d = viewer2d;
+
+        // DISABLE AUTO-ROTATION: Override startSpin to prevent it from ever working
+        viewer3d.startSpin = function () {
+            // Do nothing - prevent spin from ever starting
+        };
+
+        // Also stop any current spinning immediately
+        if (typeof viewer3d.stopSpin === 'function') {
+            viewer3d.stopSpin();
+        }
 
         new Entities();
         new FloorTextures();
@@ -191,7 +227,17 @@
         new TransformPlugin(viewer3d, { language });
         new ViewCubePlugin(viewer3d, { language });
 
+        // Initialize wall length editor - double-click on walls to edit length
+        new WallLengthEditor(viewer2d, viewer3d);
+
         viewer3d.loadPlan("./bp3d/plans/new_plan.json");
+
+        // Stop spin after plan loads as well
+        viewer3d.addEventListener('plan_loaded', () => {
+            if (typeof viewer3d.stopSpin === 'function') {
+                viewer3d.stopSpin();
+            }
+        });
     </script>
 </body>
 

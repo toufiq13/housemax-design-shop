@@ -275,53 +275,102 @@ var entities = [
         url: "models/gltf/door2.glb",
         type: "InWallFloorEntity",
     },
+
     {
-        name: "Zhiyin Storefront",
-        image: "models/thumbnails/zhiyin_storefront.png",
-        url: "models/gltf/zhiyin_storefront.glb",
-        type: "BasicEntity",
-    },
-    {
-        name: "Zhiyin Storefront text",
-        image: "models/thumbnails/zhiyin_storefront_text.png",
-        url: "models/gltf/zhiyin_storefront_text.glb",
-        type: "BasicEntity",
-    },
-    {
-        name: "Zhiyin Storefront background",
-        image: "models/thumbnails/zhiyin_storefront_background.png",
-        url: "models/gltf/zhiyin_storefront_background.glb",
-        type: "BasicEntity",
-    },
-    {
-        name: "小货架A",
+        name: "Small Shelf A",
         image: "models/thumbnails/小货架A.png",
         url: "models/gltf/小货架A.glb",
         type: "FloorEntity",
     },
     {
-        name: "小货架B",
+        name: "Small Shelf B",
         image: "models/thumbnails/小货架B.png",
         url: "models/gltf/小货架B.glb",
         type: "FloorEntity",
     },
     {
-        name: "收银台A",
+        name: "Checkout Counter A",
         image: "models/thumbnails/收银台A.png",
         url: "models/gltf/收银台A.glb",
         type: "FloorEntity",
     },
     {
-        name: "收银台B",
+        name: "Checkout Counter B",
         image: "models/thumbnails/收银台B.png",
         url: "models/gltf/收银台B.glb",
         type: "FloorEntity",
     },
     {
-        name: "收银台C",
+        name: "Checkout Counter C",
         image: "models/thumbnails/收银台C.png",
         url: "models/gltf/收银台C.glb",
         type: "FloorEntity",
+    },
+    {
+        name: "Race Car",
+        image: "models/thumbnails/race_car.png",
+        url: "models/gltf/race_car.glb",
+        type: "FloorEntity",
+    },
+    {
+        name: "Audi Car",
+        image: "models/thumbnails/audi_car.png",
+        url: "models/audi_car.glb",
+        type: "FloorEntity",
+        defaultWidth: 400.1,
+        defaultDepth: 800.7,
+        defaultHeight: 400.2,
+    },
+    {
+        name: "Toilet",
+        image: "models/thumbnails/toilet.png",
+        url: "models/gltf/toilet.glb",
+        type: "FloorEntity",
+    },
+    {
+        name: "Bath Tub 1",
+        image: "models/thumbnails/bathtub.png",
+        url: "models/bathtub.glb",
+        type: "FloorEntity",
+        defaultWidth: 100.2,
+        defaultDepth: 200.1,
+        defaultHeight: 100.4,
+    },
+    {
+        name: "Shower 1",
+        image: "models/thumbnails/shower_cabin.png",
+        url: "models/shower_cabin.glb",
+        type: "FloorEntity",
+    },
+    {
+        name: "Dining Table",
+        image: "models/thumbnails/dining_table.png",
+        url: "models/modern_dining_table.glb",
+        type: "FloorEntity",
+    },
+    {
+        name: "Sun Art",
+        image: "models/thumbnails/sun_art.png",
+        url: "models/sun_art.glb",
+        type: "WallEntity",
+    },
+    {
+        name: "Shower 2",
+        image: "models/thumbnails/shower2.png",
+        url: "models/shower2.glb",
+        type: "FloorEntity",
+    },
+    {
+        name: "Honeycomb Shelf",
+        image: "models/thumbnails/honeycomb_shelf.png",
+        url: "models/honeycomb_shelf.glb",
+        type: "WallEntity",
+    },
+    {
+        name: "Antique Clock",
+        image: "models/thumbnails/antique_clock.png",
+        url: "models/antique_clock.glb",
+        type: "WallEntity",
     },
     /*
 {
@@ -339,12 +388,20 @@ export class Entities {
     }
 
     createItem(item) {
+        const widthAttr = item.defaultWidth ? `entity-width="${item.defaultWidth}"` : '';
+        const depthAttr = item.defaultDepth ? `entity-depth="${item.defaultDepth}"` : '';
+        const heightAttr = item.defaultHeight ? `entity-height="${item.defaultHeight}"` : '';
+        const scaleAttr = item.defaultScale ? `entity-scale="${item.defaultScale}"` : '';
         return `
         <div class="col-sm-4">
             <a class="thumbnail add-entity"
                 entity-name="${item.name}"
                 entity-url="${item.url}"
-                entity-type="${item.type}">
+                entity-type="${item.type}"
+                ${widthAttr}
+                ${depthAttr}
+                ${heightAttr}
+                ${scaleAttr}>
                 <img alt="Add Entity" src="${item.image}" />
                 ${item.name}
             </a>

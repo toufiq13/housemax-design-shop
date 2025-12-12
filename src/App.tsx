@@ -12,6 +12,7 @@ import Shop from "./pages/Shop";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import Planner from "./pages/Planner";
+import PlanViewer from "./pages/PlanViewer";
 import Payment from "./pages/Payment";
 import Orders from "./pages/Orders";
 import Admin from "./pages/Admin";
@@ -70,6 +71,7 @@ const App = () => {
                     <Route path="/auth" element={<Auth />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/planner" element={<Planner />} />
+                    <Route path="/planner/view" element={<PlanViewer />} />
                     <Route path="/payment" element={<Payment />} />
                     <Route path="/orders" element={<Orders />} />
                     <Route path="/admin" element={<Admin />} />

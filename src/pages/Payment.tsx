@@ -32,7 +32,7 @@ const Payment = () => {
     city: '',
     zipCode: '',
   });
-  const [selectedCurrency, setSelectedCurrency] = useState('USD');
+  const [selectedCurrency, setSelectedCurrency] = useState('INR');
   const [exchangeRate, setExchangeRate] = useState(1);
   const [convertedTotal, setConvertedTotal] = useState(0);
   const [isLoadingRates, setIsLoadingRates] = useState(false);
@@ -55,9 +55,9 @@ const Payment = () => {
         setIsLoadingRates(true);
         const userCurrency = exchangeRateService.getUserCurrency();
         setSelectedCurrency(userCurrency);
-        
-        if (userCurrency !== 'USD') {
-          const rates = await exchangeRateService.getCachedRates('USD');
+
+        if (userCurrency !== 'INR') {
+          const rates = await exchangeRateService.getCachedRates('INR');
           const rate = rates[userCurrency] || 1;
           setExchangeRate(rate);
           setConvertedTotal(getTotalPrice() * rate);
@@ -80,9 +80,9 @@ const Payment = () => {
     try {
       setIsLoadingRates(true);
       setSelectedCurrency(currency);
-      
-      if (currency !== 'USD') {
-        const rates = await exchangeRateService.getCachedRates('USD');
+
+      if (currency !== 'INR') {
+        const rates = await exchangeRateService.getCachedRates('INR');
         const rate = rates[currency] || 1;
         setExchangeRate(rate);
         setConvertedTotal(getTotalPrice() * rate);
@@ -106,46 +106,31 @@ const Payment = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setPaymentStep('processing');
-    
-    try {
-      // Create Stripe payment intent
-      const paymentIntent = await stripeService.createPaymentIntent(
-        convertedTotal,
-        selectedCurrency.toLowerCase(),
-        {
-          order_id: `ORD-${Date.now()}`,
-          user_email: formData.email,
-          items: JSON.stringify(items.map(item => ({
-            id: item.id,
-            name: item.name,
-            quantity: item.quantity,
-            price: item.price
-          })))
-        }
-      );
 
-      // Confirm payment with Stripe
-      const result = await stripeService.confirmPayment(paymentIntent.client_secret);
-      
-      if (result.success) {
-        // Create order
-        const order = {
-          id: `ORD-${Date.now()}`,
-          date: new Date().toISOString(),
-          status: 'processing' as const,
-          total: convertedTotal,
-          currency: selectedCurrency,
-          items: items.map(item => ({
-            id: item.id,
-            name: item.name,
-            price: item.price,
-            quantity: item.quantity,
-            image: item.image,
-            category: item.category,
+    try {
+      // Simulate payment processing delay for better UX
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // Create order with simulated payment (bypassing Stripe for demo purposes)
+      const orderId = `ORD-${Date.now()}`;
+      const order = {
+        id: orderId,
+        date: new Date().toISOString(),
+        status: 'processing' as const,
+        total: convertedTotal * 1.08, // Include tax
+        currency: selectedCurrency,
+        items: items.map(item => ({
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          image: item.image,
+          category: item.category,
         })),
         shippingAddress: `${formData.address}, ${formData.city}, ${formData.zipCode}`,
-        paymentMethod: `Stripe Payment`,
-        paymentIntentId: paymentIntent.id,
+        paymentMethod: `Card ending in ${formData.cardNumber.slice(-4) || '****'}`,
+        customerName: formData.name,
+        customerEmail: formData.email,
       };
 
       // Save order to localStorage
@@ -156,9 +141,6 @@ const Payment = () => {
       setPaymentStep('success');
       clearCart();
       toast.success('Payment successful! Your order has been placed.');
-    } else {
-      throw new Error(result.error || 'Payment failed');
-    }
     } catch (error) {
       console.error('Payment error:', error);
       setPaymentStep('form');
@@ -377,9 +359,9 @@ const Payment = () => {
                       </div>
                     ))}
                   </div>
-                  
+
                   <Separator className="my-4" />
-                  
+
                   {/* Currency Selector */}
                   <div className="mb-4">
                     <Label htmlFor="currency">Currency</Label>
@@ -420,9 +402,9 @@ const Payment = () => {
                       <span>{exchangeRateService.formatCurrency(convertedTotal * 1.08, selectedCurrency)}</span>
                     </div>
                   </div>
-                  
-                  <Button 
-                    className="w-full mt-6" 
+
+                  <Button
+                    className="w-full mt-6"
                     size="lg"
                     onClick={handleSubmit}
                   >

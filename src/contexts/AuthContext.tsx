@@ -70,14 +70,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signUp = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({
+    // First create the user with password
+    const { error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/`,
-      },
+        // Disable the default email confirmation link
+        emailRedirectTo: undefined,
+      }
     });
-    if (error) throw error;
+    if (signUpError) throw signUpError;
+
+    // Then send OTP for email verification
+    const { error: otpError } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        shouldCreateUser: false, // User already created above
+      }
+    });
+    if (otpError) throw otpError;
   };
 
   const signOut = async () => {
@@ -89,15 +100,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const { error } = await supabase.auth.verifyOtp({
       email,
       token,
-      type: 'signup',
+      type: 'email', // Changed from 'signup' to 'email' for OTP verification
     });
     if (error) throw error;
   };
 
   const resendOtp = async (email: string) => {
-    const { error } = await supabase.auth.resend({
-      type: 'signup',
+    const { error } = await supabase.auth.signInWithOtp({
       email,
+      options: {
+        shouldCreateUser: false,
+      }
     });
     if (error) throw error;
   };
